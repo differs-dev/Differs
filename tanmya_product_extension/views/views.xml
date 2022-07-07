@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="favorite_website_menu" model="website.menu">
+            <field name="name">Favorites</field>
+            <field name="url">/favorites</field>
+            <field name="parent_id" ref="website.main_menu"/>
+           <field name="sequence" type="int">88</field>
+        </record>
+        <record id="product_normal_form_view_inherit" model="ir.ui.view">
+            <field name="name">product.normal.form.view.inherit</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='options']/span[last()]" position="after" >
+                    <span class="d-inline-block" style="margin-left:20px" >
+                            <label for="kit_template"/>
+                            <field name="kit_template" context="{'company_id': company_id}" options="{'no_create': False, 'no_open': False}" />
+                    </span>
+                    <span class="d-inline-block" style="margin-left:20px" >
+                            <label for="prod_category"/>
+                            <field name="prod_category" widget="many2many_tags" context="{'company_id': company_id}" options="{'no_create': False, 'no_open': False}" />
+                    </span>
+                    <group attrs="{'invisible':  [('kit_template', '=', False)]}">
+                        <group>
+                            <field name="owner_id"/>
+                            <field name="favorite"/>
+                            <field name="hours_preparation_time"/>
+                            <field name="minutes_preparation_time"/>
+                            <field name="difficulty_level"/>
+                            <field name="instructions"/>
+                            <field name="description"/>
+                            <field name="servings"/>
+                        </group>
+                        <group string="Nutrition Value">
+                            <field name="calories"/>
+                            <field name="carbs"/>
+                            <field name="protein"/>
+                            <field name="fat"/>
+                            <field name="fiber"/>
+                            <field name="iron"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+<!--        Categories list & form view-->
+        <record id="tanmya_category_list_view" model="ir.ui.view">
+            <field name="name">tanmya.category.list.view</field>
+            <field name="model">tanmya.product.category</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="tanmya_category_form_view" model="ir.ui.view">
+            <field name="name">tanmya.category.form.view</field>
+            <field name="model">tanmya.product.category</field>
+            <field name="arch" type="xml">
+                <form>
+                    <field name="name"/>
+                    <field name="image" widget="image"/>
+                </form>
+            </field>
+        </record>
+<!--                Categories menu action-->
+        <record id="tanmya_category_action" model="ir.actions.act_window">
+            <field name="name">Tanmya Categories</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">tanmya.product.category</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create Your First Database Connector!
+                </p>
+            </field>
+        </record>
+<!--                Categories menu -->
+        <menuitem id="stock.test" name="Tanmya Categories" action="tanmya_category_action"
+        parent="stock.menu_stock_inventory_control" sequence="10" groups="product.group_product_variant"/>
+
+    </data>
+</odoo>

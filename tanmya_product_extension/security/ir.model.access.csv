@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+tanmya_product_category,tanmya.product.category,model_tanmya_product_category,base.group_user,1,1,1,1
+ingredients_details,ingredients.details,model_ingredients_details,base.group_user,1,1,1,1
+ingredients_preferences,ingredients.preferences,model_ingredients_preferences,base.group_user,1,1,1,1
+
+
