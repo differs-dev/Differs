@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="product_kit" name="Product kit Lines">
+        <table class="mb16 table table-striped table-sm " id="sub_kit_products" t-if="product_variant.kit_template">
+            <thead>
+                <tr>
+                    <th class="td-img">Product</th>
+                    <th></th>
+                    <th class="text-center td-qty">
+                        Quantity
+                    </th>
+                    <th class="text-center td-price">Price</th>
+                    <th class="text-center td-action"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <t t-set="line_sql" t-value="0" />
+                <t t-foreach="product_variant.kit_template.sale_order_template_line_ids" t-as="line">
+                    <tr >
+                        <t t-set="line_sql" t-value="line_sql+1" />
+                        <td colspan="2" t-if="not line.product_id.product_tmpl_id" class='td-img'></td>
+                        <td align="center" t-if="line.product_id.product_tmpl_id" class='td-img'>
+                            <span t-if="line.product_id.image_128">
+                                <img t-att-src="image_data_uri(line.product_id.image_128)" class="img o_image_64_max rounded" />
+                            </span>
+                            <span t-else=""
+                                t-field="line.product_id.image_128"
+                                t-options="{'widget': 'image', 'qweb_img_responsive': False, 'class': 'rounded o_image_64_max'}"
+                            />
+                        </td>
+                        <td t-if="line.product_id.product_tmpl_id" class='td-product_name'>
+                            <div>
+                                <t t-call="website_sale.cart_line_product_link">
+                                    <strong t-field="line.product_id.name" />
+                                </t>
+                            </div>
+                        </td>
+<!--                        <td>unknown1</td>-->
+                        <td class="text-center td-qty">
+                            <div class="css_quantity input-group mx-auto justify-content-center">
+                                        <div class="input-group-prepend">
+                                            <a t-attf-href="#" class="btn btn-link js_add_cart_json d-none d-md-inline-block" aria-label="Remove one" title="Remove one">
+                                                <i class="fa fa-minus"></i>
+                                            </a>
+                                        </div>
+                                        <input t-att-id="'qprod'+str(line.product_id.id)+':'+str(line.product_uom_qty)" type="text" class="js_quantity form-control quantity" t-att-data-line-id="line.id" t-att-data-product-sub-id="line.product_id.id" t-att-value="int(line.product_uom_qty) == line.product_uom_qty and int(line.product_uom_qty) or line.product_uom_qty" />
+                                        <div class="input-group-append">
+                                            <a t-attf-href="#" class="btn btn-link float_left js_add_cart_json d-none d-md-inline-block" aria-label="Add one" title="Add one">
+                                                <i class="fa fa-plus"></i>
+                                            </a>
+                                        </div>
+                            </div>
+                        </td>
+                        <td class="text-center td-price" name="price">
+<!--                            <t t-set="website_sale_order" t-value="website.sale_get_order()"/>-->
+<!--                            <t t-set="website_date" t-value="website.serverdate()"/>-->
+
+<!--                            <t t-set="combination" t-value="line.product_id.product_template_attribute_value_ids"/>-->
+<!--                            <t t-set="combination_info" t-value="line.product_id.product_tmpl_id._get_combination_info(combination, pricelist=website_sale_order.pricelist_id, add_qty=line.product_uom_qty)"/>-->
+
+<!--                            <t t-set="list_price_converted" t-value="website.currency_id._convert(combination_info['list_price'], website_sale_order.currency_id, website_sale_order.company_id, website.serverdate())"/>-->
+<!--                            <t groups="account.group_show_line_subtotals_tax_excluded" t-if="(website_sale_order.pricelist_id.discount_policy == 'without_discount' and website_sale_order.currency_id.compare_amounts(list_price_converted, line.price_reduce_taxexcl) == 1) or website_sale_order.currency_id.compare_amounts(line.price_unit, line.price_reduce) == 1" name="order_line_discount">-->
+<!--                                <del t-attf-class="#{'text-danger mr8'}" style="white-space: nowrap;" t-esc="list_price_converted" t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}" />-->
+<!--                            </t>-->
+<!--                            <span t-field="line.price_reduce_taxexcl" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}" groups="account.group_show_line_subtotals_tax_excluded" />-->
+<!--                            <t groups="account.group_show_line_subtotals_tax_included" t-if="(website_sale_order.pricelist_id.discount_policy == 'without_discount' and website_sale_order.currency_id.compare_amounts(list_price_converted, line.price_reduce_taxinc) == 1) or website_sale_order.currency_id.compare_amounts(line.price_unit, line.price_reduce) == 1" name="order_line_discount">-->
+<!--                                <del t-attf-class="#{'text-danger mr8'}" style="white-space: nowrap;" t-esc="list_price_converted" t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}" />-->
+<!--                            </t>-->
+<!--                            <span t-field="line.price_reduce_taxinc" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}" groups="account.group_show_line_subtotals_tax_included" />-->
+<!--                            <small t-if="not line._is_not_sellable_line() and line.product_id.base_unit_price" class="cart_product_base_unit_price d-block text-muted" groups="website_sale.group_show_uom_price">-->
+<!--                                <t t-call='website_sale.base_unit_price'><t t-set='product' t-value='line.product_id' /></t>-->
+<!--                            </small>-->
+<!--                                <small t-if="line.product_id.base_unit_price" class="cart_product_base_unit_price d-block text-muted" groups="website_sale.group_show_uom_price">-->
+                               <span data-oe-type="monetary" ><span class="oe_currency_value">
+<!--                                   <t t-call='website_sale.base_unit_price'><t t-set='product' t-value='line.product_id' /></t>-->
+
+                               </span><t t-esc="line.product_id.lst_price" /></span>
+<!--                                <small  class="cart_product_base_unit_price d-block text-muted" >-->
+<!--                                    <t t-esc="line.product_id.product_templ_id.list_price" />-->
+<!--                                    <t t-call='website_sale.base_unit_price'><t t-set='product' t-value='line.product_id' /></t>-->
+<!--                                </small>-->
+                        </td>
+                        <td class="td-action">
+                            <a href='#' aria-label="Remove from cart" title="Remove from cart" class='js_delete_product no-decoration'> <small><i class='fa fa-trash-o'></i></small></a>
+                        </td>
+                    </tr>
+                </t>
+            </tbody>
+        </table>
+
+    </template>
+
+    <template id="tanm_product_ext_pot_js" inherit_id="website.layout" active="True" customize_show="True" name="detail sub products" priority="22">
+
+          <xpath expr="//div[@id='wrapwrap']" position="inside">
+              <script type="text/javascript" src="/tanmya_product_extension/static/src/js/website_sale_ext.js"/>
+          </xpath>
+
+    </template>
+    <template id="tanm_product_ext_pot" inherit_id="website_sale.product" active="True" customize_show="True" name="detail sub products" priority="22">
+
+            <xpath expr='//div[@id="add_to_cart_wrap"]' position="after">
+
+                <div>
+                    <t t-call="tanmya_product_extension.product_kit" />
+<!--                    <p >-->
+<!--                        this phrase is just for testing..........-->
+<!--                    </p>-->
+                </div>
+            </xpath>
+
+    </template>
+
+
+    <template id="tanm_portal_favorites" name="Favorites">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="oe_structure">
+                    <section class="s_title parallax s_parallax_is_fixed bg-black-50 pt24 pb24" data-vcss="001" data-snippet="s_title" data-scroll-background-ratio="1">
+
+                        <div class="o_we_bg_filter bg-black-50"/>
+                        <div class="container">
+                            <span class="navbar-brand h4 my-0 mr-auto" >Favorites</span>
+                            <t t-set="gogo" t-value="" />
+                            <p>
+                                <t t-esc="gogo" />
+                            </p>
+                            <button name="action_from_view" string="Open View" type="object"/>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="tanm_fav_master" name="favitem">
+        <table class="mb16 table table-striped table-sm " id="sub_kit_products" t-if="product_variant.kit_template">
+            <thead>
+                <tr>
+                    <th class="td-img">Item</th>
+                    <th/>
+                    <th class="text-center ">
+                        Contents
+                    </th>
+                    <th class="text-center td-price">Price</th>
+                    <th class="text-center td-action"/>
+                </tr>
+            </thead>
+            <tbody>
+                <t t-set="line_sql" t-value="0"/>
+                <t t-foreach="customerpot.items" t-as="line">
+                    <tr>
+                        <t t-set="line_sql" t-value="line_sql+1"/>
+                        <td colspan="2" t-if="not line.product_id.product_tmpl_id" class="td-img"/>
+                        <td align="center" t-if="line.product_id.product_tmpl_id" class="td-img">
+                            <span t-if="line.product_id.image_128">
+                                <img t-att-src="image_data_uri(line.product_id.image_128)" class="img o_image_64_max rounded"/>
+                            </span>
+                            <span t-else="" t-field="line.product_id.image_128" t-options="{'widget': 'image', 'qweb_img_responsive': False, 'class': 'rounded o_image_64_max'}"/>
+
+                        </td>
+                        <td t-if="line.product_id.product_tmpl_id" class="td-product_name">
+                            <div>
+                                <t t-call="website_sale.cart_line_product_link">
+                                    <strong t-field="line.product_id.name"/>
+                                </t>
+                            </div>
+                        </td>
+
+<!--                        <td class="text-center td-qty">-->
+<!--                            <div class="css_quantity input-group mx-auto justify-content-center">-->
+<!--                                        <div class="input-group-prepend">-->
+<!--                                            <a t-attf-href="#" class="btn btn-link js_add_cart_json d-none d-md-inline-block" aria-label="Remove one" title="Remove one">-->
+<!--                                                <i class="fa fa-minus"/>-->
+<!--                                            </a>-->
+<!--                                        </div>-->
+<!--                                        <input t-att-id="'qprod'+str(line.product_id.id)+':'+str(line.product_uom_qty)" type="text" class="js_quantity form-control quantity" t-att-data-line-id="line.id" t-att-data-product-sub-id="line.product_id.id" t-att-value="int(line.product_uom_qty) == line.product_uom_qty and int(line.product_uom_qty) or line.product_uom_qty"/>-->
+<!--                                        <div class="input-group-append">-->
+<!--                                            <a t-attf-href="#" class="btn btn-link float_left js_add_cart_json d-none d-md-inline-block" aria-label="Add one" title="Add one">-->
+<!--                                                <i class="fa fa-plus"/>-->
+<!--                                            </a>-->
+<!--                                        </div>-->
+<!--                            </div>-->
+<!--                        </td>-->
+                        <td class="text-center td-price" name="price">
+                                  <h3 class="css_non_editable_mode_hidden decimal_precision" t-att-data-precision="str(website.currency_id.decimal_places)">
+                                    <span t-field="line.product_id..get_price()" t-options="{  &quot;widget&quot;: &quot;monetary&quot;,                    &quot;display_currency&quot;: product.currency_id,                }"/>
+                                  </h3>
+                        </td>
+                        <td class="td-action">
+                            <a href="#" aria-label="Remove from cart" title="Remove from cart" class="js_delete_product no-decoration"> <small><i class="fa fa-trash-o"/></small></a>
+                        </td>
+                    </tr>
+                </t>
+            </tbody>
+        </table>
+    </template>
+
+
+    <template id="tanm_portal_addfavorites" name="addfavorites">
+            <t t-call="website.layout">
+                <t t-set="additional_title">Favorite</t>
+                <div id="wrap" class="js_sale">
+                    <div class="oe_structure oe_empty oe_structure_not_nearest" id="oe_structure_website_sale_products_1"/>
+                    <div class="container oe_website_sale pt-2">
+                        <div class="row o_wsale_products_main_row">
+                            <div t-if="enable_left_column" id="products_grid_before" class="col-lg-3 pb-2">
+                                <div class="products_categories"/>
+                                <div class="products_attributes_filters"/>
+                            </div>
+                            <div id="products_grid" t-attf-class="col #{'o_wsale_layout_list' if layout_mode == 'list' else ''}">
+
+                                <div class="products_header form-inline flex-md-nowrap justify-content-end mb-4">
+                                    <t t-call="tanm_search">
+                                        <t t-set="_classes" t-valuef="w-100 w-md-auto mr-auto mb-2"/>
+                                        <t t-set="search" t-value="original_search or search"/>
+                                    </t>
+                                    <t t-call="website_sale.pricelist_list">
+                                        <t t-set="_classes" t-valuef="ml-3 mb-2"/>
+                                    </t>
+                                </div>
+                                <div t-if="original_search and bins" class="alert alert-warning mt8">
+                                    No results found for '<span t-esc="original_search"/>'. Showing results for '<span t-esc="search"/>'.
+                                </div>
+
+                                <div t-if="bins" class="o_wsale_products_grid_table_wrapper">
+                                    <table class="table table-borderless m-0" t-att-data-ppg="ppg" t-att-data-ppr="ppr">
+                                        <colgroup t-ignore="true">
+                                            <!-- Force the number of columns (useful when only one row of (x < ppr) products) -->
+                                            <col t-foreach="ppr" t-as="p"/>
+                                        </colgroup>
+                                        <tbody>
+                                            <tr t-foreach="bins" t-as="tr_product">
+                                                <t t-foreach="tr_product" t-as="td_product">
+                                                    <t t-if="td_product">
+                                                        <t t-set="product" t-value="td_product['product']"/>
+                                                        <!-- We use t-attf-class here to allow easier customization -->
+                                                        <td t-att-colspan="td_product['x'] != 1 and td_product['x']" t-att-rowspan="td_product['y'] != 1 and td_product['y']" t-attf-class="oe_product" t-att-data-ribbon-id="td_product['ribbon'].id">
+                                                            <div t-attf-class="o_wsale_product_grid_wrapper o_wsale_product_grid_wrapper_#{td_product['x']}_#{td_product['y']}">
+                                                                <t t-call="website_sale.products_item">
+                                                                    <t t-set="product_image_big" t-value="td_product['x'] + td_product['y'] &gt; 2"/>
+                                                                </t>
+                                                            </div>
+                                                        </td>
+                                                    </t>
+                                                    <td t-else=""/>
+                                                </t>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <t t-else="">
+                                    <div class="text-center text-muted">
+                                        <t t-if="not search">
+                                            <h3 class="mt8">No product defined</h3>
+                                            <p t-if="category">No product defined in category "<strong t-esc="category.display_name"/>".</p>
+                                        </t>
+                                        <t t-else="">
+                                            <h3 class="mt8">No results</h3>
+                                            <p>No results for "<strong t-esc="search"/>"<t t-if="category"> in category "<strong t-esc="category.display_name"/>"</t>.</p>
+                                        </t>
+                                        <p t-ignore="true" groups="sales_team.group_sale_manager">Click <i>'New'</i> in the top-right corner to create your first product.</p>
+                                    </div>
+                                </t>
+                                <div class="products_pager form-inline justify-content-center py-3">
+                                    <t t-call="website.pager"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="oe_structure oe_empty " id="oe_structure_fav"/>
+                </div>
+            </t>
+        </template>
+
+    <template id="tanm_search" name="Search Box">
+        <t t-call="website.website_search_box_input">
+            <t t-set="_form_classes" t-valuef="o_wsale_products_searchbar_form w-100 w-md-auto mr-auto mb-2"/>
+            <t t-set="_classes" t-valuef=" "/>
+            <t t-set="search_type" t-valuef="products"/>
+            <t t-set="action" t-value="keep('/favorites') , search=0) or '/favorites'"/>
+            <t t-set="display_image" t-valuef="true"/>
+            <t t-set="display_description" t-valuef="true"/>
+            <t t-set="display_extra_link" t-valuef="true"/>
+            <t t-set="display_detail" t-valuef="true"/>
+            <t t-if="attrib_values">
+                <t t-foreach="attrib_values" t-as="a">
+                    <input type="hidden" name="attrib" t-att-value="'%s-%s' % (a[0], a[1])" />
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>
