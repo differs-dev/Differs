@@ -351,6 +351,7 @@ class TanmyaProducExt(models.Model):
 
     @api.model
     def get_products_details(self, search_word='', category_id=-1, order_by='name'):
+        tic = time.time()
         search_word1 = search_word.capitalize()
         search_word2 = search_word.lower()
         search_word3 = search_word.upper()
@@ -388,6 +389,14 @@ class TanmyaProducExt(models.Model):
                 'description': product.description
             }
             products_details.append(product_details)
+        toc = time.time()
+        tic_toc = toc - tic
+        _logger.info('---------------------------------------------------------')
+        _logger.info("Search Word is :")
+        _logger.info(search_word)
+        _logger.info("Get products execution time is: ")
+        _logger.info(tic_toc)
+        _logger.info('---------------------------------------------------------')
         return products_details
 
     @api.model
