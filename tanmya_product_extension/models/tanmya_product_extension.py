@@ -502,6 +502,11 @@ class TanmyaProducExt(models.Model):
                 }
                 recipes_details.append(recipe_details)
         return recipes_details
+    
+    
+    @api.model
+    def get_product_count(self):
+        return self.env['product.product'].sudo().search_count([])
 
     @api.model
     def get_recipes(self, search_word='', order_by='name'):
