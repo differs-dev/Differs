@@ -156,6 +156,7 @@ class ResUsers(models.Model):
         }
         return user_vals
 
+    
     @classmethod
     def authenticate(cls, db, login, password, user_agent_env):
         try:
@@ -172,19 +173,37 @@ class ResUsers(models.Model):
                     user = self.sudo().search(self._get_firebase_user_domain(firebase_user.uid), limit=1)
                     user = user.with_user(user)
                     if user:
-                        return super(ResUsers, cls).authenticate(db, user.login, firebase_user_password, user_agent_env)
-
+                        try:
+                            auth_res = super(ResUsers, cls).authenticate(db, user.login, firebase_user_password,
+                                                                         user_agent_env)
+                            return auth_res
+                        except AccessDenied:
+                            _logger.info('-------------------------Existing User----------------------------')
+                            _logger.info(db)
+                            _logger.info(user.login)
+                            _logger.info(firebase_user_password)
+                            _logger.info(user_agent_env)
+                            _logger.info('------------------------------------------------------------------')
                     else:
                         vals = self._get_new_user_vals(firebase_user.uid, firebase_user.email, password)
                         new_user = self.sudo().create(vals)
                         new_user = user.with_user(new_user)
-
                         if new_user:
-                            return super(ResUsers, cls).authenticate(db, new_user.login, firebase_user_password,
-                                                                     user_agent_env)
+                            try:
+                                auth_res = super(ResUsers, cls).authenticate(db, new_user.login, firebase_user_password,
+                                                                             user_agent_env)
+                                return auth_res
+                            except AccessDenied:
+                                _logger.info('-------------------------New User----------------------------')
+                                _logger.info(db)
+                                _logger.info(new_user.login)
+                                _logger.info(firebase_user_password)
+                                _logger.info(user_agent_env)
+                                _logger.info('------------------------------------------------------------------')
             else:
                 return 1
-
+    
+    
     @api.model
     def set_address_info(self, vals):
         uid = self.env.uid
