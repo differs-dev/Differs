@@ -15,6 +15,7 @@ class Tanmyaprodcategory(models.Model):
 
     @api.model
     def get_categories_details(self, search_word=''):
+        tic = time.time()
         categories = False
         if search_word == '':
             categories = self.env['tanmya.product.category'].sudo().search([])
@@ -33,6 +34,9 @@ class Tanmyaprodcategory(models.Model):
                     'image': category.image
                 }
                 categories_details.append(category_details)
+
+        toc = time.time()
+        _logger.info("Get categories execution time is: ", (toc - tic))
         return categories_details
 
     @api.model
@@ -152,6 +156,13 @@ class TanmyaProducExt(models.Model):
                 totalprice += (list_price + item.product_id.price_extra) * item.product_uom_qty
 
         return totalprice
+
+    def time_convert(self, sec):
+        mins = sec // 60
+        sec = sec % 60
+        hours = mins // 60
+        mins = mins % 60
+        return "Time Lapsed = {0}:{1}:{2}".format(int(hours), int(mins), sec)
 
     @api.model
     def add_recipe(self, vals: dict):
@@ -390,8 +401,9 @@ class TanmyaProducExt(models.Model):
                 'description': product.description
             }
             products_details.append(product_details)
+
         toc = time.time()
-        tic_toc = toc - tic
+        tic_toc = self.time_convert(toc - tic)
         _logger.info('---------------------------------------------------------')
         _logger.info("Search Word is :")
         _logger.info(search_word)
@@ -502,14 +514,14 @@ class TanmyaProducExt(models.Model):
                 }
                 recipes_details.append(recipe_details)
         return recipes_details
-    
-    
+
     @api.model
     def get_product_count(self):
         return self.env['product.product'].sudo().search_count([])
 
     @api.model
     def get_recipes(self, search_word='', order_by='name'):
+        tic = time.time()
         recipes = self.env['product.product'].sudo().search(['|', '|', '|',
                                                              ('name', 'like', search_word),
                                                              ('name', 'like', search_word.capitalize()),
@@ -545,4 +557,9 @@ class TanmyaProducExt(models.Model):
                 'reviews_ids': recipe.reviews_ids.ids
             }
             recipes_details.append(recipe_details)
+
+        toc = time.time()
+        _logger.info("Get recipes execution time is: ", (toc - tic))
         return recipes_details
+
+
