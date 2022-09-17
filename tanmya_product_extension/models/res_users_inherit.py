@@ -5,6 +5,7 @@ from firebase_admin import credentials
 from firebase_admin import auth
 import firebase_admin
 import logging
+from odoo.exceptions import AccessDenied, UserError, AccessError
 
 
 logger = logging.getLogger('odoo.log')
@@ -201,7 +202,7 @@ class ResUsers(models.Model):
                                 _logger.info(user_agent_env)
                                 _logger.info('------------------------------------------------------------------')
             else:
-                return 1
+                raise AccessError(_("User authentication failed due to invalid authentication values"))
     
     
     @api.model
