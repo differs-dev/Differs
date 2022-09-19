@@ -97,3 +97,7 @@ class RecipeReviews(models.Model):
     review_text = fields.Text(string='Review Text')
     review_date = fields.Date(string='Review Date')
     rating = fields.Char(string='Recipe Rating')
+
+    
+class IngredientsPreferences(models.Model):
+    _name = 'ingredients.preferences'
