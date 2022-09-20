@@ -211,13 +211,13 @@ class ResUsers(models.Model):
             else:
                 raise AccessError(_("User authentication failed due to invalid authentication values"))
 
-        finally:
-            toc = time.time()
-            tic_toc = self.time_convert(toc - tic)
-            _logger.info('---------------------------------------------------------')
-            _logger.info("Authentication execution time is: ")
-            _logger.info(tic_toc)
-            _logger.info('---------------------------------------------------------')
+#         finally:
+#             toc = time.time()
+#             tic_toc = self.time_convert(toc - tic)
+#             _logger.info('---------------------------------------------------------')
+#             _logger.info("Authentication execution time is: ")
+#             _logger.info(tic_toc)
+#             _logger.info('---------------------------------------------------------')
 
     @api.model
     def set_address_info(self, vals):
