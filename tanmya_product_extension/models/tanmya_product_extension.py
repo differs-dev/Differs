@@ -415,7 +415,7 @@ class TanmyaProducExt(models.Model):
         search_word2 = search_word.lower()
         search_word3 = search_word.upper()
         if category_id > 0:
-            products = self.env['product.product'].sudo().search(domain=['|', '|', '|',
+            products = self.env['product.product'].sudo().search(['|', '|', '|',
                                                                          ('name', 'like', search_word),
                                                                          ('name', 'like', search_word1),
                                                                          ('name', 'like', search_word2),
@@ -426,7 +426,7 @@ class TanmyaProducExt(models.Model):
                                                                  offset=offset,
                                                                  order=order_by)
         else:
-            products = self.env['product.product'].sudo().search(domain=['|', '|', '|',
+            products = self.env['product.product'].sudo().search(['|', '|', '|',
                                                                          ('name', 'like', search_word),
                                                                          ('name', 'like', search_word1),
                                                                          ('name', 'like', search_word2),
