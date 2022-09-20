@@ -415,23 +415,23 @@ class TanmyaProducExt(models.Model):
         search_word2 = search_word.lower()
         search_word3 = search_word.upper()
         if category_id > 0:
-            products = self.env['product.product'].sudo().search(['|', '|', '|',
-                                                                  ('name', 'like', search_word),
-                                                                  ('name', 'like', search_word1),
-                                                                  ('name', 'like', search_word2),
-                                                                  ('name', 'like', search_word3),
-                                                                  ('kit_template', '=', None),
-                                                                  ('prod_category', 'like', category_id)],
+            products = self.env['product.product'].sudo().search(domain=['|', '|', '|',
+                                                                         ('name', 'like', search_word),
+                                                                         ('name', 'like', search_word1),
+                                                                         ('name', 'like', search_word2),
+                                                                         ('name', 'like', search_word3),
+                                                                         ('kit_template', '=', None),
+                                                                         ('prod_category', 'like', category_id)],
                                                                  limit=limit,
                                                                  offset=offset,
                                                                  order=order_by)
         else:
-            products = self.env['product.product'].sudo().search(['|', '|', '|',
-                                                                  ('name', 'like', search_word),
-                                                                  ('name', 'like', search_word1),
-                                                                  ('name', 'like', search_word2),
-                                                                  ('name', 'like', search_word3),
-                                                                  ('kit_template', '=', None)],
+            products = self.env['product.product'].sudo().search(domain=['|', '|', '|',
+                                                                         ('name', 'like', search_word),
+                                                                         ('name', 'like', search_word1),
+                                                                         ('name', 'like', search_word2),
+                                                                         ('name', 'like', search_word3),
+                                                                         ('kit_template', '=', None)],
                                                                  limit=limit,
                                                                  offset=offset,
                                                                  order=order_by)
@@ -570,7 +570,6 @@ class TanmyaProducExt(models.Model):
 
     @api.model
     def get_recipes(self, search_word='', order_by='name'):
-        tic = time.time()
         recipes = self.env['product.product'].sudo().search(['|', '|', '|',
                                                              ('name', 'like', search_word),
                                                              ('name', 'like', search_word.capitalize()),
@@ -607,6 +606,4 @@ class TanmyaProducExt(models.Model):
             }
             recipes_details.append(recipe_details)
 
-        toc = time.time()
-        _logger.info("Get recipes execution time is: ", (toc - tic))
         return recipes_details
