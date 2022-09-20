@@ -516,8 +516,15 @@ class TanmyaProducExt(models.Model):
         return recipes_details
 
     @api.model
-    def get_product_count(self):
-        return self.env['product.product'].sudo().search_count([])
+    def get_product_count(self, search_word=''):
+        search_word1 = search_word.capitalize()
+        search_word2 = search_word.lower()
+        search_word3 = search_word.upper()
+        return self.env['product.product'].sudo().search_count(['|', '|', '|',
+                                                                ('name', 'like', search_word),
+                                                                ('name', 'like', search_word1),
+                                                                ('name', 'like', search_word2),
+                                                                ('name', 'like', search_word3), ])
 
     @api.model
     def get_recipes(self, search_word='', order_by='name'):
@@ -561,5 +568,3 @@ class TanmyaProducExt(models.Model):
         toc = time.time()
         _logger.info("Get recipes execution time is: ", (toc - tic))
         return recipes_details
-
-
