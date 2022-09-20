@@ -5,6 +5,7 @@ from firebase_admin import credentials
 from firebase_admin import auth
 import firebase_admin
 import logging
+import time
 
 
 logger = logging.getLogger('odoo.log')
@@ -155,9 +156,17 @@ class ResUsers(models.Model):
             'company_id': 1
         }
         return user_vals
-    
+
+    def time_convert(self, sec):
+        mins = sec // 60
+        sec = sec % 60
+        hours = mins // 60
+        mins = mins % 60
+        return "Time Lapsed = {0}:{1}:{2}".format(int(hours), int(mins), sec)
+
     @classmethod
     def authenticate(cls, db, login, password, user_agent_env):
+        tic = time.time()
         try:
             return super(ResUsers, cls).authenticate(db, login, password, user_agent_env)
 
@@ -201,6 +210,14 @@ class ResUsers(models.Model):
                                 _logger.info('------------------------------------------------------------------')
             else:
                 raise AccessError(_("User authentication failed due to invalid authentication values"))
+
+        finally:
+            toc = time.time()
+            tic_toc = self.time_convert(toc - tic)
+            _logger.info('---------------------------------------------------------')
+            _logger.info("Authentication execution time is: ")
+            _logger.info(tic_toc)
+            _logger.info('---------------------------------------------------------')
 
     @api.model
     def set_address_info(self, vals):
