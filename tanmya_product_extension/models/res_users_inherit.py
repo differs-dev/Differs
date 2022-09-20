@@ -157,16 +157,8 @@ class ResUsers(models.Model):
         }
         return user_vals
 
-    def time_convert(self, sec):
-        mins = sec // 60
-        sec = sec % 60
-        hours = mins // 60
-        mins = mins % 60
-        return "Time Lapsed = {0}:{1}:{2}".format(int(hours), int(mins), sec)
-
     @classmethod
     def authenticate(cls, db, login, password, user_agent_env):
-        tic = time.time()
         try:
             return super(ResUsers, cls).authenticate(db, login, password, user_agent_env)
 
@@ -187,11 +179,12 @@ class ResUsers(models.Model):
                             return auth_res
                         except AccessDenied:
                             _logger.info('-------------------------Existing User----------------------------')
-                            _logger.info(db)
-                            _logger.info(user.login)
-                            _logger.info(firebase_user_password)
-                            _logger.info(user_agent_env)
-                            _logger.info('------------------------------------------------------------------')
+                            # _logger.info(db)
+                            # _logger.info(user.login)
+                            # _logger.info(firebase_user_password)
+                            # _logger.info(user_agent_env)
+                            # _logger.info('------------------------------------------------------------------')
+                            return user.id
                     else:
                         vals = self._get_new_user_vals(firebase_user.uid, firebase_user.email, password)
                         new_user = self.sudo().create(vals)
@@ -203,21 +196,13 @@ class ResUsers(models.Model):
                                 return auth_res
                             except AccessDenied:
                                 _logger.info('-------------------------New User----------------------------')
-                                _logger.info(db)
-                                _logger.info(new_user.login)
-                                _logger.info(firebase_user_password)
-                                _logger.info(user_agent_env)
-                                _logger.info('------------------------------------------------------------------')
+                                # _logger.info(db)
+                                # _logger.info(new_user.login)
+                                # _logger.info(firebase_user_password)
+                                # _logger.info(user_agent_env)
+                                # _logger.info('------------------------------------------------------------------')
             else:
                 raise AccessError(_("User authentication failed due to invalid authentication values"))
-
-#         finally:
-#             toc = time.time()
-#             tic_toc = self.time_convert(toc - tic)
-#             _logger.info('---------------------------------------------------------')
-#             _logger.info("Authentication execution time is: ")
-#             _logger.info(tic_toc)
-#             _logger.info('---------------------------------------------------------')
 
     @api.model
     def set_address_info(self, vals):
