@@ -8,7 +8,6 @@ import logging
 import time
 
 
-logger = logging.getLogger('odoo.log')
 _logger = logging.getLogger(__name__)
 
 
@@ -120,7 +119,7 @@ class ResUsers(models.Model):
             return False
 
         except Exception as e:
-            logger.info(e)
+            _logger.info(e)
             return False
 
     @classmethod
@@ -133,7 +132,7 @@ class ResUsers(models.Model):
                 return firebase_user
             return False
         except Exception as e:
-            logger.info(e)
+            _logger.info(e)
             return False
 
     @api.model
@@ -165,7 +164,6 @@ class ResUsers(models.Model):
         except AccessDenied:
             firebase_user = cls.get_firebase_user(login)
             if firebase_user:
-                # logger.info('#############')
                 firebase_user_password = '123'
                 user = False
                 with cls.pool.cursor() as cr:
@@ -179,11 +177,6 @@ class ResUsers(models.Model):
                             return auth_res
                         except AccessDenied:
                             _logger.info('-------------------------Existing User----------------------------')
-                            # _logger.info(db)
-                            # _logger.info(user.login)
-                            # _logger.info(firebase_user_password)
-                            # _logger.info(user_agent_env)
-                            # _logger.info('------------------------------------------------------------------')
                             return user.id
                     else:
                         vals = self._get_new_user_vals(firebase_user.uid, firebase_user.email, password)
@@ -196,11 +189,10 @@ class ResUsers(models.Model):
                                 return auth_res
                             except AccessDenied:
                                 _logger.info('-------------------------New User----------------------------')
-                                # _logger.info(db)
-                                # _logger.info(new_user.login)
-                                # _logger.info(firebase_user_password)
-                                # _logger.info(user_agent_env)
-                                # _logger.info('------------------------------------------------------------------')
+                                _logger.info(new_user.login)
+                                _logger.info(firebase_user_password)
+                                _logger.info("User authentication failed due to invalid authentication values")
+                                _logger.info('------------------------------------------------------------------')
             else:
                 raise AccessError(_("User authentication failed due to invalid authentication values"))
 
