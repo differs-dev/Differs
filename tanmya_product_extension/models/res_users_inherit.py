@@ -7,7 +7,6 @@ import firebase_admin
 import logging
 import time
 
-
 _logger = logging.getLogger(__name__)
 
 
@@ -60,7 +59,7 @@ class ResUsers(models.Model):
         return False
 
     @api.model
-    def get_user_preferences(self, products_type: int):
+    def get_user_preferences(self, products_type, limit=None, offset=0):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         user_preferences = []
         if user:
@@ -68,11 +67,11 @@ class ResUsers(models.Model):
             if products_type == 2:
                 products_preferences = self.env['products.preferences'].sudo().search(
                     [('id', 'in', user.products_preferences_ids.ids),
-                     ('product_id.kit_template', '!=', None)])
+                     ('product_id.kit_template', '!=', None)], limit=limit, offset=offset)
             else:
                 products_preferences = self.env['products.preferences'].sudo().search(
                     [('id', 'in', user.products_preferences_ids.ids),
-                     ('product_id.kit_template', '=', None)])
+                     ('product_id.kit_template', '=', None)], limit=limit, offset=offset)
 
             for product_preference in products_preferences:
                 user_preference = {
@@ -146,7 +145,7 @@ class ResUsers(models.Model):
         user_vals = {
             'firebase_uid': firebase_uid,
             'name': phone_name_list[1],
-            'sel_groups_1_9_10': 9,   # 1 internal, 9 portal and 10 public user
+            'sel_groups_1_9_10': 9,  # 1 internal, 9 portal and 10 public user
             'login': email,
             'email': email,
             'mobile': phone_name_list[0],
