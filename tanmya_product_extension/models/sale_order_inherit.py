@@ -5,7 +5,6 @@ from itertools import groupby
 import logging
 import pytz
 
-
 _logger = logging.getLogger(__name__)
 
 
@@ -39,8 +38,8 @@ class SaleOrderInerit(models.Model):
         if user_id:
             user = self.env['res.users'].sudo().search([('id', '=', user_id)])
             user_sale_order = self.env['sale.order'].sudo().search([('partner_id', '=', user.partner_id.id),
-                                                             ('state', '=', 'draft')],
-                                                            order='date_order desc', limit=1)
+                                                                    ('state', '=', 'draft')],
+                                                                   order='date_order desc', limit=1)
             if user_sale_order:
                 return user_sale_order
             else:
@@ -142,8 +141,8 @@ class SaleOrderInerit(models.Model):
     def create_cash_statement(self, invoice_name, payaction):
         last_payment = self.env['account.payment'].sudo().browse(payaction['res_id'])
         last_journal = self.env['account.bank.statement'].sudo().search([
-                                                                ('journal_id', '=', last_payment.journal_id.id)],
-                                                                 order='id desc', limit=1)
+            ('journal_id', '=', last_payment.journal_id.id)],
+            order='id desc', limit=1)
         lastpaymentid = last_payment.id
         journal_id = last_payment.journal_id.id
         date = last_payment.date
@@ -214,7 +213,7 @@ class SaleOrderInerit(models.Model):
                 except:
                     pass
                 rec.action_confirm()
-            
+
                 rec.date_order = rec_date_order
                 super(SaleOrderInerit, rec)._create_invoices(final=True)
                 rec.invoice_ids.invoice_date = rec_date_order_invoice
@@ -273,6 +272,3 @@ class SaleOrderInerit(models.Model):
                 user_sale_order.order_review = order_review.id
                 return True
         return False
-
-
-
