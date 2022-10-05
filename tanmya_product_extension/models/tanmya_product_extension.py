@@ -14,16 +14,20 @@ class Tanmyaprodcategory(models.Model):
     publish = fields.Boolean(string='Publish')
 
     @api.model
-    def get_categories_details(self, search_word=''):
+    def get_categories_details(self, search_word='', limit=None, offset=0):
         categories = False
         if search_word == '':
-            categories = self.env['tanmya.product.category'].sudo().search([])
+            categories = self.env['tanmya.product.category'].sudo().search([],
+                                                                           limit=limit,
+                                                                           offset=offset)
         else:
             categories = self.env['tanmya.product.category'].sudo().search(['|', '|', '|',
                                                                             ('name', 'like', search_word),
                                                                             ('name', 'like', search_word.capitalize()),
                                                                             ('name', 'like', search_word.upper()),
-                                                                            ('name', 'like', search_word.lower())])
+                                                                            ('name', 'like', search_word.lower())],
+                                                                           limit=limit,
+                                                                           offset=offset)
         categories_details = []
         if categories:
             for category in categories:
@@ -416,22 +420,22 @@ class TanmyaProducExt(models.Model):
         search_word3 = search_word.upper()
         if category_id > 0:
             products = self.env['product.product'].sudo().search(['|', '|', '|',
-                                                                         ('name', 'like', search_word),
-                                                                         ('name', 'like', search_word1),
-                                                                         ('name', 'like', search_word2),
-                                                                         ('name', 'like', search_word3),
-                                                                         ('kit_template', '=', None),
-                                                                         ('prod_category', 'like', category_id)],
+                                                                  ('name', 'like', search_word),
+                                                                  ('name', 'like', search_word1),
+                                                                  ('name', 'like', search_word2),
+                                                                  ('name', 'like', search_word3),
+                                                                  ('kit_template', '=', None),
+                                                                  ('prod_category', 'like', category_id)],
                                                                  limit=limit,
                                                                  offset=offset,
                                                                  order=order_by)
         else:
             products = self.env['product.product'].sudo().search(['|', '|', '|',
-                                                                         ('name', 'like', search_word),
-                                                                         ('name', 'like', search_word1),
-                                                                         ('name', 'like', search_word2),
-                                                                         ('name', 'like', search_word3),
-                                                                         ('kit_template', '=', None)],
+                                                                  ('name', 'like', search_word),
+                                                                  ('name', 'like', search_word1),
+                                                                  ('name', 'like', search_word2),
+                                                                  ('name', 'like', search_word3),
+                                                                  ('kit_template', '=', None)],
                                                                  limit=limit,
                                                                  offset=offset,
                                                                  order=order_by)
@@ -499,9 +503,11 @@ class TanmyaProducExt(models.Model):
                 review = self.env['tanmya.review'].sudo().create(review_vals)
 
     @api.model
-    def get_recipe_reviews(self, reviews_ids: list):
+    def get_recipe_reviews(self, reviews_ids=None, limit=None, offset=0):
         if reviews_ids:
-            reviews = self.env['tanmya.review'].sudo().search([('id', 'in', reviews_ids)])
+            reviews = self.env['tanmya.review'].sudo().search([('id', 'in', reviews_ids)],
+                                                              limit=limit,
+                                                              offset=offset)
             reviews_details = []
             for review in reviews:
                 review_details = {
@@ -516,15 +522,19 @@ class TanmyaProducExt(models.Model):
         return []
 
     @api.model
-    def get_recipes_details(self, state='public', owner_id=-1):
+    def get_recipes_details(self, state='public', owner_id=-1, limit=None, offset=0):
         recipes = False
         if owner_id == -1 or not owner_id:
             recipes = self.env['product.product'].sudo().search([('kit_template', '!=', None),
-                                                                 ('recipe_status', '=', state)])
+                                                                 ('recipe_status', '=', state)],
+                                                                limit=limit,
+                                                                offset=offset)
         else:
             recipes = self.env['product.product'].sudo().search([('kit_template', '!=', None),
                                                                  ('recipe_status', '=', state),
-                                                                 ('owner_id', '=', owner_id)])
+                                                                 ('owner_id', '=', owner_id)],
+                                                                limit=limit,
+                                                                offset=offset)
         recipes_details = []
         if recipes:
             for recipe in recipes:
@@ -569,7 +579,7 @@ class TanmyaProducExt(models.Model):
                                                                 ('name', 'like', search_word3), ])
 
     @api.model
-    def get_recipes(self, search_word='', order_by='name'):
+    def get_recipes(self, search_word='', order_by='name', limit=None, offset=0):
         recipes = self.env['product.product'].sudo().search(['|', '|', '|',
                                                              ('name', 'like', search_word),
                                                              ('name', 'like', search_word.capitalize()),
@@ -577,7 +587,9 @@ class TanmyaProducExt(models.Model):
                                                              ('name', 'like', search_word.upper()),
                                                              ('kit_template', '!=', None),
                                                              ('recipe_status', '=', 'public')],
-                                                            order=order_by)
+                                                            order=order_by,
+                                                            limit=limit,
+                                                            offset=offset)
         recipes_details = []
         for recipe in recipes:
             recipe_details = {
