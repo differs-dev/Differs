@@ -196,11 +196,6 @@ class SaleOrderInerit(models.Model):
             odoobot_tz = odoobot.env.user.tz
             if not odoobot_tz:
                 odoobot_tz = 'Europe/Paris'
-                
-            _logger.info('***************************************************')
-            _logger.info(odoobot_tz)
-            _logger.info(datetime.now(pytz.timezone(odoobot_tz)).strftime('%z'))
-            _logger.info('***************************************************')
             
             tt = datetime.now(pytz.timezone(odoobot_tz)).strftime('%z')
             diff_hour = int(tt[1:3]) + int(tt[3:]) / 60
