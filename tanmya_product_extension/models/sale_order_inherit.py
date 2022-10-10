@@ -192,6 +192,12 @@ class SaleOrderInerit(models.Model):
     def payment_automation(self):
         for rec in self:
             odoobot = rec.env['res.users'].sudo().browse(1)
+            
+            _logger.info('***************************************************')
+            _logger.info(odoobot.env.user.tz)
+            _logger.info(pytz.timezone(odoobot.env.user.tz))
+            _logger.info('***************************************************')
+            
             tt = datetime.now(pytz.timezone(odoobot.env.user.tz)).strftime('%z')
             diff_hour = int(tt[1:3]) + int(tt[3:]) / 60
             seq_transaction = 0
