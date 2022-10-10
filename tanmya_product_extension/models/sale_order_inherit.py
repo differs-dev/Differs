@@ -193,12 +193,15 @@ class SaleOrderInerit(models.Model):
         for rec in self:
             odoobot = rec.env['res.users'].sudo().browse(1)
             
+            odoobot_tz = odoobot.env.user.tz
+            if not odoobot_tz:
+                odoobot_tz = 'Europe/Paris'
+                
             _logger.info('***************************************************')
             _logger.info(odoobot.env.user.tz)
-            _logger.info(pytz.timezone(odoobot.env.user.tz))
             _logger.info('***************************************************')
             
-            tt = datetime.now(pytz.timezone(odoobot.env.user.tz)).strftime('%z')
+            tt = datetime.now(pytz.timezone(odoobot_tz)).strftime('%z')
             diff_hour = int(tt[1:3]) + int(tt[3:]) / 60
             seq_transaction = 0
             rec_date_order = datetime.strptime('01/08/2015', '%d/%m/%Y').date()
