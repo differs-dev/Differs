@@ -199,6 +199,7 @@ class SaleOrderInerit(models.Model):
                 
             _logger.info('***************************************************')
             _logger.info(odoobot_tz)
+            _logger.info(datetime.now(pytz.timezone(odoobot_tz)).strftime('%z'))
             _logger.info('***************************************************')
             
             tt = datetime.now(pytz.timezone(odoobot_tz)).strftime('%z')
