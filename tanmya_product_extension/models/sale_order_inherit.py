@@ -185,16 +185,16 @@ class SaleOrderInerit(models.Model):
         statement.action_bank_reconcile_bank_statements()
         annos = self.env['account.reconcile.model'].sudo().browse(2)
         annos._apply_rules(statement.line_ids)
-        _logger.info('------------------------++++++++++++++++++++++++++++++++++++++++++++++++++')
-        _logger.info(annos.name)
-        _logger.info(statement.state)
-        _logger.info(statement.line_ids[0].payment_ref)
-        _logger.info(statement.line_ids[0].partner_id.name)
-        _logger.info(statement.line_ids[0].amount)
-        _logger.info(statement.all_lines_reconciled)
-        for line in statement.line_ids:
-            _logger.info(line.is_reconciled)
-        _logger.info('------------------------++++++++++++++++++++++++++++++++++++++++++++++++++')
+#         _logger.info('------------------------++++++++++++++++++++++++++++++++++++++++++++++++++')
+#         _logger.info(annos.name)
+#         _logger.info(statement.state)
+#         _logger.info(statement.line_ids[0].payment_ref)
+#         _logger.info(statement.line_ids[0].partner_id.name)
+#         _logger.info(statement.line_ids[0].amount)
+#         _logger.info(statement.all_lines_reconciled)
+#         for line in statement.line_ids:
+#             _logger.info(line.is_reconciled)
+#         _logger.info('------------------------++++++++++++++++++++++++++++++++++++++++++++++++++')
         statement.button_validate_or_action()
 
     @api.model
