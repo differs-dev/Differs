@@ -186,6 +186,7 @@ class SaleOrderInerit(models.Model):
         annos = self.env['account.reconcile.model'].sudo().browse(1)
         annos._apply_rules(statement.line_ids)
         _logger.info('------------------------++++++++++++++++++++++++++++++++++++++++++++++++++')
+        _logger.info(annos)
         _logger.info(statement.state)
         _logger.info(statement.all_lines_reconciled)
         for line in statement.line_ids:
