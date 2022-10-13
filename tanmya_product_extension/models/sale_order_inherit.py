@@ -183,7 +183,7 @@ class SaleOrderInerit(models.Model):
         line_counterpart_account_id = statement.journal_id.profit_account_id.id
         statement.button_post()
         statement.action_bank_reconcile_bank_statements()
-        annos = self.env['account.reconcile.model'].sudo().browse(1)
+        annos = self.env['account.reconcile.model'].sudo().browse(2)
         annos._apply_rules(statement.line_ids)
         _logger.info('------------------------++++++++++++++++++++++++++++++++++++++++++++++++++')
         _logger.info(annos.name)
@@ -267,8 +267,8 @@ class SaleOrderInerit(models.Model):
                         """
                 self._cr.execute(qry)
                 self.create_cash_statement(inv_name, pay_action)
-#                 if seq_transaction % 10 == 0:
-#                     self._cr.commit()
+                if seq_transaction % 10 == 0:
+                    self._cr.commit()
                 ###############################################
 
     @api.model
