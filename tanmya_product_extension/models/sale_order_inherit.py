@@ -181,17 +181,15 @@ class SaleOrderInerit(models.Model):
         line_journal_id = journal_id
         line_statement_id = statement.id
         line_counterpart_account_id = statement.journal_id.profit_account_id.id
-        _logger.info('------------------------++++++++++++++++++++++++++++++++++++++++++++++++++')
         statement.button_post()
-        _logger.info('------------------------++++++++++++++++++++++++++++++++++++++++++++++++++')
         statement.action_bank_reconcile_bank_statements()
-        _logger.info('------------------------++++++++++++++++++++++++++++++++++++++++++++++++++')
         annos = self.env['account.reconcile.model'].sudo().browse(1)
-        _logger.info('------------------------++++++++++++++++++++++++++++++++++++++++++++++++++')
         annos._apply_rules(statement.line_ids)
         _logger.info('------------------------++++++++++++++++++++++++++++++++++++++++++++++++++')
-        statement.button_validate_or_action()
+        _logger.info(statement.state)
+        _logger.info(statement.all_lines_reconciled)
         _logger.info('------------------------++++++++++++++++++++++++++++++++++++++++++++++++++')
+        statement.button_validate_or_action()
 
     @api.model
     def payment_automation(self):
