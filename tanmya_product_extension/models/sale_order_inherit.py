@@ -188,6 +188,8 @@ class SaleOrderInerit(models.Model):
         _logger.info('------------------------++++++++++++++++++++++++++++++++++++++++++++++++++')
         _logger.info(statement.state)
         _logger.info(statement.all_lines_reconciled)
+        for line in statement.line_ids:
+            print(line.is_reconciled)
         _logger.info('------------------------++++++++++++++++++++++++++++++++++++++++++++++++++')
         statement.button_validate_or_action()
 
