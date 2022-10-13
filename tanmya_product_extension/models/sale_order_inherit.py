@@ -265,7 +265,7 @@ class SaleOrderInerit(models.Model):
                         where aa.ref='{inv_name}' or aa.move_name='{inv_name}'
                         """
                 self._cr.execute(qry)
-#                 self.create_cash_statement(inv_name, pay_action)
+                self.create_cash_statement(inv_name, pay_action)
 #                 if seq_transaction % 10 == 0:
 #                     self._cr.commit()
                 ###############################################
