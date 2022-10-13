@@ -187,6 +187,7 @@ class SaleOrderInerit(models.Model):
         annos._apply_rules(statement.line_ids)
         _logger.info('------------------------++++++++++++++++++++++++++++++++++++++++++++++++++')
         _logger.info(annos)
+        _logger.info(annos._apply_rules(statement.line_ids))
         _logger.info(statement.state)
         _logger.info(statement.all_lines_reconciled)
         for line in statement.line_ids:
