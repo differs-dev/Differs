@@ -414,7 +414,7 @@ class TanmyaProducExt(models.Model):
     #     return products_details
 
     @api.model
-    def get_products_details(self, search_word='', category_id=-1, order_by='name', limit=None, offset=0):
+    def get_products_details(self, search_word='', category_id=-1, order_by='name', limit=None, offset=0, is_publish=True):
         search_word1 = search_word.capitalize()
         search_word2 = search_word.lower()
         search_word3 = search_word.upper()
@@ -425,7 +425,8 @@ class TanmyaProducExt(models.Model):
                                                                   ('name', 'like', search_word2),
                                                                   ('name', 'like', search_word3),
                                                                   ('kit_template', '=', None),
-                                                                  ('prod_category', 'like', category_id)],
+                                                                  ('prod_category', 'like', category_id),
+                                                                  ('is_published', '=', is_publish)],
                                                                  limit=limit,
                                                                  offset=offset,
                                                                  order=order_by)
@@ -435,15 +436,13 @@ class TanmyaProducExt(models.Model):
                                                                   ('name', 'like', search_word1),
                                                                   ('name', 'like', search_word2),
                                                                   ('name', 'like', search_word3),
-                                                                  ('kit_template', '=', None)],
+                                                                  ('kit_template', '=', None),
+                                                                  ('is_published', '=', is_publish)],
                                                                  limit=limit,
                                                                  offset=offset,
                                                                  order=order_by)
         products_details = []
         for product in products:
-            _logger.info("/-----------------------------------************************************")
-            _logger.info(product.is_published)
-            _logger.info("/-----------------------------------*************************************")
             product_details = {
                 'id': product.id,
                 'name': product.name,
