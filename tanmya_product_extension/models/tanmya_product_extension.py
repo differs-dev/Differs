@@ -441,6 +441,9 @@ class TanmyaProducExt(models.Model):
                                                                  order=order_by)
         products_details = []
         for product in products:
+            _logger.info("/-------------------------------------*************************************")
+            _logger.info(product.is_published)
+            _logger.info("/-------------------------------------*************************************")
             product_details = {
                 'id': product.id,
                 'name': product.name,
