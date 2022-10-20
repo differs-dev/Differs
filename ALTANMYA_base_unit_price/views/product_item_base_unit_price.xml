@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="base_unit_differ_price_unit" inherit_id="website_sale.products_item">
+        <xpath expr="//span[@class='h5'][1]" position="after">
+            <small class="cart_product_base_unit_price text-muted">
+                (<t t-if="product.base_unit_price == 0">
+                <span class="o_base_unit_price" t-esc="product.list_price" t-options='{
+                    "widget": "monetary",
+                    "display_currency": (website or product).currency_id
+                    }'/>
+                </t>
+                <t t-else="">
+                    <span class="o_base_unit_price" t-esc="product.base_unit_price" t-options='{
+                    "widget": "monetary",
+                    "display_currency": (website or product).currency_id
+                    }'/>
+                </t>
+                    / <span class="oe_custom_base_unit" t-esc="product.base_unit_name"/>)
+            </small>
+        </xpath>
+    </template>
+</odoo>
