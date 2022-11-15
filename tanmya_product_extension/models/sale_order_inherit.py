@@ -117,6 +117,7 @@ class SaleOrderInerit(models.Model):
                 line_details = {
                     'id': line.id,
                     'product': {
+                        'kit_template': line.product_id.kit_template,
                         'name': line.product_id.name,
                         'image': line.product_id.image_128 or ''},
                     'price': line.price_unit,
