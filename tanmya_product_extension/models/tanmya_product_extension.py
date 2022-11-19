@@ -525,12 +525,8 @@ class TanmyaProducExt(models.Model):
 
     def get_preference_state(self, product_id):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
-        _logger.info('/**************************************************/////////////////////////////')
-        _logger.info(user.products_preferences_ids)
-        _logger.info(user.products_preferences_ids.ids)
-        _logger.info('/**************************************************/////////////////////////////')
         for rec in user.products_preferences_ids:
-            if rec.product_id == product_id:
+            if rec.product_id == product_id.id:
                 return rec.status
         return 'dislike'
 
