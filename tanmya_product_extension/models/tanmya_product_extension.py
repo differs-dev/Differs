@@ -523,6 +523,13 @@ class TanmyaProducExt(models.Model):
             return reviews_details
         return []
 
+    def get_preference_state(self, product_id):
+        user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
+        for rec in user.products_preferences_ids:
+            if rec.product_id == product_id:
+                return rec.status
+        return 'dislike'
+
     @api.model
     def get_recipes_details(self, state='public', owner_id=-1, limit=None, offset=0):
         recipes = False
@@ -561,10 +568,9 @@ class TanmyaProducExt(models.Model):
                     'fat': recipe.fat,
                     'fiber': recipe.fiber,
                     'iron': recipe.iron,
-                    # 'prod_category': self.get_recipe_categories(recipe),
                     'prod_category': recipe.prod_category.ids,
-                    # 'reviews_ids': self.get_recipe_reviews(recipe),
-                    'reviews_ids': recipe.reviews_ids.ids
+                    'reviews_ids': recipe.reviews_ids.ids,
+                    'preference_state': self.get_preference_state(recipe.id)
                 }
                 recipes_details.append(recipe_details)
         return recipes_details
