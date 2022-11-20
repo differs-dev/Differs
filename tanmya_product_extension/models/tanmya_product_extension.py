@@ -128,15 +128,7 @@ class TanmyaProducExt(models.Model):
         for product in self:
             if product.kit_template:
                 totalprice = 0
-                # for item in product.kit_template.sale_order_template_line_ids:
-                #     if to_uom:
-                #         list_price = item.product_id.uom_id._compute_price(product.list_price, to_uom)
-                #     else:
-                #         list_price = item.product_id.list_price
-                #     totalprice+=(list_price+ item.product_id.price_extra)*item.product_uom_qty
-
                 product.lst_price = self._compute_kit_price(product.kit_template, to_uom)
-
             else:
                 if to_uom:
                     list_price = product.uom_id._compute_price(product.list_price, to_uom)
@@ -362,56 +354,13 @@ class TanmyaProducExt(models.Model):
         uid = self.env.uid
         return uid
 
-    # @api.model
-    # def get_products_details(self, search_word='', category_id=-1, order_by='name'):
-    #     tic = time.time()
-    #     search_word1 = search_word.capitalize()
-    #     search_word2 = search_word.lower()
-    #     search_word3 = search_word.upper()
-    #     if category_id > 0:
-    #         products = self.env['product.product'].sudo().search(['|', '|', '|',
-    #                                                               ('name', 'like', search_word),
-    #                                                               ('name', 'like', search_word1),
-    #                                                               ('name', 'like', search_word2),
-    #                                                               ('name', 'like', search_word3),
-    #                                                               ('kit_template', '=', None),
-    #                                                               ('prod_category', 'like', category_id)],
-    #                                                              order=order_by)
-    #     else:
-    #         products = self.env['product.product'].sudo().search(['|', '|', '|',
-    #                                                               ('name', 'like', search_word),
-    #                                                               ('name', 'like', search_word1),
-    #                                                               ('name', 'like', search_word2),
-    #                                                               ('name', 'like', search_word3),
-    #                                                               ('kit_template', '=', None)],
-    #                                                              order=order_by)
-    #     products_details = []
-    #     for product in products:
-    #         product_details = {
-    #             'id': product.id,
-    #             'name': product.name,
-    #             'image_128': product.image_128,
-    #             'list_price': product.list_price,
-    #             'uom': product.uom_id.name,
-    #             'calories': product.calories,
-    #             'carbs': product.carbs,
-    #             'protein': product.protein,
-    #             'fat': product.fat,
-    #             'fiber': product.fiber,
-    #             'iron': product.iron,
-    #             'description': product.description
-    #         }
-    #         products_details.append(product_details)
-    #
-    #     toc = time.time()
-    #     tic_toc = self.time_convert(toc - tic)
-    #     _logger.info('---------------------------------------------------------')
-    #     _logger.info("Search Word is :")
-    #     _logger.info(search_word)
-    #     _logger.info("Get products execution time is: ")
-    #     _logger.info(tic_toc)
-    #     _logger.info('---------------------------------------------------------')
-    #     return products_details
+    def get_preference_state(self, product_id):
+        user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
+        for rec in user.products_preferences_ids:
+            if rec.product_id.id == product_id:
+                return rec.status
+
+        return 'dislike'
 
     @api.model
     def get_products_details(self, search_word='', category_id=-1, order_by='name', limit=None, offset=0, is_publish=True):
@@ -455,7 +404,8 @@ class TanmyaProducExt(models.Model):
                 'fat': product.fat,
                 'fiber': product.fiber,
                 'iron': product.iron,
-                'description': product.description
+                'description': product.description,
+                'preference_state': self.get_preference_state(product.id)
             }
             products_details.append(product_details)
         return products_details
@@ -522,13 +472,6 @@ class TanmyaProducExt(models.Model):
                 reviews_details.append(review_details)
             return reviews_details
         return []
-
-    def get_preference_state(self, product_id):
-        user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
-        for rec in user.products_preferences_ids:
-            if rec.product_id.id == product_id:
-                return rec.status
-        return 'dislike'
 
     @api.model
     def get_recipes_details(self, state='public', owner_id=-1, limit=None, offset=0):
@@ -622,7 +565,8 @@ class TanmyaProducExt(models.Model):
                 'fiber': recipe.fiber,
                 'iron': recipe.iron,
                 'prod_category': recipe.prod_category.ids,
-                'reviews_ids': recipe.reviews_ids.ids
+                'reviews_ids': recipe.reviews_ids.ids,
+                'preference_state': self.get_preference_state(recipe.id)
             }
             recipes_details.append(recipe_details)
 
