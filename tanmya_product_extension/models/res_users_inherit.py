@@ -270,12 +270,16 @@ class ResUsers(models.Model):
         if user:
             for address in user.partner_id.address_ids:
                 address_info = {
+                    'zip': address.zip,
+                    'city': address.city,
+                    'country': address.country_id.name,
+                    'phone': address.phone,
                     'address_title': address.address_title,
                     'building_name': address.building_name,
                     'apartment_name': address.apartment_name,
                     'street': address.street,
-                    'partner_latitude': address.latitude,
-                    'partner_longitude': address.longitude
+                    'partner_latitude': address.partner_latitude,
+                    'partner_longitude': address.partner_longitude
                 }
                 addresses_info_list.append(address_info)
         return addresses_info_list
