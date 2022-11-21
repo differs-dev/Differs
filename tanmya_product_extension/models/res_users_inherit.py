@@ -250,6 +250,11 @@ class ResUsers(models.Model):
                  Fals if not
         """
         if address_vals:
+            if address_vals.get('country', False):
+                country_id = self.env['res.country'].sudo().search([('name', '=', address_vals.get('country'))]).id
+                address_vals['country_id'] = country_id
+                del address_vals['country']
+
             new_address = self.env['additional.address'].sudo().create(address_vals)
             if new_address:
                 user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
@@ -311,3 +316,7 @@ class AdditionalAddress(models.Model):
     street = fields.Char(string='Street Name')
     latitude = fields.Float(string='Latitude')
     longitude = fields.Float(string='Longitude')
+    zip = fields.Char(string='ZIP Code')
+    country_id = fields.Many2one('res.country', string='Country')
+    city = fields.Char(string='City')
+    phone = fields.Char(string='Phone Number')
