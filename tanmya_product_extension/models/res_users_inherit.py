@@ -230,7 +230,8 @@ class ResUsers(models.Model):
                 'apartment_name': user.partner_id.apartment_name,
                 'street': user.partner_id.street,
                 'partner_latitude': user.partner_id.partner_latitude,
-                'partner_longitude': user.partner_id.partner_longitude
+                'partner_longitude': user.partner_id.partner_longitude,
+                'phone': user.partner_id.mobile
             }
             address_info_list.append(address_info)
         return address_info_list
