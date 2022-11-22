@@ -445,7 +445,8 @@ class TanmyaProducExt(models.Model):
     @api.model
     def get_total_user_recipes_rates(self, user_id):
         if user_id:
-            recipes = self.env['product.product'].sudo().search([('owner_id', '=', user_id)])
+            recipes = self.env['product.product'].sudo().search([('owner_id', '=', user_id),
+                                                                 ('recipe_status', '=', 'public')])
             recipe_count = int(len(recipes))
             user_recipes_rates = 0.0
             rates_sum = 0
