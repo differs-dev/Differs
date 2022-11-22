@@ -222,6 +222,7 @@ class ResUsers(models.Model):
         address_info_list = []
         if user:
             address_info = {
+                'id': -1,
                 'zip': user.partner_id.zip,
                 'country': user.partner_id.country_id.name,
                 'city': user.partner_id.city,
@@ -264,13 +265,14 @@ class ResUsers(models.Model):
         return False
 
     @api.model
-    def get_addresses_details(self):
+    def get_addresses_details(self, search_word=''):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         address_info = False
         addresses_info_list = self.get_address_info()
         if user:
             for address in user.partner_id.address_ids:
                 address_info = {
+                    'id': address.id,
                     'zip': address.zip,
                     'city': address.city,
                     'country': address.country_id.name,
@@ -283,6 +285,12 @@ class ResUsers(models.Model):
                     'partner_longitude': address.partner_longitude
                 }
                 addresses_info_list.append(address_info)
+
+        # if search_word != '':
+        #     target_addresses = []
+        #     for address in addresses_info_list:
+        #         if search_word
+
         return addresses_info_list
 
     @api.model
