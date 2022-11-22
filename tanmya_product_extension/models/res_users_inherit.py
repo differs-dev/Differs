@@ -329,8 +329,9 @@ class ResUsers(models.Model):
             return [address_info]
 
     @api.model
-    def update_address_info(self, address_id, vals):
+    def update_address_info(self, vals):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
+        address_id = user.partner_id.main_address_id
         if vals.get('country', False):
             country_id = self.env['res.country'].sudo().search([('name', '=', vals.get('country'))]).id
             vals['country_id'] = country_id
@@ -358,6 +359,11 @@ class ResUsers(models.Model):
             user.write(new_vals)
             return True
         return False
+
+    @api.model
+    def set_main_address_id(self, address_id):
+        user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
+        user.write({'main_address_id': address_id})
 
 
 class ResPartner(models.Model):
