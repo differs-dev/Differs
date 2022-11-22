@@ -539,9 +539,6 @@ class TanmyaProducExt(models.Model):
                     'preference_state': self.get_preference_state(recipe.id),
                     'total_rates': self.get_recipe_total_rates(recipe.id)
                 }
-                _logger.info('///////////////////////********************--------------------')
-                _logger.info(recipe_details['total_rates'])
-                _logger.info('///////////////////////********************--------------------')
                 recipes_details.append(recipe_details)
         return recipes_details
 
