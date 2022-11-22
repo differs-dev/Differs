@@ -309,11 +309,12 @@ class ResUsers(models.Model):
     def get_address_details(self, address_id):
         if address_id == -1:
             address = self.get_address_info()
-            _logger.info('-------------------*******************************')
-            _logger.info(address)
-            _logger.info('-------------------*******************************')
-            if len(address) > 0:
-                return address[0]
+#             _logger.info('-------------------*******************************')
+#             _logger.info(address)
+#             _logger.info('-------------------*******************************')
+#             if len(address) > 0:
+#                 return address[0]
+            return address
         else:
             address = self.env['additional.address'].sudo().search([('id', '=', address_id)])
             address_info = {
@@ -329,7 +330,9 @@ class ResUsers(models.Model):
                 'partner_latitude': address.partner_latitude,
                 'partner_longitude': address.partner_longitude
             }
-            return address_info
+            address_list = []
+            address_list.append(address_info)
+            return address_list
 
     @api.model
     def update_address_info(self, address_id, vals):
