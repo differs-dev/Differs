@@ -264,6 +264,17 @@ class ResUsers(models.Model):
                 return True
         return False
 
+    def search_in_address(self, address_vals, search_word):
+        search_word1 = search_word.capitalize()
+        search_word2 = search_word.lower()
+        search_word3 = search_word.upper()
+        result = False
+        for val in address_vals.values():
+            if search_word in val or search_word1 in val or search_word2 in val or search_word3 in val:
+                result = True
+                break
+        return result
+
     @api.model
     def get_addresses_details(self, search_word=''):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
@@ -286,12 +297,52 @@ class ResUsers(models.Model):
                 }
                 addresses_info_list.append(address_info)
 
-        # if search_word != '':
-        #     target_addresses = []
-        #     for address in addresses_info_list:
-        #         if search_word
-
+            if search_word and search_word != '':
+                target_addresses = []
+                for address in addresses_info_list:
+                    if self.search_in_address(address, search_word):
+                        target_addresses.append(address)
+                return target_addresses
         return addresses_info_list
+
+    @api.model
+    def get_address_details(self, address_id):
+        if address_id == -1:
+            address = self.get_address_info()
+            if len(address) > 0:
+                return address[0]
+        else:
+            address = self.env['additional.address'].sudo().search([('id', '=', address_id)])
+            address_info = {
+                'id': address.id,
+                'zip': address.zip,
+                'city': address.city,
+                'country': address.country_id.name,
+                'phone': address.phone,
+                'address_title': address.address_title,
+                'building_name': address.building_name,
+                'apartment_name': address.apartment_name,
+                'street': address.street,
+                'partner_latitude': address.partner_latitude,
+                'partner_longitude': address.partner_longitude
+            }
+            return address_info
+
+    @api.model
+    def update_address_info(self, address_id, vals):
+        user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
+        if vals.get('country', False):
+            country_id = self.env['res.country'].sudo().search([('name', '=', vals.get('country'))]).id
+            vals['country_id'] = country_id
+            del vals['country']
+
+        if address_id == -1:
+            user.write(vals)
+            return True
+        else:
+            address = self.env['additional.address'].sudo().search([('id', '=', address_id)])
+            address.write(vals)
+            return True
 
     @api.model
     def update_user_info(self, new_vals):
