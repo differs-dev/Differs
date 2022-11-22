@@ -493,6 +493,8 @@ class TanmyaProducExt(models.Model):
                     if rates_count != 0:
                         return total_rates / rates_count
                     return total_rates
+                else:
+                    return 0.0
 
     @api.model
     def get_recipes_details(self, state='public', owner_id=-1, limit=None, offset=0):
