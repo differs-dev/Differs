@@ -436,9 +436,17 @@ class TanmyaProducExt(models.Model):
 
     @api.model
     def get_count_user_recipes(self, user_id: int):
+        recipe_count = 0
         if user_id:
-            return int(len(self.env['product.product'].sudo().search([('owner_id', '=', user_id)])))
-        return 0
+            recipes = self.env['product.product'].sudo().search([('owner_id', '=', user_id)])
+            recipe_count = int(len(recipes))
+
+            total_user_rates = 0
+            for recipe in recipes:
+                total_user_rates += self.get_recipe_total_rates(recipe.id)
+            user_recipes_rates = total_user_rates / recipe_count
+
+        return recipe_count
 
     @api.model
     def add_review(self, recipe_id: int, review_text: str, rating: str):
@@ -529,6 +537,9 @@ class TanmyaProducExt(models.Model):
                     'preference_state': self.get_preference_state(recipe.id),
                     'total_rates': self.get_recipe_total_rates(recipe.id)
                 }
+                _logger.info('///////////////////////********************--------------------')
+                _logger.info(recipe_details['total_rates'])
+                _logger.info('///////////////////////********************--------------------')
                 recipes_details.append(recipe_details)
         return recipes_details
 
