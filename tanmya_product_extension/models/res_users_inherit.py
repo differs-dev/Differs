@@ -269,10 +269,11 @@ class ResUsers(models.Model):
         search_word2 = search_word.lower()
         search_word3 = search_word.upper()
         result = False
-        for val in address_vals.values():
-            if search_word in val or search_word1 in val or search_word2 in val or search_word3 in val:
-                result = True
-                break
+        for key, val in address_vals.items():
+            if key != 'id' and key != 'partner_latitude' and key != 'partner_longitude':
+                if search_word in str(val) or search_word1 in str(val) or search_word2 in str(val) or search_word3 in str(val):
+                    result = True
+                    break
         return result
 
     @api.model
