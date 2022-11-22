@@ -473,6 +473,19 @@ class TanmyaProducExt(models.Model):
             return reviews_details
         return []
 
+    def get_recipe_total_rates(self, recipe_id):
+        if recipe_id:
+            recipe = self.env['product.product'].sudo().search([('id', '=', recipe_id)])
+            if recipe:
+                if recipe.reviews_ids:
+                    total_rates = 0
+                    rates_count = len(recipe.reviews_ids)
+                    for review in recipe.reviews_ids:
+                        total_rates += int(review.rating)
+                    if rates_count != 0:
+                        return total_rates / rates_count
+                    return total_rates
+
     @api.model
     def get_recipes_details(self, state='public', owner_id=-1, limit=None, offset=0):
         recipes = False
@@ -513,7 +526,8 @@ class TanmyaProducExt(models.Model):
                     'iron': recipe.iron,
                     'prod_category': recipe.prod_category.ids,
                     'reviews_ids': recipe.reviews_ids.ids,
-                    'preference_state': self.get_preference_state(recipe.id)
+                    'preference_state': self.get_preference_state(recipe.id),
+                    'total_rates': self.get_recipe_total_rates(recipe.id)
                 }
                 recipes_details.append(recipe_details)
         return recipes_details
@@ -566,7 +580,8 @@ class TanmyaProducExt(models.Model):
                 'iron': recipe.iron,
                 'prod_category': recipe.prod_category.ids,
                 'reviews_ids': recipe.reviews_ids.ids,
-                'preference_state': self.get_preference_state(recipe.id)
+                'preference_state': self.get_preference_state(recipe.id),
+                'total_rates': self.get_recipe_total_rates(recipe.id)
             }
             recipes_details.append(recipe_details)
 
