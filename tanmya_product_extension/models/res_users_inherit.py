@@ -306,17 +306,13 @@ class ResUsers(models.Model):
         return addresses_info_list
 
     @api.model
-    def get_address_details(self, address_id):
-        if address_id == -1:
+    def get_address_details(self):
+        user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
+        if user.partner_id.main_address_id == -1:
             address = self.get_address_info()
-#             _logger.info('-------------------*******************************')
-#             _logger.info(address)
-#             _logger.info('-------------------*******************************')
-#             if len(address) > 0:
-#                 return address[0]
             return address
         else:
-            address = self.env['additional.address'].sudo().search([('id', '=', address_id)])
+            address = self.env['additional.address'].sudo().search([('id', '=', user.partner_id.main_address_id)])
             address_info = {
                 'id': address.id,
                 'zip': address.zip,
@@ -330,9 +326,7 @@ class ResUsers(models.Model):
                 'partner_latitude': address.partner_latitude,
                 'partner_longitude': address.partner_longitude
             }
-            address_list = []
-            address_list.append(address_info)
-            return address_list
+            return [address_info]
 
     @api.model
     def update_address_info(self, address_id, vals):
@@ -372,8 +366,8 @@ class ResPartner(models.Model):
     address_title = fields.Char(string='Address Title')
     building_name = fields.Char(string='Building Name')
     apartment_name = fields.Char(string='Apartment Name')
-
     address_ids = fields.One2many('additional.address', 'partner_id', string='Partner Addresses')
+    main_address_id = fields.Integer(string='Main Address ID', default=-1)
 
 
 class AdditionalAddress(models.Model):
