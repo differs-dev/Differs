@@ -481,7 +481,7 @@ class TanmyaProducExt(models.Model):
                     total_rates = 0
                     rates_count = len(recipe.reviews_ids)
                     for review in recipe.reviews_ids:
-                        total_rates += int(review.rating)
+                        total_rates += float(review.rating)
                     if rates_count != 0:
                         return int(total_rates / rates_count)
                     return total_rates
