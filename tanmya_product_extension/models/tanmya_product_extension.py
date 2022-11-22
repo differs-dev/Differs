@@ -440,13 +440,21 @@ class TanmyaProducExt(models.Model):
         if user_id:
             recipes = self.env['product.product'].sudo().search([('owner_id', '=', user_id)])
             recipe_count = int(len(recipes))
-
-            total_user_rates = 0
-            for recipe in recipes:
-                total_user_rates += self.get_recipe_total_rates(recipe.id)
-            user_recipes_rates = total_user_rates / recipe_count
-
         return recipe_count
+
+    @api.model
+    def get_total_user_recipes_rates(self, user_id):
+        if user_id:
+            recipes = self.env['product.product'].sudo().search([('owner_id', '=', user_id)])
+            recipe_count = int(len(recipes))
+            user_recipes_rates = 0.0
+            rates_sum = 0
+            for recipe in recipes:
+                rates_sum += self.get_recipe_total_rates(recipe.id)
+            if recipe_count != 0:
+                user_recipes_rates = rates_sum / recipe_count
+            return user_recipes_rates
+
 
     @api.model
     def add_review(self, recipe_id: int, review_text: str, rating: str):
