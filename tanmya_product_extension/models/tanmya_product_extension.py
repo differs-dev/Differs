@@ -483,7 +483,7 @@ class TanmyaProducExt(models.Model):
                     for review in recipe.reviews_ids:
                         total_rates += int(review.rating)
                     if rates_count != 0:
-                        return total_rates / rates_count
+                        return int(total_rates / rates_count)
                     return total_rates
 
     @api.model
