@@ -138,6 +138,47 @@ class SaleOrderInerit(models.Model):
             return sale_order_details
         return False
 
+    def get_sale_order_details(self, sale_order):
+        if sale_order:
+            order_line = []
+            for line in sale_order.order_line:
+                line_details = {
+                    'id': line.id,
+                    'product': {
+                        'kit_template': line.product_id.kit_template.id,
+                        'name': line.product_id.name,
+                        'image': line.product_id.image_128 or ''},
+                    'price': line.price_unit,
+                    'quantity': line.product_uom_qty,
+                    'uom': line.product_uom.name,
+                    'currency': line.currency_id.name,
+                    'price_total': line.price_total,
+                }
+                order_line.append(line_details)
+            sale_order_details = {
+                'id': sale_order.id,
+                'amount_total': sale_order.amount_total,
+                'order_line': order_line,
+                'cart_quantity': sale_order.cart_products_qty,
+                'state': sale_order.state,
+                'date_order': sale_order.date_order,
+            }
+            return sale_order_details
+
+    @api.model
+    def get_user_carts_history(self):
+        user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
+        if user:
+            user_sale_orders = self.env['sale.order'].sudo().search([('partner_id', '=', user.partner_id.id),
+                                                                    ('state', '=', 'sale')],
+                                                                    order='date_order desc')
+            if user_sale_orders:
+                user_carts = []
+                for sale_order in user_sale_orders:
+                    user_carts.append(self.get_sale_order_details(sale_order))
+                return user_carts
+        return []
+
     @api.model
     def create_cash_statement(self, invoice_name, payaction):
         last_payment = self.env['account.payment'].sudo().browse(payaction['res_id'])
@@ -186,27 +227,27 @@ class SaleOrderInerit(models.Model):
         statement.action_bank_reconcile_bank_statements()
         annos = self.env['account.reconcile.model'].sudo().browse(2)
         annos._apply_rules(statement.line_ids)
-#         _logger.info('------------------------++++++++++++++++++++++++++++++++++++++++++++++++++')
-#         _logger.info(annos.name)
-#         _logger.info(statement.state)
-#         _logger.info(statement.line_ids[0].payment_ref)
-#         _logger.info(statement.line_ids[0].partner_id.name)
-#         _logger.info(statement.line_ids[0].amount)
-#         _logger.info(statement.all_lines_reconciled)
-#         for line in statement.line_ids:
-#             _logger.info(line.is_reconciled)
-#         _logger.info('------------------------++++++++++++++++++++++++++++++++++++++++++++++++++')
+        #         _logger.info('------------------------++++++++++++++++++++++++++++++++++++++++++++++++++')
+        #         _logger.info(annos.name)
+        #         _logger.info(statement.state)
+        #         _logger.info(statement.line_ids[0].payment_ref)
+        #         _logger.info(statement.line_ids[0].partner_id.name)
+        #         _logger.info(statement.line_ids[0].amount)
+        #         _logger.info(statement.all_lines_reconciled)
+        #         for line in statement.line_ids:
+        #             _logger.info(line.is_reconciled)
+        #         _logger.info('------------------------++++++++++++++++++++++++++++++++++++++++++++++++++')
         statement.button_validate_or_action()
 
     @api.model
     def payment_automation(self):
         for rec in self:
             odoobot = rec.env['res.users'].sudo().browse(1)
-            
+
             odoobot_tz = odoobot.env.user.tz
             if not odoobot_tz:
                 odoobot_tz = 'Europe/Paris'
-            
+
             tt = datetime.now(pytz.timezone(odoobot_tz)).strftime('%z')
             diff_hour = int(tt[1:3]) + int(tt[3:]) / 60
             seq_transaction = 0
