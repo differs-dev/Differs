@@ -78,7 +78,7 @@
                 <tree>
                     <field name="name"/>
                     <field name="publish"/>
-<!--                     <field name="type"/> -->
+                    <field name="type"/>
                 </tree>
             </field>
         </record>
@@ -92,7 +92,7 @@
                             <field name="publish" widget="boolean_toggle"/>
                             <field name="name"/>
                             <field name="image" widget="image"/>
-<!--                             <field name="type"/> -->
+                            <field name="type"/>
                         </group>
                     </sheet>
                 </form>
