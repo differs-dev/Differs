@@ -78,6 +78,7 @@
                 <tree>
                     <field name="name"/>
                     <field name="publish"/>
+                    <field name="type"/>
                 </tree>
             </field>
         </record>
@@ -91,12 +92,13 @@
                             <field name="publish" widget="boolean_toggle"/>
                             <field name="name"/>
                             <field name="image" widget="image"/>
+                            <field name="type"/>
                         </group>
                     </sheet>
                 </form>
             </field>
         </record>
-<!--                Categories menu action-->
+<!--    Categories menu action-->
         <record id="tanmya_category_action" model="ir.actions.act_window">
             <field name="name">Tanmya Categories</field>
             <field name="type">ir.actions.act_window</field>
@@ -104,7 +106,7 @@
             <field name="view_mode">tree,kanban,form</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
-                    Create Your First Database Connector!
+                    Create Your First Category!
                 </p>
             </field>
         </record>
