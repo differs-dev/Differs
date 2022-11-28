@@ -12,9 +12,9 @@ class Tanmyaprodcategory(models.Model):
     name = fields.Char(string='Category name')
     image = fields.Image(string='Image')
     publish = fields.Boolean(string='Publish')
-    type = fields.Selection([('by_ingredients', 'By Ingredients'),
-                             ('by_cuisine', 'By Cuisine')],
-                            string='Category Type')
+#     type = fields.Selection([('by_ingredients', 'By Ingredients'),
+#                              ('by_cuisine', 'By Cuisine')],
+#                             string='Category Type')
 
     @api.model
     def get_categories_details(self, search_word='', limit=None, offset=0):
