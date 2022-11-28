@@ -12,6 +12,9 @@ class Tanmyaprodcategory(models.Model):
     name = fields.Char(string='Category name')
     image = fields.Image(string='Image')
     publish = fields.Boolean(string='Publish')
+    type = fields.Selection([('by_ingredients', 'By Ingredients'),
+                             ('by_cuisine', 'By Cuisine')],
+                            string='Category Type')
 
     @api.model
     def get_categories_details(self, search_word='', limit=None, offset=0):
@@ -363,7 +366,8 @@ class TanmyaProducExt(models.Model):
         return 'dislike'
 
     @api.model
-    def get_products_details(self, search_word='', category_id=-1, order_by='name', limit=None, offset=0, is_publish=True):
+    def get_products_details(self, search_word='', category_id=-1, order_by='name', limit=None, offset=0,
+                             is_publish=True):
         search_word1 = search_word.capitalize()
         search_word2 = search_word.lower()
         search_word3 = search_word.upper()
@@ -455,7 +459,6 @@ class TanmyaProducExt(models.Model):
             if recipe_count != 0:
                 user_recipes_rates = rates_sum / recipe_count
             return user_recipes_rates
-
 
     @api.model
     def add_review(self, recipe_id: int, review_text: str, rating: str):
