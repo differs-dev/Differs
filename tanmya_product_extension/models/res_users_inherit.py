@@ -248,7 +248,7 @@ class ResUsers(models.Model):
             'partner_latitude': 'partner_latitude',
             'partner_longitude': 'partner_longitude'
         }
-        @return: True if address added
+        @return: new_address.id if address added
                  Fals if not
         """
         if address_vals:
@@ -261,7 +261,7 @@ class ResUsers(models.Model):
             if new_address:
                 user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
                 user.partner_id.address_ids = [(4, new_address.id)]
-                return True
+                return new_address.id
         return False
 
     def search_in_address(self, address_vals, search_word):
