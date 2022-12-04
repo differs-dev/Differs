@@ -480,7 +480,8 @@ class TanmyaProducExt(models.Model):
         if reviews_ids:
             reviews = self.env['tanmya.review'].sudo().search([('id', 'in', reviews_ids)],
                                                               limit=limit,
-                                                              offset=offset)
+                                                              offset=offset,
+                                                              order='review_date desc')
             reviews_details = []
             for review in reviews:
                 review_details = {
