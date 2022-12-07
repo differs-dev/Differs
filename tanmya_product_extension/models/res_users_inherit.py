@@ -312,6 +312,23 @@ class ResUsers(models.Model):
         if user.partner_id.main_address_id == -1:
             address = self.get_address_info()
             return address
+
+        elif user.partner_id.main_address_id == -2:
+            address_info = {
+                'id': 0,
+                'zip': '',
+                'city': '',
+                'country': '',
+                'phone': '',
+                'address_title': '',
+                'building_name': '',
+                'apartment_name': '',
+                'street': '',
+                'partner_latitude': 0.0,
+                'partner_longitude': 0.0
+            }
+            return [address_info]
+
         else:
             address = self.env['additional.address'].sudo().search([('id', '=', user.partner_id.main_address_id)])
             address_info = {
@@ -365,6 +382,12 @@ class ResUsers(models.Model):
     def set_main_address_id(self, address_id):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         user.write({'main_address_id': address_id})
+    
+    @api.model
+    def cancel_main_address(self, address_id):
+        user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
+        if user.main_address_id == address_id:
+            user.write({'main_address_id': -2})
 
 
 class ResPartner(models.Model):
