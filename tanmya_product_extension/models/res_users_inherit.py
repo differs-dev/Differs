@@ -315,7 +315,7 @@ class ResUsers(models.Model):
 
         elif user.partner_id.main_address_id == -2:
             address_info = {
-                'id': 0,
+                'id': -2,
                 'zip': '',
                 'city': '',
                 'country': '',
