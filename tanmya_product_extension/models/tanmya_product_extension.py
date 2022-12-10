@@ -551,7 +551,8 @@ class TanmyaProducExt(models.Model):
                     'prod_category': recipe.prod_category.ids,
                     'reviews_ids': recipe.reviews_ids.ids,
                     'preference_state': self.get_preference_state(recipe.id),
-                    'total_rates': self.get_recipe_total_rates(recipe.id)
+                    'total_rates': self.get_recipe_total_rates(recipe.id),
+                    'recipe_status': recipe.recipe_status
                 }
                 recipes_details.append(recipe_details)
         return recipes_details
