@@ -397,7 +397,7 @@ class ResUsers(models.Model):
                 'zip': None,
                 'city': None,
                 'country_id': None,
-                'phone': None,
+                'mobile': None,
                 'address_title': None,
                 'building_name': None,
                 'apartment_name': None,
