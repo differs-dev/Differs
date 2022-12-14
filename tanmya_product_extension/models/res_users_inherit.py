@@ -388,6 +388,27 @@ class ResUsers(models.Model):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         if user.main_address_id == address_id:
             user.write({'main_address_id': -2})
+    
+    @api.model
+    def delete_address(self, address_id):
+        user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
+        if address_id == -1:
+            address_vals = {
+                'zip': None,
+                'city': None,
+                'country_id': None,
+                'phone': None,
+                'address_title': None,
+                'building_name': None,
+                'apartment_name': None,
+                'street': None,
+                'partner_latitude': None,
+                'partner_longitude': None
+            }
+            user.write(address_vals)
+        else:
+            address = self.env['additional.address'].sudo().search([('id', '=', address_id)])
+            address.unlink()
 
 
 class ResPartner(models.Model):
