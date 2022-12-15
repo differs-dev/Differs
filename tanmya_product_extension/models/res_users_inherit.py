@@ -418,7 +418,7 @@ class ResUsers(models.Model):
         _logger.info(self.env.uid)
         _logger.info('///////////***************************************////////////////////////')
         request.session.logout(keep_db=True)
-        user.unlink()
+        user.sudo().unlink()
         _logger.info('///////////*******************2222********************/////////////////////')
         _logger.info(self.env.uid)
         _logger.info('///////////*******************2222*******************//////////////////////')
