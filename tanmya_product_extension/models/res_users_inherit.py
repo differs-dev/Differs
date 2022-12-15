@@ -409,6 +409,18 @@ class ResUsers(models.Model):
         else:
             address = self.env['additional.address'].sudo().search([('id', '=', address_id)])
             address.unlink()
+     
+    @api.model
+    def delete_user_account(self):
+        user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
+        _logger.info('///////////***************************************////////////////////////')
+        _logger.info(self.env.uid)
+        _logger.info('///////////***************************************////////////////////////')
+        request.session.logout(keep_db=True)
+        user.unlink()
+        _logger.info('///////////*******************2222********************/////////////////////')
+        _logger.info(self.env.uid)
+        _logger.info('///////////*******************2222*******************//////////////////////')
 
 
 class ResPartner(models.Model):
