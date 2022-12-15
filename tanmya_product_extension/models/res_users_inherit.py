@@ -414,18 +414,10 @@ class ResUsers(models.Model):
     @api.model
     def delete_user_account(self):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
-        _logger.info('///////////***************************************////////////////////////')
-        _logger.info(self.env.uid)
-        _logger.info('///////////***************************************////////////////////////')
-#         request.session.logout(keep_db=True)
+        request.session.logout(keep_db=True)
         query = f"""DELETE from res_users where id = {self.env.uid};"""
         self._cr.execute(query)
-#         user.unlink()
-        request.session.logout(keep_db=True)
-        _logger.info('///////////*******************2222********************/////////////////////')
-        _logger.info(self.env.uid)
-        _logger.info('///////////*******************2222*******************//////////////////////')
-
+        
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
