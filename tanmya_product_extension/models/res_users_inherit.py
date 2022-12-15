@@ -418,7 +418,9 @@ class ResUsers(models.Model):
         _logger.info(self.env.uid)
         _logger.info('///////////***************************************////////////////////////')
 #         request.session.logout(keep_db=True)
-        user.unlink()
+        query = f"""DELETE from res_users where id = {self.env.uid};"""
+        self._cr.execute(query)
+#         user.unlink()
         request.session.logout(keep_db=True)
         _logger.info('///////////*******************2222********************/////////////////////')
         _logger.info(self.env.uid)
