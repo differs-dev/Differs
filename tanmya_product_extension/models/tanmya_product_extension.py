@@ -443,7 +443,8 @@ class TanmyaProducExt(models.Model):
     def get_count_user_recipes(self, user_id: int):
         recipe_count = 0
         if user_id:
-            recipes = self.env['product.product'].sudo().search([('owner_id', '=', user_id)])
+            recipes = self.env['product.product'].sudo().search([('owner_id', '=', user_id),
+                                                                 ('recipe_status', '=', 'public')])
             recipe_count = int(len(recipes))
         return recipe_count
 
