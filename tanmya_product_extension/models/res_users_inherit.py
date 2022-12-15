@@ -3,6 +3,7 @@ from odoo import api, fields, models, tools, SUPERUSER_ID, _, Command
 from odoo.exceptions import AccessDenied, UserError, AccessError
 from firebase_admin import credentials
 from firebase_admin import auth
+from odoo.http import request
 import firebase_admin
 import logging
 import time
