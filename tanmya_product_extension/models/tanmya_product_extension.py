@@ -570,17 +570,30 @@ class TanmyaProducExt(models.Model):
                                                                 ('name', 'like', search_word3), ])
 
     @api.model
-    def get_recipes(self, search_word='', order_by='name', limit=None, offset=0):
-        recipes = self.env['product.product'].sudo().search(['|', '|', '|',
-                                                             ('name', 'like', search_word),
-                                                             ('name', 'like', search_word.capitalize()),
-                                                             ('name', 'like', search_word.lower()),
-                                                             ('name', 'like', search_word.upper()),
-                                                             ('kit_template', '!=', None),
-                                                             ('recipe_status', '=', 'public')],
-                                                            order=order_by,
-                                                            limit=limit,
-                                                            offset=offset)
+    def get_recipes(self, search_word='', order_by='name', limit=None, offset=0, category_id=-1):
+        if category_id > 0:
+            recipes = self.env['product.product'].sudo().search(['|', '|', '|',
+                                                                 ('name', 'like', search_word),
+                                                                 ('name', 'like', search_word.capitalize()),
+                                                                 ('name', 'like', search_word.lower()),
+                                                                 ('name', 'like', search_word.upper()),
+                                                                 ('kit_template', '!=', None),
+                                                                 ('prod_category', 'like', category_id),
+                                                                 ('recipe_status', '=', 'public')],
+                                                                order=order_by,
+                                                                limit=limit,
+                                                                offset=offset)
+        else:
+            recipes = self.env['product.product'].sudo().search(['|', '|', '|',
+                                                                 ('name', 'like', search_word),
+                                                                 ('name', 'like', search_word.capitalize()),
+                                                                 ('name', 'like', search_word.lower()),
+                                                                 ('name', 'like', search_word.upper()),
+                                                                 ('kit_template', '!=', None),
+                                                                 ('recipe_status', '=', 'public')],
+                                                                order=order_by,
+                                                                limit=limit,
+                                                                offset=offset)
         recipes_details = []
         for recipe in recipes:
             recipe_details = {
