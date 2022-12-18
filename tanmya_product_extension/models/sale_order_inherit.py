@@ -341,11 +341,3 @@ class SaleOrderInerit(models.Model):
                 }
                 return [sale_order_review]
         return []
-
-    @api.model
-    def update_order_review(self, new_review_vals, order_id):
-        sale_order = self.env['sale.order'].sudo().search([('id', '=', order_id)])
-        if sale_order:
-            sale_order.write(new_review_vals)
-            return True
-        return False
