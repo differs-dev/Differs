@@ -337,7 +337,7 @@ class SaleOrderInerit(models.Model):
                 sale_order_review = {
                     'review_text': sale_order.order_review.review_text,
                     'rating': sale_order.order_review.rating,
-                    'review_date': sale_order.order_review.review_date,
+                    'review_date': str(sale_order.order_review.review_date),
                 }
                 return [sale_order_review]
         return []
