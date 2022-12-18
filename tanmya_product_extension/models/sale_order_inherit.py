@@ -328,3 +328,24 @@ class SaleOrderInerit(models.Model):
                 user_sale_order.order_review = order_review.id
                 return True
         return False
+    
+    @api.model
+    def get_order_review(self, order_id):
+        sale_order = self.env['sale.order'].sudo().search([('id', '=', order_id)])
+        if sale_order:
+            if sale_order.order_review:
+                sale_order_review = {
+                    'review_text': sale_order.order_review.review_text,
+                    'rating': sale_order.order_review.rating,
+                    'review_date': sale_order.order_review.review_date,
+                }
+                return [sale_order_review]
+        return []
+
+    @api.model
+    def update_order_review(self, new_review_vals, order_id):
+        sale_order = self.env['sale.order'].sudo().search([('id', '=', order_id)])
+        if sale_order:
+            sale_order.write(new_review_vals)
+            return True
+        return False
