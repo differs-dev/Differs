@@ -341,3 +341,11 @@ class SaleOrderInerit(models.Model):
                 }
                 return [sale_order_review]
         return []
+    
+    @api.model
+    def buy_order_again(self, order_id):
+        old_order = self.env['sale.order'].sudo().search([('id', '=', order_id)])
+        user_order = self.get_user_cart()
+        for line in old_order.order_line:
+            new_line = line.copy()
+            user_order.order_line = [(4, new_line.id)]
