@@ -314,7 +314,7 @@ class SaleOrderInerit(models.Model):
                 ###############################################
 
     @api.model
-    def add_order_review(self, review_vals):
+    def add_order_review(self, review_vals, order_id):
         # review_vals = {
         #     'review_text': 'review_text',
         #     'rating': 'rating',
@@ -323,7 +323,7 @@ class SaleOrderInerit(models.Model):
             review_vals['user_id'] = self.env.uid
             review_vals['review_date'] = datetime.now()
             order_review = self.env['tanmya.review'].sudo().create(review_vals)
-            user_sale_order = self.get_user_cart()
+            user_sale_order = self.env['sale.order'].sudo().search([('id', '=', order_id)])
             if user_sale_order:
                 user_sale_order.order_review = order_review.id
                 return True
