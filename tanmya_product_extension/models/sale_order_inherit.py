@@ -350,5 +350,5 @@ class SaleOrderInerit(models.Model):
             # new_line = line.copy()
             line_vals = line.copy_data()[0]
             line_vals['order_id'] = user_order.id
-            new_line = self.env['sale.order'].sudo().create(line_vals)
+            new_line = self.env['sale.order.line'].sudo().create(line_vals)
             user_order.order_line = [(4, new_line.id)]
