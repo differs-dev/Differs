@@ -347,5 +347,8 @@ class SaleOrderInerit(models.Model):
         old_order = self.env['sale.order'].sudo().search([('id', '=', order_id)])
         user_order = self.get_user_cart()
         for line in old_order.order_line:
-            new_line = line.copy()
+            # new_line = line.copy()
+            line_vals = line.copy_data()[0]
+            line_vals['order_id'] = user_order.id
+            new_line = self.env['sale.order'].sudo().create(line_vals)
             user_order.order_line = [(4, new_line.id)]
