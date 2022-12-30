@@ -12,7 +12,7 @@ import werkzeug
 import psycopg2
 import logging
 import hashlib
-import odoo,
+import odoo
 
 
 class BaseUnitPrice(http.Controller):
