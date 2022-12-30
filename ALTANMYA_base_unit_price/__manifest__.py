@@ -2,7 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 {
     'name': 'ALTANMYA Base Price Unit',
-    'version': '1.0',
+    'version': '1.0.1',
     'category': '',
     'summary': 'Base Price Unit',
     'depends': ['website', 'website_sale', 'portal'],
