@@ -7,9 +7,9 @@ class ProductTemplateInherit(models.Model):
     website_description = fields.Char('Description for the website')
     
     # Nutrition Value Fields
-    calories = fields.Char(string='Recipe Calories')
-    carbs = fields.Char(string='Recipe Carbs')
-    protein = fields.Char(string='Recipe Protin')
-    fat = fields.Char(string='Recipe Fat')
-    fiber = fields.Char(string='Recipe Fiber')
-    iron = fields.Char(string='Recipe Iron')
+    calories = fields.Char(string='Calories')
+    carbs = fields.Char(string='Carbs')
+    protein = fields.Char(string='Protin')
+    fat = fields.Char(string='Fat')
+    fiber = fields.Char(string='Fiber')
+    iron = fields.Char(string='Iron')
