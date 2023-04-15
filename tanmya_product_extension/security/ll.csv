@@ -1,5 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-sale_order_template,sale.order.template,model_sale_order_template,website.group_website_publisher,1,0,0,0
-sale_order_template_line,sale.order.template.line,model_sale_order_template_line,website.group_website_publisher,1,0,0,0
-tanmya_product_category,tanmya.product.category,model_tanmya_product_category,website.group_website_publisher,1,0,0,0
-'tanmya.product.category
