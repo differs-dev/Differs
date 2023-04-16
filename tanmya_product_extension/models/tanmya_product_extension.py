@@ -169,17 +169,6 @@ class Tanmyacustomerpotslines(models.Model):
                                 copy=False)
     qty = fields.Float('Quantity')
 
-class TanmyaProducTemp(models.Model):
-    _inherit = 'product.template'
-
-    # Nutrition Value Fields
-    calories = fields.Integer(string='Calories')
-    carbs = fields.Integer(string='Carbs')
-    protein = fields.Integer(string='Protin')
-    fat = fields.Integer(string='Fat')
-    fiber = fields.Integer(string='Fiber')
-    iron = fields.Integer(string='Iron')
-
 class TanmyaProducExt(models.Model):
     _inherit = 'product.product'
 
