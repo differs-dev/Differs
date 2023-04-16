@@ -455,6 +455,7 @@ class TanmyaProducExt(models.Model):
         search_word1 = search_word.capitalize()
         search_word2 = search_word.lower()
         search_word3 = search_word.upper()
+        _logger.info(category_id)
         if category_id > 0:
             products = self.env['product.template'].sudo().search(['|', '|', '|',
                                                                   ('name', 'like', search_word),
