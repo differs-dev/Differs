@@ -462,7 +462,7 @@ class TanmyaProducExt(models.Model):
                                                                   ('name', 'like', search_word1),
                                                                   ('name', 'like', search_word2),
                                                                   ('name', 'like', search_word3),
-                                                                  ('categ_id', 'like', category_id),
+                                                                  ('categ_id', '=', category_id),
                                                                   ('is_published', '=', is_publish)],
                                                                  limit=limit,
                                                                  offset=offset,
