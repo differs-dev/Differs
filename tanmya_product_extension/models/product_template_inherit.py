@@ -4,7 +4,7 @@ from odoo import api, fields, models, _
 class ProductTemplateInherit(models.Model):
     _inherit = "product.template",
 
-    website_description = fields.Char('Description for the website')
+    description = fields.Char('Description', translate=True)
     
     # Nutrition Value Fields
     calories = fields.Char(string='Calories')
