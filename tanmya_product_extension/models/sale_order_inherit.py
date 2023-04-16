@@ -371,3 +371,18 @@ class SaleOrderInerit(models.Model):
             line_vals['order_id'] = user_order.id
             new_line = self.env['sale.order.line'].sudo().create(line_vals)
             user_order.order_line = [(4, new_line.id)]
+            
+    @api.model
+    def apply_coupon_automation(self, cuopon_code):
+        user_sale_order = self.get_user_cart()
+        if user_sale_order:
+            sale_coupon_wizard = self.env['sale.coupon.apply.code'].sudo().create({'coupon_code': cuopon_code})
+            if sale_coupon_wizard:
+                self.env.context['active_id'] = user_sale_order.id
+                error_status = ''
+                try:
+                    error_status = sale_coupon_wizard.process_coupon()
+                    return error_status
+                except UserError as e:
+                    print(e)
+                    return error_status
