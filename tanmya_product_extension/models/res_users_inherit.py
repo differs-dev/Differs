@@ -171,7 +171,7 @@ class ResUsers(models.Model):
 
     @api.model
     def _get_new_user_vals(self, firebase_uid, email, phone_name):
-        _logger.info('111111111111111111111111111111111111111111111111111111111111111111111111111111111111111')
+        _logger.info('11111111111111111111111111111111111111111111111111111111111111111111111111111111')
         _logger.info(phone_name)
         phone_name_list = phone_name.split(',')
         _logger.info(phone_name_list)
