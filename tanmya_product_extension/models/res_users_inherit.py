@@ -249,12 +249,12 @@ class ResUsers(models.Model):
             if firebase_user:
                 _logger.info('cccccccccccccccccccccccccccccccccccccccccccccc')
                 _logger.info('firebase_user')
-                firebase_user_password = '123'
                 user = False
                 with cls.pool.cursor() as cr:
                     self = api.Environment(cr, SUPERUSER_ID, {})[cls._name]
                     user = self.sudo().search(self._get_firebase_user_domain(firebase_user.uid), limit=1)
                     user = user.with_user(user)
+                    firebase_user_password = user.password
                     _logger.info('user')
                     if user:
                         _logger.info('dddddddddddddddddddddddddddddddddddddddddddd')
@@ -292,7 +292,7 @@ class ResUsers(models.Model):
                                 'name': phone_name_list[1],
                                 'sel_groups_1_9_10': 9,
                                 'email': firebase_user.email,
-                                'password': '123',
+                                'password': existing_user.password,
                                 'mobile': phone_name_list[0],
                                 'phone': phone_parts[1] + ' ' + phone_parts[2],
                             })
