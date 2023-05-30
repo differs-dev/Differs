@@ -274,9 +274,6 @@ class ResUsers(models.Model):
                         except AccessDenied:
                             _logger.info(
                                 '-------------------------AccessDenied Existing User----------------------------')
-                            _logger.info(user)
-                            a = self.env['res.users'].sudo().search_read([('id', '=', user)])
-                            _logger.info(a)
                             return user.id
                     else:
                         existing_user = self.env['res.users'].sudo().search([('login', '=', firebase_user.email)])
@@ -309,9 +306,6 @@ class ResUsers(models.Model):
                             try:
                                 auth_res = super(ResUsers, cls).authenticate(db, new_user.login, firebase_user_password,
                                                                              user_agent_env)
-                                _logger.info('////////////////////////////////////2')
-                                a = self.env['res.users'].sudo().search_read([('id', '=', auth_res)])
-                                _logger.info(a)
                                 return auth_res
                             except AccessDenied:
                                 _logger.info(
