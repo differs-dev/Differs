@@ -1,8 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-tanmya_product_category,tanmya.product.category,model_tanmya_product_category,base.group_user,1,1,1,1
-ingredients_details,ingredients.details,model_ingredients_details,base.group_user,1,1,1,1
-products_preferences,products.preferences,model_products_preferences,base.group_user,1,1,1,1
-tanmya_review,tanmya.review,model_tanmya_review,base.group_user,1,1,1,1
-sale_order,sale.order,model_sale_order,base.group_user,1,1,1,1
-product_product,product.product,model_product_product,base.group_user,1,1,1,1
-additional_address,additional.address,model_additional_address,base.group_user,1,1,1,1
