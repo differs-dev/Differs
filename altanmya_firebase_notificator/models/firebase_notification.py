@@ -69,7 +69,7 @@ class FirebaseNotification(models.Model):
                 'dry_run': False,
                 'priority': 'high',
                 'content_available': True,
-                'to': tokens[0] if type(tokens) == list and len(tokens) > 0 else tokens,
+             #   'to': tokens[0] if type(tokens) == list and len(tokens) > 0 else tokens,
             }
         resp = requests.post(url, headers=headers, json=data)
         raise ValidationError(_(resp.text.encode('utf8')))
