@@ -103,7 +103,7 @@ class FirebaseNotification(models.Model):
     def send(self):
         tokens = self.user_ids.mapped('firebase_account_id').mapped('token')
         firebase_app = self.get_firebase_app()
-
+        _logger.info('WTFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF')
         if tokens:
             if type(tokens) == list and len(tokens) == 1:
                 if not self.notification_date:
@@ -149,10 +149,12 @@ class FirebaseNotification(models.Model):
                         'sticky': False,  # True/False will display for few seconds if false
                     }
                 }
+                _logger.info('WTF11111111111111111111111111111111111111')
                 return notification
 
             else:
                 if not self.notification_date:
+                    _logger.info('WTF2222222222222222222222222222222222222222222')
                     self.notification_date = datetime.now()
                 message = messaging.MulticastMessage(
                     notification=messaging.Notification(
@@ -194,6 +196,7 @@ class FirebaseNotification(models.Model):
                         'sticky': False,  # True/False will display for few seconds if false
                     }
                 }
+                _logger.info('WTF3333333333333333333333333333333333333333333')
                 return notification
 
     @api.model
