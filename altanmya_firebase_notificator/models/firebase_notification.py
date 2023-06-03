@@ -197,7 +197,6 @@ class FirebaseNotification(models.Model):
                     }
                 }
                 _logger.info('WTF3333333333333333333333333333333333333333333')
-                sleep(2)
                 return notification
 
     @api.model
