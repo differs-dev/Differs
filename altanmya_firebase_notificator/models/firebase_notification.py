@@ -11,7 +11,6 @@ from firebase_admin import auth
 from datetime import datetime
 from time import sleep
 
-
 _logger = logging.getLogger(__name__)
 
 
@@ -24,6 +23,7 @@ class FirebaseNotification(models.Model):
     icon = fields.Char(string='Notification Icon URL')
     image = fields.Char(string='Notification Image URL')
     target_action = fields.Char(string='Target Action', default="FLUTTER_NOTIFICATION_CLICK")
+    payload = fields.Char(string='payload', default=" ", required=True)
     notification_date = fields.Datetime(string='Notification Date')
     user_ids = fields.Many2many('res.users', 'notification_ids',
                                 domain=[('firebase_account_id', '!=', False)],
@@ -46,6 +46,7 @@ class FirebaseNotification(models.Model):
                     'icon': self.icon,
                     'image': self.image,
                     'click_action': self.target_action,
+                    'payload': self.payload,
                     'sound': None,
                     'badge': None,
                 },
@@ -63,6 +64,7 @@ class FirebaseNotification(models.Model):
                     'icon': self.icon,
                     'image': self.image,
                     'click_action': self.target_action,
+                    'payload': self.payload,
                     'sound': None,
                     'badge': None,
                 },
@@ -74,7 +76,6 @@ class FirebaseNotification(models.Model):
         resp = requests.post(url, headers=headers, json=data)
         raise ValidationError(_(resp.text.encode('utf8')))
 
-    
     def get_firebase_app(self):
         cred_info = {
             "type": "service_account",
@@ -99,7 +100,6 @@ class FirebaseNotification(models.Model):
         except Exception as e:
             _logger.info(e)
             return app
-    
 
     def send(self):
         tokens = self.user_ids.mapped('firebase_account_id').mapped('token')
@@ -115,12 +115,13 @@ class FirebaseNotification(models.Model):
                             body=self.content,
                         ),
                         android=messaging.AndroidConfig(priority='high',
-                                                    notification=messaging.AndroidNotification(sound='default',
-                                                                                               click_action=self.target_action,
-                                                                                               title_loc_key='Hello world',
-                                                                                               body_loc_key='This is a message')),
+                                                        notification=messaging.AndroidNotification(sound='default',
+                                                                                                   click_action=self.target_action,
+                                                                                                   title_loc_key='Hello world',
+                                                                                                   body_loc_key='This is a message')),
                         data={'ios_click_action': self.target_action,
-                              'recipe_id': str(self.recipe_id)},
+                              'recipe_id': str(self.recipe_id),
+                              'payload': self.payload},
                         apns=messaging.APNSConfig(payload=messaging.APNSPayload(
                             aps=messaging.Aps(sound='default', alert=messaging.ApsAlert(subtitle=self.target_action,
                                                                                         title_loc_key='Hello world',
@@ -149,12 +150,10 @@ class FirebaseNotification(models.Model):
                         'sticky': False,  # True/False will display for few seconds if false
                     }
                 }
-                _logger.info('WTF11111111111111111111111111111111111111')
                 return notification
 
             else:
                 if not self.notification_date:
-                    _logger.info('WTF2222222222222222222222222222222222222222222')
                     self.notification_date = datetime.now()
                 message = messaging.MulticastMessage(
                     notification=messaging.Notification(
@@ -167,11 +166,13 @@ class FirebaseNotification(models.Model):
                                                                                                title_loc_key='Hello world',
                                                                                                body_loc_key='This is a message')),
                     data={'ios_click_action': self.target_action,
-                           'recipe_id': str(self.recipe_id)},
+                          'recipe_id': str(self.recipe_id),
+                          'payload': self.payload},
                     apns=messaging.APNSConfig(payload=messaging.APNSPayload(aps=messaging.Aps(sound='default',
-                                                                                              alert=messaging.ApsAlert(subtitle=self.target_action,
-                                                                                                                       title_loc_key='Hello world',
-                                                                                                                       loc_key='This is a message')))),
+                                                                                              alert=messaging.ApsAlert(
+                                                                                                  subtitle=self.target_action,
+                                                                                                  title_loc_key='Hello world',
+                                                                                                  loc_key='This is a message')))),
                     tokens=tokens,
                 )
                 response = messaging.send_multicast(message, app=firebase_app)
@@ -196,17 +197,17 @@ class FirebaseNotification(models.Model):
                         'sticky': False,  # True/False will display for few seconds if false
                     }
                 }
-                _logger.info('WTF3333333333333333333333333333333333333333333')
                 return notification
 
     @api.model
     def get_notifications_by_user(self, user_id: int):
         res = self.env['firebase.notification'].sudo().search_read([('user_ids', 'in', user_id)])
         return res
-    
+
     @api.model
     def get_notifications_length(self, user_id: int):
-        res = len(self.env['firebase.notification'].sudo().search_read([('user_ids', 'in', user_id), ('read_state', '=', False)]))
+        res = len(self.env['firebase.notification'].sudo().search_read(
+            [('user_ids', 'in', user_id), ('read_state', '=', False)]))
         return res
 
     @api.model
