@@ -23,7 +23,7 @@ class FirebaseNotification(models.Model):
     content = fields.Text(string='Notification Content', required=True, default="Default Content")
     icon = fields.Char(string='Notification Icon URL')
     image = fields.Char(string='Notification Image URL')
-    target_action = fields.Char(string='Target Action', default="Notification Action", required=True)
+    target_action = fields.Char(string='Target Action', default="FLUTTER_NOTIFICATION_CLICK")
     notification_date = fields.Datetime(string='Notification Date')
     user_ids = fields.Many2many('res.users', 'notification_ids',
                                 domain=[('firebase_account_id', '!=', False)],
