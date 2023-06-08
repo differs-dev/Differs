@@ -4,6 +4,7 @@ from odoo import api, fields, models, _
 from itertools import groupby
 import logging
 import pytz
+from odoo.tools import float_compare
 
 _logger = logging.getLogger(__name__)
 
@@ -13,7 +14,7 @@ class SaleOrderInerit(models.Model):
 
     cart_products_qty = fields.Integer(string='Cart Quantity', compute='_compute_cart_qty')
     order_review = fields.Many2one('tanmya.review', string='Order Review')
-    
+
     #################################
     delivery_address = fields.Many2one('additional.address', compute='_compute_delivery_address')
     delivery_period = fields.Selection([('before_5_30', 'Before 5:30 PM'),
@@ -23,8 +24,7 @@ class SaleOrderInerit(models.Model):
                                       ('out_of_area', 'Out Of Area')],
                                      string='Delivery Area')
     delivery_date = fields.Date(string='Delivery Date')
-    
-    
+
     @api.onchange('partner_id.main_address_id')
     def _compute_delivery_address(self):
         for rec in self:
@@ -127,7 +127,7 @@ class SaleOrderInerit(models.Model):
     def _compute_cart_qty(self):
         for order in self:
             order.cart_products_qty = int(sum(order.mapped('order_line.product_uom_qty')))
-            
+
     def get_variant_attributes(self, product_id):
         product = self.env['product.product'].sudo().browse(product_id)
         product_attributes = ''
@@ -206,23 +206,23 @@ class SaleOrderInerit(models.Model):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         if user:
             user_sale_orders = self.env['sale.order'].sudo().search([('partner_id', '=', user.partner_id.id),
-                                                                    ('state', '=', 'sale')],
+                                                                     ('state', '=', 'sale')],
                                                                     order='date_order desc')
             if user_sale_orders:
                 user_carts = []
                 for sale_order in user_sale_orders:
                     if sale_order.picking_ids:
                         if sale_order.picking_ids[0].state == 'done':
-                            user_carts.append(self.get_sale_order_details(sale_order))                    
+                            user_carts.append(self.get_sale_order_details(sale_order))
                 return user_carts
         return []
-    
+
     @api.model
     def get_user_carts_ongoing(self):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         if user:
             user_sale_orders = self.env['sale.order'].sudo().search([('partner_id', '=', user.partner_id.id),
-                                                                    ('state', '=', 'sale'),
+                                                                     ('state', '=', 'sale'),
                                                                      ('invoice_ids.payment_state', '=', 'paid')],
                                                                     order='date_order desc')
             if user_sale_orders:
@@ -230,7 +230,7 @@ class SaleOrderInerit(models.Model):
                 for sale_order in user_sale_orders:
                     if sale_order.picking_ids:
                         if sale_order.picking_ids[0].state != 'done':
-                            user_carts.append(self.get_sale_order_details(sale_order))                    
+                            user_carts.append(self.get_sale_order_details(sale_order))
                 return user_carts
         return []
 
@@ -383,7 +383,7 @@ class SaleOrderInerit(models.Model):
                 user_sale_order.order_review = order_review.id
                 return True
         return False
-    
+
     @api.model
     def get_order_review(self, order_id):
         sale_order = self.env['sale.order'].sudo().search([('id', '=', order_id)])
@@ -396,7 +396,7 @@ class SaleOrderInerit(models.Model):
                 }
                 return [sale_order_review]
         return []
-    
+
     @api.model
     def buy_order_again(self, order_id):
         old_order = self.env['sale.order'].sudo().search([('id', '=', order_id)])
@@ -407,7 +407,7 @@ class SaleOrderInerit(models.Model):
             line_vals['order_id'] = user_order.id
             new_line = self.env['sale.order.line'].sudo().create(line_vals)
             user_order.order_line = [(4, new_line.id)]
-            
+
     @api.model
     def apply_coupon_automation(self, cuopon_code):
         user_sale_order = self.get_user_cart()
@@ -425,8 +425,8 @@ class SaleOrderInerit(models.Model):
                     print(e)
                     error_status['old_total_price'] = old_total_price
                     return error_status
-    
-    
+
+
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
@@ -483,7 +483,8 @@ class ImmediateStockPicking(models.TransientModel):
                                     'title': 'Order delivered',
                                     'content': f'Order #{order.name} was successfully delivered to you.'
                                                'Click here to place a new order',
-                                    'target_action': 'order_delivered',
+                                    'payload': 'order_delivered',
+                                    'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                                     'notification_date': datetime.now(),
                                     'user_ids': [(6, 0, [order_user.id])],
                                 }
@@ -501,7 +502,8 @@ class ImmediateStockPicking(models.TransientModel):
                                 notification_vals = {
                                     'title': 'Order on its way',
                                     'content': 'Your order is on its way to you.',
-                                    'target_action': 'order_on_its_way',
+                                    'payload': 'order_on_its_way',
+                                    'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                                     'notification_date': datetime.now(),
                                     'user_ids': [(6, 0, [order_user.id])],
                                 }
@@ -566,7 +568,8 @@ class StockBackOrderConfirmation1(models.TransientModel):
                                     'content': f'Order #{order.name} was successfully delivered to you.'
                                                'Click here to place a new order',
                                     'notification_date': datetime.now(),
-                                    'target_action': 'order_delivered',
+                                    'payload': 'order_delivered',
+                                    'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                                     'user_ids': [(6, 0, [order_user.id])],
                                 }
                                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
@@ -584,7 +587,8 @@ class StockBackOrderConfirmation1(models.TransientModel):
                                     'title': 'Order on its way',
                                     'content': 'Your order is on its way to you.',
                                     'notification_date': datetime.now(),
-                                    'target_action': 'order_on_its_way',
+                                    'payload': 'order_on_its_way',
+                                    'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                                     'user_ids': [(6, 0, [order_user.id])],
                                 }
                                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
@@ -625,7 +629,8 @@ class StockBackOrderConfirmation1(models.TransientModel):
                                     'content': f'Order #{order.name} was successfully delivered to you.'
                                                'Click here to place a new order',
                                     'notification_date': datetime.now(),
-                                    'target_action': 'order_delivered',
+                                    'payload': 'order_delivered',
+                                    'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                                     'user_ids': [(6, 0, [order_user.id])],
                                 }
                                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
@@ -643,7 +648,8 @@ class StockBackOrderConfirmation1(models.TransientModel):
                                     'title': 'Order on its way',
                                     'content': 'Your order is on its way to you.',
                                     'notification_date': datetime.now(),
-                                    'target_action': 'order_on_its_way',
+                                    'payload': 'order_on_its_way',
+                                    'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                                     'user_ids': [(6, 0, [order_user.id])],
                                 }
                                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
