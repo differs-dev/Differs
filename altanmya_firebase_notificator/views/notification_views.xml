@@ -61,7 +61,7 @@
                         <field name="content"/>
                         <field name="read_state"/>
                         <field name="create_date" string="Creation Date"/>
-                        <field name="target_action"/>
+                        <field name="target_action" readonly="True"/>
                         <field name="user_ids" widget="many2many_tags"/>
                         <footer>
                             <button name="send" string="Send" class="oe_highlight" type="object"/>
