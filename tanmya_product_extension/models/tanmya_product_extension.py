@@ -16,7 +16,7 @@ class Tanmyaprodcategory(models.Model):
                              ('by_cuisine', 'By Cuisine')],
                             string='Category Type',
                             default='by_ingredients')
-    
+
     @api.model
     def get_categories_by_ingredients(self, limit=None, offset=0):
         categories = False
@@ -100,7 +100,7 @@ class Tanmyaprodcategory(models.Model):
                     'image': category.image
                 }
                 categories_details.append(category_details)
-        
+
         return categories_details
 
     @api.model
@@ -110,12 +110,12 @@ class Tanmyaprodcategory(models.Model):
             categories = self.env['product.category'].sudo().search([], limit=limit, offset=offset)
         else:
             categories = self.env['product.category'].sudo().search(['|', '|', '|',
-                                                                            ('name', 'like', search_word),
-                                                                            ('name', 'like', search_word.capitalize()),
-                                                                            ('name', 'like', search_word.upper()),
-                                                                            ('name', 'like', search_word.lower())],
-                                                                           limit=limit,
-                                                                           offset=offset)
+                                                                     ('name', 'like', search_word),
+                                                                     ('name', 'like', search_word.capitalize()),
+                                                                     ('name', 'like', search_word.upper()),
+                                                                     ('name', 'like', search_word.lower())],
+                                                                    limit=limit,
+                                                                    offset=offset)
         categories_details = []
         if categories:
             for category in categories:
@@ -168,6 +168,7 @@ class Tanmyacustomerpotslines(models.Model):
                                 index=True,
                                 copy=False)
     qty = fields.Float('Quantity')
+
 
 class TanmyaProducExt(models.Model):
     _inherit = 'product.product'
@@ -458,16 +459,16 @@ class TanmyaProducExt(models.Model):
         _logger.info(category_id)
         if category_id > 0:
             products = self.env['product.template'].sudo().search(['|', '|', '|',
-                                                                  ('name', 'like', search_word),
-                                                                  ('name', 'like', search_word1),
-                                                                  ('name', 'like', search_word2),
-                                                                  ('name', 'like', search_word3),
-                                                                  ('categ_id', '=', category_id),
-                                                                  ('is_published', '=', is_publish)],
-                                                                 limit=limit,
-                                                                 offset=offset,
-                                                                 order=order_by)
-            
+                                                                   ('name', 'like', search_word),
+                                                                   ('name', 'like', search_word1),
+                                                                   ('name', 'like', search_word2),
+                                                                   ('name', 'like', search_word3),
+                                                                   ('categ_id', '=', category_id),
+                                                                   ('is_published', '=', is_publish)],
+                                                                  limit=limit,
+                                                                  offset=offset,
+                                                                  order=order_by)
+
             products_details = []
             for product in products:
                 product_details = {
@@ -484,13 +485,13 @@ class TanmyaProducExt(models.Model):
                     'uom': product.uom_id.name,
                     'description': product.description,
                     'preference_state': self.get_preference_state(product.id),
-                    'additional_description' : product.website_description,
-                    'composition' : product.x_studio_composition,
-                    'conservation_et_utilisation' : product.x_studio_conservation_et_utilisation,
-                    'product_more_info' : product.x_studio_product_more_info
+                    'additional_description': product.website_description,
+                    'composition': product.x_studio_composition,
+                    'conservation_et_utilisation': product.x_studio_conservation_et_utilisation,
+                    'product_more_info': product.x_studio_product_more_info
                 }
                 products_details.append(product_details)
-            
+
         else:
             products = self.env['product.product'].sudo().search(['|', '|', '|',
                                                                   ('name', 'like', search_word),
@@ -502,7 +503,7 @@ class TanmyaProducExt(models.Model):
                                                                  limit=limit,
                                                                  offset=offset,
                                                                  order=order_by)
-            
+
             products_details = []
             for product in products:
                 product_details = {
@@ -519,10 +520,10 @@ class TanmyaProducExt(models.Model):
                     'iron': product.iron,
                     'description': product.description,
                     'preference_state': self.get_preference_state(product.id),
-                    'additional_description' : product.website_description,
-                    'composition' : product.x_studio_composition,
-                    'conservation_et_utilisation' : product.x_studio_conservation_et_utilisation,
-                    'product_more_info' : product.x_studio_product_more_info
+                    'additional_description': product.website_description,
+                    'composition': product.x_studio_composition,
+                    'conservation_et_utilisation': product.x_studio_conservation_et_utilisation,
+                    'product_more_info': product.x_studio_product_more_info
                 }
                 products_details.append(product_details)
         return products_details
@@ -559,7 +560,7 @@ class TanmyaProducExt(models.Model):
                                                                  ('recipe_status', '=', 'public')])
             recipe_count = int(len(recipes))
         return recipe_count
-    
+
     @api.model
     def get_count_all_user_recipes(self, user_id: int):
         recipe_count_1 = 0
@@ -595,20 +596,21 @@ class TanmyaProducExt(models.Model):
                     'rating': rating
                 }
                 review = self.env['tanmya.review'].sudo().create(review_vals)
-                
+
                 # Send notification when a user adds a review on consumer recipe
                 if review:
                     notification_vals = {
                         'title': 'Recipe reviewed',
                         'content': f'{review.user_id.name} just reviewed your recipe. Click here to see details.',
-                        'target_action': 'recipe_reviewed',
+                        'payload': 'recipe_reviewed',
+                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                         'notification_date': datetime.now(),
                         'user_ids': [(6, 0, [recipe.owner_id.id])],
                         'recipe_id': recipe_id,
                     }
                     notification = self.env['firebase.notification'].sudo().create(notification_vals)
                     if notification:
-#                         notification.send_notifications()
+                        #                         notification.send_notifications()
                         notification.send()
 
     @api.model
@@ -760,7 +762,7 @@ class TanmyaProducExt(models.Model):
             recipes_details.append(recipe_details)
 
         return recipes_details
-    
+
     @api.model
     def get_recipe_details(self, recipe_id: int):
         if recipe_id:
