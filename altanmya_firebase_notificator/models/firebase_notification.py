@@ -123,7 +123,7 @@ class FirebaseNotification(models.Model):
                               'recipe_id': str(self.recipe_id),
                               'payload': self.payload},
                         apns=messaging.APNSConfig(payload=messaging.APNSPayload(
-                            aps=messaging.Aps(sound='default', alert=messaging.ApsAlert(subtitle=self.target_action,
+                            aps=messaging.Aps(sound='default', alert=messaging.ApsAlert(
                                                                                         title_loc_key='Hello world',
                                                                                         loc_key='This is a message')))),
                         token=tokens[0],
@@ -170,7 +170,7 @@ class FirebaseNotification(models.Model):
                           'payload': self.payload},
                     apns=messaging.APNSConfig(payload=messaging.APNSPayload(aps=messaging.Aps(sound='default',
                                                                                               alert=messaging.ApsAlert(
-                                                                                                  subtitle=self.target_action,
+                                                                                                 
                                                                                                   title_loc_key='Hello world',
                                                                                                   loc_key='This is a message')))),
                     tokens=tokens,
