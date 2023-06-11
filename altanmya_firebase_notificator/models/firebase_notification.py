@@ -41,8 +41,8 @@ class FirebaseNotification(models.Model):
         if len(tokens) > 1:
             data = {
                 "notification": {
-                    'title': self.title,
-                    'body': self.content,
+#                     'title': self.title,
+#                     'body': self.content,
                     'icon': self.icon,
                     'image': self.image,
                     'title_loc_key': "title",
@@ -61,8 +61,8 @@ class FirebaseNotification(models.Model):
         else:
             data = {
                 "notification": {
-                    'title': self.title,
-                    'body': self.content,
+#                     'title': self.title,
+#                     'body': self.content,
                     'icon': self.icon,
                     'image': self.image,
                     'title_loc_key': "title",
