@@ -120,17 +120,25 @@ class FirebaseNotification(models.Model):
 #                         ),
                         android=messaging.AndroidConfig(priority='high',
                                                         notification=messaging.AndroidNotification(sound='default',
+                                                                                                   title='test title',
+                                                                                                   body='test body',
+                                                                                                   color='#61B559',
+                                                                                                   tag='Differs',
+                                                                                                   ticker='ticker',
+                                                                                                   priority='high',
+                                                                                                   default_light_settings=True,
+                                                                                                   visibility='public',
                                                                                                    click_action=self.target_action,
                                                                                                    title_loc_key='notification_title',
-                                                                                                   body_loc_key='notification_title'
-                                                                                                  )),
+                                                                                                   body_loc_key='notification_title1'
+                                                                                                   )),
                         data={'ios_click_action': self.target_action,
                               'recipe_id': str(self.recipe_id),
                               'payload': self.payload},
                         apns=messaging.APNSConfig(payload=messaging.APNSPayload(
                             aps=messaging.Aps(sound='default', alert=messaging.ApsAlert(
                                                                                         title_loc_key='notification_title',
-                                                                                        loc_key='notification_title'
+                                                                                        loc_key='notification_title1'
                             )))),
                         token=tokens[0],
                     )]
@@ -167,18 +175,26 @@ class FirebaseNotification(models.Model):
 #                         body=self.content,
 #                     ),
                     android=messaging.AndroidConfig(priority='high',
-                                                    notification=messaging.AndroidNotification(sound='default',
-                                                                                               click_action=self.target_action,
-                                                                                               title_loc_key='notification_title',
-                                                                                               body_loc_key='notification_title'
-                                                                                              )),
+                                                        notification=messaging.AndroidNotification(sound='default',
+                                                                                                   title='test title',
+                                                                                                   body='test body',
+                                                                                                   color='#61B559',
+                                                                                                   tag='Differs',
+                                                                                                   ticker='ticker',
+                                                                                                   priority='high',
+                                                                                                   default_light_settings=True,
+                                                                                                   visibility='public',
+                                                                                                   click_action=self.target_action,
+                                                                                                   title_loc_key='notification_title',
+                                                                                                   body_loc_key='notification_title1'
+                                                                                                   )),
                     data={'ios_click_action': self.target_action,
                           'recipe_id': str(self.recipe_id),
                           'payload': self.payload},
                     apns=messaging.APNSConfig(payload=messaging.APNSPayload(aps=messaging.Aps(sound='default',
                                                                                               alert=messaging.ApsAlert(
                                                                                                   title_loc_key='notification_title',
-                                                                                                  loc_key='notification_title'
+                                                                                                  loc_key='notification_title1'
                                                                                               )))),
                     tokens=tokens,
                 )
