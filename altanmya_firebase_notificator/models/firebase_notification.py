@@ -114,10 +114,10 @@ class FirebaseNotification(models.Model):
                     self.notification_date = datetime.now()
                 messages = [
                     messaging.Message(
-                        notification=messaging.Notification(
-                            title=self.title,
-                            body=self.content,
-                        ),
+#                         notification=messaging.Notification(
+#                             title=self.title,
+#                             body=self.content,
+#                         ),
                         android=messaging.AndroidConfig(priority='high',
                                                         notification=messaging.AndroidNotification(sound='default',
                                                                                                    click_action=self.target_action,
@@ -162,10 +162,10 @@ class FirebaseNotification(models.Model):
                 if not self.notification_date:
                     self.notification_date = datetime.now()
                 message = messaging.MulticastMessage(
-                    notification=messaging.Notification(
-                        title=self.title,
-                        body=self.content,
-                    ),
+#                     notification=messaging.Notification(
+#                         title=self.title,
+#                         body=self.content,
+#                     ),
                     android=messaging.AndroidConfig(priority='high',
                                                     notification=messaging.AndroidNotification(sound='default',
                                                                                                click_action=self.target_action,
