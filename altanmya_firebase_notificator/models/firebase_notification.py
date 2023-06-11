@@ -121,6 +121,7 @@ class FirebaseNotification(models.Model):
                         android=messaging.AndroidConfig(priority='high',
                                                         notification=messaging.AndroidNotification(sound='default',
                                                                                                    click_action=self.target_action,
+                                                                                                   color='#61B559',
                                                                                                    title_loc_key='notification_title',
                                                                                                    body_loc_key='notification_title1'
                                                                                                    )),
@@ -169,6 +170,7 @@ class FirebaseNotification(models.Model):
                     android=messaging.AndroidConfig(priority='high',
                                                         notification=messaging.AndroidNotification(sound='default',
                                                                                                    click_action=self.target_action,
+                                                                                                   color='#61B559',
                                                                                                    title_loc_key='notification_title',
                                                                                                    body_loc_key='notification_title1'
                                                                                                    )),
