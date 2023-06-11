@@ -121,15 +121,17 @@ class FirebaseNotification(models.Model):
                         android=messaging.AndroidConfig(priority='high',
                                                         notification=messaging.AndroidNotification(sound='default',
                                                                                                    click_action=self.target_action,
-                                                                                                   title_loc_key='title',
-                                                                                                   body_loc_key='This is a message')),
+#                                                                                                    title_loc_key='title',
+#                                                                                                    body_loc_key='This is a message'
+                                                                                                  )),
                         data={'ios_click_action': self.target_action,
                               'recipe_id': str(self.recipe_id),
                               'payload': self.payload},
                         apns=messaging.APNSConfig(payload=messaging.APNSPayload(
                             aps=messaging.Aps(sound='default', alert=messaging.ApsAlert(
-                                                                                        title_loc_key='title',
-                                                                                        loc_key='This is a message')))),
+#                                                                                         title_loc_key='title',
+#                                                                                         loc_key='This is a message'
+                            )))),
                         token=tokens[0],
                     )]
                 response = messaging.send_all(messages=messages, app=firebase_app, dry_run=False)
@@ -167,16 +169,18 @@ class FirebaseNotification(models.Model):
                     android=messaging.AndroidConfig(priority='high',
                                                     notification=messaging.AndroidNotification(sound='default',
                                                                                                click_action=self.target_action,
-                                                                                               title_loc_key='title',
-                                                                                               body_loc_key='This is a message')),
+#                                                                                                title_loc_key='title',
+#                                                                                                body_loc_key='This is a message'
+                                                                                              )),
                     data={'ios_click_action': self.target_action,
                           'recipe_id': str(self.recipe_id),
                           'payload': self.payload},
                     apns=messaging.APNSConfig(payload=messaging.APNSPayload(aps=messaging.Aps(sound='default',
                                                                                               alert=messaging.ApsAlert(
                                                                                                  
-                                                                                                  title_loc_key='title',
-                                                                                                  loc_key='This is a message')))),
+#                                                                                                   title_loc_key='title',
+#                                                                                                   loc_key='This is a message'
+                                                                                              )))),
                     tokens=tokens,
                 )
                 response = messaging.send_multicast(message, app=firebase_app)
