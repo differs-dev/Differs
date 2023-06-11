@@ -170,7 +170,7 @@ class FirebaseNotification(models.Model):
                                                     notification=messaging.AndroidNotification(sound='default',
                                                                                                click_action=self.target_action,
                                                                                                title_loc_key='notification_title',
-                                                                                               body_loc_key='title'
+                                                                                               loc_key='title'
                                                                                               )),
                     data={'ios_click_action': self.target_action,
                           'recipe_id': str(self.recipe_id),
@@ -178,7 +178,7 @@ class FirebaseNotification(models.Model):
                     apns=messaging.APNSConfig(payload=messaging.APNSPayload(aps=messaging.Aps(sound='default',
                                                                                               alert=messaging.ApsAlert(
                                                                                                   title_loc_key='notification_title',
-                                                                                                  body_loc_key='title'
+                                                                                                  loc_key='title'
                                                                                               )))),
                     tokens=tokens,
                 )
