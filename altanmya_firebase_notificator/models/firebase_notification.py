@@ -121,16 +121,16 @@ class FirebaseNotification(models.Model):
                         android=messaging.AndroidConfig(priority='high',
                                                         notification=messaging.AndroidNotification(sound='default',
                                                                                                    click_action=self.target_action,
-                                                                                                   title_loc_key='notification_title',
-                                                                                                   body_loc_key='title'
+#                                                                                                    title_loc_key='Hello world',
+#                                                                                                    body_loc_key='This is a message'
                                                                                                   )),
                         data={'ios_click_action': self.target_action,
                               'recipe_id': str(self.recipe_id),
                               'payload': self.payload},
                         apns=messaging.APNSConfig(payload=messaging.APNSPayload(
                             aps=messaging.Aps(sound='default', alert=messaging.ApsAlert(
-                                                                                        title_loc_key='notification_title',
-                                                                                        body_loc_key='title'
+#                                                                                         title_loc_key='Hello world',
+#                                                                                         loc_key='This is a message'
                             )))),
                         token=tokens[0],
                     )]
@@ -169,16 +169,16 @@ class FirebaseNotification(models.Model):
                     android=messaging.AndroidConfig(priority='high',
                                                     notification=messaging.AndroidNotification(sound='default',
                                                                                                click_action=self.target_action,
-                                                                                               title_loc_key='notification_title',
-                                                                                               loc_key='title'
+#                                                                                                title_loc_key='Hello world',
+#                                                                                                body_loc_key='This is a message'
                                                                                               )),
                     data={'ios_click_action': self.target_action,
                           'recipe_id': str(self.recipe_id),
                           'payload': self.payload},
                     apns=messaging.APNSConfig(payload=messaging.APNSPayload(aps=messaging.Aps(sound='default',
                                                                                               alert=messaging.ApsAlert(
-                                                                                                  title_loc_key='notification_title',
-                                                                                                  loc_key='title'
+#                                                                                                   title_loc_key='Hello world',
+#                                                                                                   loc_key='This is a message'
                                                                                               )))),
                     tokens=tokens,
                 )
