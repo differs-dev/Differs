@@ -126,7 +126,7 @@ class FirebaseNotification(models.Model):
                                                                                                    tag='Differs',
 #                                                                                                    ticker='ticker',
 #                                                                                                    default_light_settings= True,
-                                                                                                   visibility='public',
+#                                                                                                    visibility='public',
                                                                                                    click_action=self.target_action,
                                                                                                    title_loc_key='notification_title',
                                                                                                    body_loc_key='notification_title1'
@@ -181,7 +181,7 @@ class FirebaseNotification(models.Model):
                                                                                                    tag='Differs',
 #                                                                                                    ticker='ticker',
 #                                                                                                    default_light_settings=True,
-                                                                                                   visibility='public',
+#                                                                                                    visibility='public',
                                                                                                    click_action=self.target_action,
                                                                                                    title_loc_key='notification_title',
                                                                                                    body_loc_key='notification_title1'
