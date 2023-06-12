@@ -143,6 +143,8 @@ class FirebaseNotification(models.Model):
                 else:
                     title = self.fr_title
                     content = self.fr_content
+                _logger.info(title)
+                _logger.info(content)
                 messages = [
                     messaging.Message(
                         notification=messaging.Notification(
