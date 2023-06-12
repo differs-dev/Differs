@@ -271,7 +271,7 @@ class ResUsers(models.Model):
                             _logger.info(
                                 '-------------------------AccessDenied Existing User----------------------------')
                             _logger.info(user)
-                            a = self.env['res.users'].sudo().search_read([('id', '=', user)])
+                            a = self.env['res.users'].sudo().search_read([('id', '=', user.id)])
                             _logger.info(a)
                             return user.id
                     else:
