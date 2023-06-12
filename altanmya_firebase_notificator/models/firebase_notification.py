@@ -17,9 +17,11 @@ _logger = logging.getLogger(__name__)
 class FirebaseNotification(models.Model):
     _name = 'firebase.notification'
 
-    title = fields.Char(string='Notification Title', required=True, default="Default Title")
+    title = fields.Char(string='English Notification Title', required=True, default="Default Title")
+    fr_title = fields.Char(string='Frensh Notification Title', required=True, default="Default Frensh Title")
     read_state = fields.Boolean(string='Read by user', required=True, default=False)
-    content = fields.Text(string='Notification Content', required=True, default="Default Content")
+    content = fields.Text(string='English Notification Content', required=True, default="Default Content")
+    fr_content = fields.Text(string='Frensh Notification Content', required=True, default="Default Frensh Content")
     icon = fields.Char(string='Notification Icon URL')
     image = fields.Char(string='Notification Image URL')
     target_action = fields.Char(string='Target Action', default="FLUTTER_NOTIFICATION_CLICK")
@@ -41,8 +43,8 @@ class FirebaseNotification(models.Model):
         if len(tokens) > 1:
             data = {
                 "notification": {
-                    'title': self.title,
-                    'body': self.content,
+                    'title': self.fr_title,
+                    'body': self.fr_content,
                     'icon': self.icon,
                     'image': self.image,
                     'title_loc_key': "notification_title",
@@ -61,8 +63,8 @@ class FirebaseNotification(models.Model):
         else:
             data = {
                 "notification": {
-                    'title': self.title,
-                    'body': self.content,
+                    'title': self.fr_title,
+                    'body': self.fr_content,
                     'icon': self.icon,
 #                     'image': self.image,
                     'title_loc_key': "notification_title",
@@ -112,26 +114,32 @@ class FirebaseNotification(models.Model):
             if type(tokens) == list and len(tokens) == 1:
                 if not self.notification_date:
                     self.notification_date = datetime.now()
+                if self.user_ids.preferred_language == 'en':
+                    title = self.title
+                    content = self.content
+                else:
+                    title = self.fr_title
+                    content = self.fr_content
                 messages = [
                     messaging.Message(
-#                         notification=messaging.Notification(
-#                             title=self.title,
-#                             body=self.content,
-#                         ),
+                        notification=messaging.Notification(
+                            title=title,
+                            body=content,
+                        ),
                         android=messaging.AndroidConfig(priority='high',
                                                         notification=messaging.AndroidNotification(sound='default',
                                                                                                    click_action=self.target_action,
                                                                                                    color='#61B559',
-                                                                                                   title_loc_key='notification_title',
-                                                                                                   body_loc_key='notification_title1'
+                                                                                                   title=title,
+                                                                                                   body=content
                                                                                                    )),
                         data={'ios_click_action': self.target_action,
                               'recipe_id': str(self.recipe_id),
                               'payload': self.payload},
                         apns=messaging.APNSConfig(payload=messaging.APNSPayload(
                             aps=messaging.Aps(sound='default', alert=messaging.ApsAlert(
-                                                                                        title_loc_key='notification_title',
-                                                                                        loc_key='notification_title1'
+                                title=title,
+                                body=content
                             )))),
                         token=tokens[0],
                     )]
@@ -163,24 +171,24 @@ class FirebaseNotification(models.Model):
                 if not self.notification_date:
                     self.notification_date = datetime.now()
                 message = messaging.MulticastMessage(
-#                     notification=messaging.Notification(
-#                         title=self.title,
-#                         body=self.content,
-#                     ),
+                    notification=messaging.Notification(
+                        title=self.fr_title,
+                        body=self.fr_content,
+                    ),
                     android=messaging.AndroidConfig(priority='high',
                                                         notification=messaging.AndroidNotification(sound='default',
                                                                                                    click_action=self.target_action,
                                                                                                    color='#61B559',
-                                                                                                   title_loc_key='notification_title',
-                                                                                                   body_loc_key='notification_title1'
+                                                                                                   title=self.fr_title,
+                                                                                                   body=self.fr_content
                                                                                                    )),
                     data={'ios_click_action': self.target_action,
                           'recipe_id': str(self.recipe_id),
                           'payload': self.payload},
                     apns=messaging.APNSConfig(payload=messaging.APNSPayload(aps=messaging.Aps(sound='default',
                                                                                               alert=messaging.ApsAlert(
-                                                                                                  title_loc_key='notification_title',
-                                                                                                  loc_key='notification_title1'
+                                                                                                  title=self.fr_title,
+                                                                                                  body=self.fr_content
                                                                                               )))),
                     tokens=tokens,
                 )
