@@ -68,6 +68,7 @@ class ResUsers(models.Model):
         new_lang param is the lang 'en' or 'fr' that was sent from the caller
         '''
         self.preferred_language = new_lang
+        _logger.info(self.preferred_language)
 
     @api.model
     def delete_product_preference(self, variant_template: int, product_id: int):
