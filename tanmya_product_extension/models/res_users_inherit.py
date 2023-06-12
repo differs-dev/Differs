@@ -68,7 +68,7 @@ class ResUsers(models.Model):
         '''
         new_lang param is the lang 'en' or 'fr' that was sent from the caller
         '''
-        user = self.env['res.users'].search([('id', '=', user_id)])
+        user = self.env['res.users'].sudo().search([('id', '=', user_id)])
         user.preferred_language = new_lang
         _logger.info('preferred_language')
         _logger.info(new_lang)
