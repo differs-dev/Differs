@@ -479,15 +479,26 @@ class ImmediateStockPicking(models.TransientModel):
                             if first_pick and len(first_pick) == 1 and \
                                     first_pick.state == 'done' and not first_pick.check_notification:
                                 # Send notification when order is delivered
-                                notification_vals = {
-                                    'title': 'Order delivered',
-                                    'content': f'Order #{order.name} was successfully delivered to you.'
-                                               'Click here to place a new order',
-                                    'payload': 'order_delivered',
-                                    'target_action': 'FLUTTER_NOTIFICATION_CLICK',
-                                    'notification_date': datetime.now(),
-                                    'user_ids': [(6, 0, [order_user.id])],
-                                }
+                                if order_user.preferred_language == 'en':
+                                    notification_vals = {
+                                        'title': 'Order delivered',
+                                        'content': f'Order #{order.name} was successfully delivered to you.'
+                                                   'Click here to place a new order',
+                                        'payload': 'order_delivered',
+                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                                        'notification_date': datetime.now(),
+                                        'user_ids': [(6, 0, [order_user.id])],
+                                    }
+                                else:
+                                    notification_vals = {
+                                        'title': 'commande livrée',
+                                        'content': f'La commande  #{order.name} vous a été livrée avec succès'
+                                                   'Click here to place a new order',
+                                        'payload': 'order_delivered',
+                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                                        'notification_date': datetime.now(),
+                                        'user_ids': [(6, 0, [order_user.id])],
+                                    }
                                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
                                 if notification:
                                     notification.send()
@@ -499,14 +510,24 @@ class ImmediateStockPicking(models.TransientModel):
                             if second_pick and len(second_pick) == 1 and \
                                     second_pick.state == 'done' and not second_pick.check_notification:
                                 # Send notification when order is on its way to customer
-                                notification_vals = {
-                                    'title': 'Order on its way',
-                                    'content': 'Your order is on its way to you.',
-                                    'payload': 'order_on_its_way',
-                                    'target_action': 'FLUTTER_NOTIFICATION_CLICK',
-                                    'notification_date': datetime.now(),
-                                    'user_ids': [(6, 0, [order_user.id])],
-                                }
+                                if order_user.preferred_language == 'en':
+                                    notification_vals = {
+                                        'title': 'Order on its way',
+                                        'content': 'Your order is on its way to you.',
+                                        'payload': 'order_on_its_way',
+                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                                        'notification_date': datetime.now(),
+                                        'user_ids': [(6, 0, [order_user.id])],
+                                    }
+                                else:
+                                    notification_vals = {
+                                        'title': 'Commande en cours',
+                                        'content': 'Votre commande est en route vers vous.',
+                                        'payload': 'order_on_its_way',
+                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                                        'notification_date': datetime.now(),
+                                        'user_ids': [(6, 0, [order_user.id])],
+                                    }
                                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
                                 if notification:
                                     notification.send()
@@ -563,15 +584,26 @@ class StockBackOrderConfirmation1(models.TransientModel):
                             if first_pick and len(first_pick) == 1 and \
                                     first_pick.state == 'done' and not first_pick.check_notification:
                                 # Send notification when order is delivered
-                                notification_vals = {
-                                    'title': 'Order delivered',
-                                    'content': f'Order #{order.name} was successfully delivered to you.'
-                                               'Click here to place a new order',
-                                    'notification_date': datetime.now(),
-                                    'payload': 'order_delivered',
-                                    'target_action': 'FLUTTER_NOTIFICATION_CLICK',
-                                    'user_ids': [(6, 0, [order_user.id])],
-                                }
+                                if order_user.preferred_language == 'en':
+                                    notification_vals = {
+                                        'title': 'Order delivered',
+                                        'content': f'Order #{order.name} was successfully delivered to you.'
+                                                   'Click here to place a new order',
+                                        'notification_date': datetime.now(),
+                                        'payload': 'order_delivered',
+                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                                        'user_ids': [(6, 0, [order_user.id])],
+                                    }
+                                else:
+                                    notification_vals = {
+                                        'title': 'commande livrée',
+                                        'content': f'La commande  #{order.name} vous a été livrée avec succès'
+                                                   'Cliquez ici pour passer une nouvelle commande',
+                                        'notification_date': datetime.now(),
+                                        'payload': 'order_delivered',
+                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                                        'user_ids': [(6, 0, [order_user.id])],
+                                    }
                                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
                                 if notification:
                                     notification.send()
@@ -583,14 +615,24 @@ class StockBackOrderConfirmation1(models.TransientModel):
                             if second_pick and len(second_pick) == 1 and \
                                     second_pick.state == 'done' and not second_pick.check_notification:
                                 # Send notification when order is on its way to customer
-                                notification_vals = {
-                                    'title': 'Order on its way',
-                                    'content': 'Your order is on its way to you.',
-                                    'notification_date': datetime.now(),
-                                    'payload': 'order_on_its_way',
-                                    'target_action': 'FLUTTER_NOTIFICATION_CLICK',
-                                    'user_ids': [(6, 0, [order_user.id])],
-                                }
+                                if order_user.preferred_language == 'en':
+                                    notification_vals = {
+                                        'title': 'Order on its way',
+                                        'content': 'Your order is on its way to you.',
+                                        'notification_date': datetime.now(),
+                                        'payload': 'order_on_its_way',
+                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                                        'user_ids': [(6, 0, [order_user.id])],
+                                    }
+                                else:
+                                    notification_vals = {
+                                        'title': 'Commande en cours',
+                                        'content': 'Votre commande est en route vers vous.',
+                                        'notification_date': datetime.now(),
+                                        'payload': 'order_on_its_way',
+                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                                        'user_ids': [(6, 0, [order_user.id])],
+                                    }
                                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
                                 if notification:
                                     notification.send()
@@ -624,15 +666,26 @@ class StockBackOrderConfirmation1(models.TransientModel):
                             if first_pick and len(first_pick) == 1 and \
                                     first_pick.state == 'done' and not first_pick.check_notification:
                                 # Send notification when order is delivered
-                                notification_vals = {
-                                    'title': 'Order delivered',
-                                    'content': f'Order #{order.name} was successfully delivered to you.'
-                                               'Click here to place a new order',
-                                    'notification_date': datetime.now(),
-                                    'payload': 'order_delivered',
-                                    'target_action': 'FLUTTER_NOTIFICATION_CLICK',
-                                    'user_ids': [(6, 0, [order_user.id])],
-                                }
+                                if order_user.preferred_language == 'en':
+                                    notification_vals = {
+                                        'title': 'Order delivered',
+                                        'content': f'Order #{order.name} was successfully delivered to you.'
+                                                   'Click here to place a new order',
+                                        'notification_date': datetime.now(),
+                                        'payload': 'order_delivered',
+                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                                        'user_ids': [(6, 0, [order_user.id])],
+                                    }
+                                else:
+                                    notification_vals = {
+                                        'title': 'commande livrée',
+                                        'content': f'La commande  #{order.name} vous a été livrée avec succès'
+                                                       'Cliquez ici pour passer une nouvelle commande',
+                                        'notification_date': datetime.now(),
+                                        'payload': 'order_delivered',
+                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                                        'user_ids': [(6, 0, [order_user.id])],
+                                    }
                                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
                                 if notification:
                                     notification.send()
@@ -644,14 +697,24 @@ class StockBackOrderConfirmation1(models.TransientModel):
                             if second_pick and len(second_pick) == 1 and \
                                     second_pick.state == 'done' and not second_pick.check_notification:
                                 # Send notification when order is on its way to customer
-                                notification_vals = {
-                                    'title': 'Order on its way',
-                                    'content': 'Your order is on its way to you.',
-                                    'notification_date': datetime.now(),
-                                    'payload': 'order_on_its_way',
-                                    'target_action': 'FLUTTER_NOTIFICATION_CLICK',
-                                    'user_ids': [(6, 0, [order_user.id])],
-                                }
+                                if order_user.preferred_language == 'en':
+                                    notification_vals = {
+                                        'title': 'Order on its way',
+                                        'content': 'Your order is on its way to you.',
+                                        'notification_date': datetime.now(),
+                                        'payload': 'order_on_its_way',
+                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                                        'user_ids': [(6, 0, [order_user.id])],
+                                    }
+                                else:
+                                    notification_vals = {
+                                        'title': 'Commande en cours',
+                                        'content': 'Votre commande est en route vers vous.',
+                                        'notification_date': datetime.now(),
+                                        'payload': 'order_on_its_way',
+                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                                        'user_ids': [(6, 0, [order_user.id])],
+                                    }
                                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
                                 if notification:
                                     notification.send()
