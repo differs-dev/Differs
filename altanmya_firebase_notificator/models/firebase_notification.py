@@ -64,8 +64,8 @@ class FirebaseNotification(models.Model):
             if self.user_ids.preferred_language == 'en':
                 data = {
                     "notification": {
-                        'title': self.fr_title,
-                        'body': self.fr_content,
+                        'title': self.title,
+                        'body': self.content,
                         'icon': self.icon,
     #                     'image': self.image,
                         'title_loc_key': "notification_title",
@@ -83,8 +83,8 @@ class FirebaseNotification(models.Model):
             else:
                 data = {
                     "notification": {
-                        'title': self.title,
-                        'body': self.content,
+                        'title': self.fr_title,
+                        'body': self.fr_content,
                         'icon': self.icon,
                         #                     'image': self.image,
                         'title_loc_key': "notification_title",
