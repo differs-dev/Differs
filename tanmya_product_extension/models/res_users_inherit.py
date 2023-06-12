@@ -69,6 +69,7 @@ class ResUsers(models.Model):
         new_lang param is the lang 'en' or 'fr' that was sent from the caller
         '''
         self.preferred_language = new_lang
+        _logger.info('preferred_language')
         _logger.info(self.preferred_language)
 
     @api.model
