@@ -611,8 +611,8 @@ class TanmyaProducExt(models.Model):
                         }
                     elif recipe.owner_id.preferred_language == 'fr':
                         notification_vals = {
-                            'title': 'Recette revue',
-                            'content': f'{review.user_id.name} viens de revoir ta recette. Cliquez ici pour voir les détails.',
+                            'fr_title': 'Recette revue',
+                            'fr_content': f'{review.user_id.name} viens de revoir ta recette. Cliquez ici pour voir les détails.',
                             'payload': 'recipe_reviewed',
                             'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                             'notification_date': datetime.now(),
