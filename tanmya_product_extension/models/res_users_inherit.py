@@ -63,6 +63,7 @@ class ResUsers(models.Model):
                 return True
         return False
     
+    @api.model
     def update_user_language(self, new_lang):
         '''
         new_lang param is the lang 'en' or 'fr' that was sent from the caller
