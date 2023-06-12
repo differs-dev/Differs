@@ -29,7 +29,7 @@ class ResUsers(models.Model):
     products_preferences_ids = fields.One2many('products.preferences',
                                                'customer_preferences_id',
                                                string='Products Preferences')
-    preferred_language = fields.Char(string='User Language')
+    preferred_language = fields.Char(string='User Language', default='fr')
 
     @api.model
     def add_product_preference(self, variant_template: int, product_id: int, product_status: str):
