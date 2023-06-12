@@ -64,12 +64,14 @@ class ResUsers(models.Model):
         return False
     
     @api.model
-    def update_user_language(self, new_lang):
+    def update_user_language(self, new_lang, user_id):
         '''
         new_lang param is the lang 'en' or 'fr' that was sent from the caller
         '''
-        self.preferred_language = new_lang
+        user = self.env['res.users'].search([('id', '=', user_id)])
+        user.preferred_language = new_lang
         _logger.info('preferred_language')
+        _logger.info(new_lang)
         _logger.info(self.preferred_language)
 
     @api.model
