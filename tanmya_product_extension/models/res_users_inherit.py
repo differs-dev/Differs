@@ -29,6 +29,7 @@ class ResUsers(models.Model):
     products_preferences_ids = fields.One2many('products.preferences',
                                                'customer_preferences_id',
                                                string='Products Preferences')
+    preferred_language = fields.Char(string='User Language')
 
     @api.model
     def add_product_preference(self, variant_template: int, product_id: int, product_status: str):
@@ -61,6 +62,12 @@ class ResUsers(models.Model):
                 user.products_preferences_ids = [(4, product_preference.id)]
                 return True
         return False
+    
+    def update_user_language(self, new_lang):
+        '''
+        new_lang param is the lang 'en' or 'fr' that was sent from the caller
+        '''
+        self.preferred_language = new_lang
 
     @api.model
     def delete_product_preference(self, variant_template: int, product_id: int):
@@ -171,12 +178,8 @@ class ResUsers(models.Model):
 
     @api.model
     def _get_new_user_vals(self, firebase_uid, email, phone_name):
-        _logger.info('11111111111111111111111111111111111111111111111111111111111111111111111111111111')
-        _logger.info(phone_name)
         phone_name_list = phone_name.split(',')
-        _logger.info(phone_name_list)
         phone_parts = phone_name_list[0].split(' ')
-        _logger.info(phone_parts)
         user_vals = {
             'firebase_uid': firebase_uid,
             'name': phone_name_list[1],
@@ -189,7 +192,7 @@ class ResUsers(models.Model):
             'company_id': 1
         }
         return user_vals
-    
+
     # this method to call before the user logout from the mobile app
     @api.model
     def delete_device_firebase_notification_token(self, firebase_device_token):
@@ -200,20 +203,20 @@ class ResUsers(models.Model):
             user_firebase_notification_account.unlink()
 
     # this method to call when user login or signup from the mobile app
-#     @api.model
-#     def set_device_firebase_notification_token(self, firebase_device_token):
-#         user_firebase_notification_account = self.env['firebase.account'].sudo().search(
-#             [('user_id', '=', self.env.uid),
-#              ('token', '=', firebase_device_token)])
+    #     @api.model
+    #     def set_device_firebase_notification_token(self, firebase_device_token):
+    #         user_firebase_notification_account = self.env['firebase.account'].sudo().search(
+    #             [('user_id', '=', self.env.uid),
+    #              ('token', '=', firebase_device_token)])
 
-#         if not user_firebase_notification_account or len(user_firebase_notification_account) < 1:
-#             firebase_notification_account_vals = {
-#                 'user_id': self.env.uid,
-#                 'token': firebase_device_token,
-#             }
-#             new_firebase_notification_account = self.env['firebase.account'].sudo().create(
-#                 firebase_notification_account_vals)
-            
+    #         if not user_firebase_notification_account or len(user_firebase_notification_account) < 1:
+    #             firebase_notification_account_vals = {
+    #                 'user_id': self.env.uid,
+    #                 'token': firebase_device_token,
+    #             }
+    #             new_firebase_notification_account = self.env['firebase.account'].sudo().create(
+    #                 firebase_notification_account_vals)
+
     # this method to call when user login or signup from the mobile app
     @api.model
     def set_device_firebase_notification_token(self, firebase_device_token):
@@ -240,8 +243,6 @@ class ResUsers(models.Model):
     def authenticate(cls, db, login, password, user_agent_env):
         try:
             _logger.info('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-            _logger.info(login)
-            _logger.info(password)
             return super(ResUsers, cls).authenticate(db, login, password, user_agent_env)
         except AccessDenied:
             _logger.info('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
@@ -249,63 +250,43 @@ class ResUsers(models.Model):
             if firebase_user:
                 _logger.info('cccccccccccccccccccccccccccccccccccccccccccccc')
                 _logger.info('firebase_user')
+                firebase_user_password = '123'
                 user = False
                 with cls.pool.cursor() as cr:
                     self = api.Environment(cr, SUPERUSER_ID, {})[cls._name]
                     user = self.sudo().search(self._get_firebase_user_domain(firebase_user.uid), limit=1)
                     user = user.with_user(user)
-                    firebase_user_password = user.password
                     _logger.info('user')
                     if user:
                         _logger.info('dddddddddddddddddddddddddddddddddddddddddddd')
                         try:
-                            ttt = self.env['res.users'].sudo().search([('login', '=', firebase_user.email)]).password
-                            _logger.info('------------------------------------------ s ----------------------------------------------------')
-                            _logger.info(user.login)
-                            _logger.info(firebase_user_password)
-                            _logger.info(user_agent_env)
-                            _logger.info('----------------------------------------- e-----------------------------------------------------')
                             auth_res = super(ResUsers, cls).authenticate(db, user.login, firebase_user_password,
                                                                          user_agent_env)
-                            _logger.info('/////////////////////////////////////1')
+                            _logger.info('////////////////////////////////////1')
                             a = self.env['res.users'].sudo().search_read([('id', '=', auth_res)])
                             _logger.info(a)
                             return auth_res
                         except AccessDenied:
                             _logger.info(
                                 '-------------------------AccessDenied Existing User----------------------------')
+                            _logger.info(user)
+                            a = self.env['res.users'].sudo().search_read([('id', '=', user)])
+                            _logger.info(a)
                             return user.id
                     else:
-                        existing_user = self.env['res.users'].sudo().search([('login', '=', firebase_user.email)])
-                        _logger.info('existing_user111')
-                        _logger.info(existing_user)
-                        if existing_user:
-                            _logger.info(password)
-                            phone_name_list = password.split(',')
-                            phone_parts = phone_name_list[0].split(' ')
-                            _logger.info('phone_name_list ', phone_name_list, phone_parts)
-                            existing_user.sudo().write({
-                                'firebase_uid': firebase_user.uid,
-                                'name': phone_name_list[1],
-                                'sel_groups_1_9_10': 9,
-                                'email': firebase_user.email,
-                                'password': existing_user.password,
-                                'mobile': phone_name_list[0],
-                                'phone': phone_parts[1] + ' ' + phone_parts[2],
-                            })
-                            new_user = user.with_user(existing_user)
-                        else:
-                            vals = self._get_new_user_vals(firebase_user.uid, firebase_user.email, password)
-                            new_user = self.sudo().create(vals)
-                            _logger.info('new user')
-                            _logger.info(new_user)
-                            new_user = user.with_user(new_user)
+                        _logger.info('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
+                        vals = self._get_new_user_vals(firebase_user.uid, firebase_user.email, password)
+                        new_user = self.sudo().create(vals)
+                        new_user = user.with_user(new_user)
                         _logger.info(new_user)
                         if new_user:
                             _logger.info('ffffffffffffffffffffffffffffffffffffffffffffff')
                             try:
                                 auth_res = super(ResUsers, cls).authenticate(db, new_user.login, firebase_user_password,
                                                                              user_agent_env)
+                                _logger.info('////////////////////////////////////2')
+                                a = self.env['res.users'].sudo().search_read([('id', '=', auth_res)])
+                                _logger.info(a)
                                 return auth_res
                             except AccessDenied:
                                 _logger.info(
@@ -314,7 +295,7 @@ class ResUsers(models.Model):
             else:
                 raise AccessError(_("User authentication failed due to invalid authentication values"))
 
-                
+
     @api.model
     def set_address_info(self, vals):
         uid = self.env.uid
@@ -327,6 +308,7 @@ class ResUsers(models.Model):
             user.write(vals)
             return True
         return False
+
 
     @api.model
     def get_address_info(self):
@@ -350,6 +332,7 @@ class ResUsers(models.Model):
             }
             address_info_list.append(address_info)
         return address_info_list
+
 
     @api.model
     def add_new_address(self, address_vals):
@@ -378,6 +361,7 @@ class ResUsers(models.Model):
                 return new_address.id
         return False
 
+
     def search_in_address(self, address_vals, search_word):
         search_word1 = search_word.capitalize()
         search_word2 = search_word.lower()
@@ -385,10 +369,12 @@ class ResUsers(models.Model):
         result = False
         for key, val in address_vals.items():
             if key != 'id' and key != 'partner_latitude' and key != 'partner_longitude':
-                if search_word in str(val) or search_word1 in str(val) or search_word2 in str(val) or search_word3 in str(val):
+                if search_word in str(val) or search_word1 in str(val) or search_word2 in str(val) or search_word3 in str(
+                        val):
                     result = True
                     break
         return result
+
 
     @api.model
     def get_addresses_details(self, search_word=''):
@@ -419,6 +405,7 @@ class ResUsers(models.Model):
                         target_addresses.append(address)
                 return target_addresses
         return addresses_info_list
+
 
     @api.model
     def get_address_details(self):
@@ -460,6 +447,7 @@ class ResUsers(models.Model):
             }
             return [address_info]
 
+
     @api.model
     def update_address_info(self, address_id, vals):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
@@ -477,6 +465,7 @@ class ResUsers(models.Model):
             address.write(vals)
             return True
 
+
     @api.model
     def update_user_info(self, new_vals):
         # new_vals = {
@@ -492,17 +481,20 @@ class ResUsers(models.Model):
             return True
         return False
 
+
     @api.model
     def set_main_address_id(self, address_id):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         user.write({'main_address_id': address_id})
-    
+
+
     @api.model
     def cancel_main_address(self, address_id):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         if user.main_address_id == address_id:
             user.write({'main_address_id': -2})
-    
+
+
     @api.model
     def delete_address(self, address_id):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
@@ -523,14 +515,15 @@ class ResUsers(models.Model):
         else:
             address = self.env['additional.address'].sudo().search([('id', '=', address_id)])
             address.unlink()
-     
+
+
     @api.model
     def delete_user_account(self):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         request.session.logout(keep_db=True)
         query = f"""DELETE from res_users where id = {self.env.uid};"""
         self._cr.execute(query)
-        
+
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
@@ -556,7 +549,7 @@ class AdditionalAddress(models.Model):
     country_id = fields.Many2one('res.country', string='Country')
     city = fields.Char(string='City')
     phone = fields.Char(string='Phone Number')
-    
+
     def name_get(self):
         result = []
         for address in self:
