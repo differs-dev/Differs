@@ -61,26 +61,44 @@ class FirebaseNotification(models.Model):
             }
 
         else:
-            data = {
-                "notification": {
-                    'title': self.fr_title,
-                    'body': self.fr_content,
-                    'icon': self.icon,
-#                     'image': self.image,
-                    'title_loc_key': "notification_title",
-                    'body_loc_key': "title",
-                    'click_action': self.target_action,
-                    'payload': self.payload,
-                    'sound': None,
-                    'badge': None,
-                },
-                'dry_run': False,
-                'priority': 'high',
-                'content_available': True,
-                'to': tokens[0] if type(tokens) == list and len(tokens) > 0 else tokens,
-            }
-            _logger.info('data ya brooo')
-            _logger.info(data)
+            if self.user_ids.preferred_language == 'en':
+                data = {
+                    "notification": {
+                        'title': self.fr_title,
+                        'body': self.fr_content,
+                        'icon': self.icon,
+    #                     'image': self.image,
+                        'title_loc_key': "notification_title",
+                        'body_loc_key': "title",
+                        'click_action': self.target_action,
+                        'payload': self.payload,
+                        'sound': None,
+                        'badge': None,
+                    },
+                    'dry_run': False,
+                    'priority': 'high',
+                    'content_available': True,
+                    'to': tokens[0] if type(tokens) == list and len(tokens) > 0 else tokens,
+                }
+            else:
+                data = {
+                    "notification": {
+                        'title': self.title,
+                        'body': self.content,
+                        'icon': self.icon,
+                        #                     'image': self.image,
+                        'title_loc_key': "notification_title",
+                        'body_loc_key': "title",
+                        'click_action': self.target_action,
+                        'payload': self.payload,
+                        'sound': None,
+                        'badge': None,
+                    },
+                    'dry_run': False,
+                    'priority': 'high',
+                    'content_available': True,
+                    'to': tokens[0] if type(tokens) == list and len(tokens) > 0 else tokens,
+                }
         resp = requests.post(url, headers=headers, json=data)
         raise ValidationError(_(resp.text.encode('utf8')))
 
@@ -122,8 +140,6 @@ class FirebaseNotification(models.Model):
                 else:
                     title = self.fr_title
                     content = self.fr_content
-                _logger.info('data ya brooo 2 ')
-                _logger.info(content)
                 messages = [
                     messaging.Message(
                         notification=messaging.Notification(
