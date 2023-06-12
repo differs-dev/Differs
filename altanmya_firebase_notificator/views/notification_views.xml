@@ -58,7 +58,9 @@
                 <sheet>
                     <group>
                         <field name="title"/>
+                        <field name="fr_title"/>
                         <field name="content"/>
+                        <field name="fr_content"/>
                         <field name="read_state"/>
                         <field name="create_date" string="Creation Date"/>
                         <field name="target_action" readonly="True"/>
