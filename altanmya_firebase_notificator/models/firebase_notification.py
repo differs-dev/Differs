@@ -192,23 +192,23 @@ class FirebaseNotification(models.Model):
                     self.notification_date = datetime.now()
                 message = messaging.MulticastMessage(
                     notification=messaging.Notification(
-                        title=self.fr_title,
-                        body=self.fr_content,
+                        title=self.title,
+                        body=self.content,
                     ),
                     android=messaging.AndroidConfig(priority='high',
                                                         notification=messaging.AndroidNotification(sound='default',
                                                                                                    click_action=self.target_action,
                                                                                                    color='#61B559',
-                                                                                                   title=self.fr_title,
-                                                                                                   body=self.fr_content
+                                                                                                   title=self.title,
+                                                                                                   body=self.content
                                                                                                    )),
                     data={'ios_click_action': self.target_action,
                           'recipe_id': str(self.recipe_id),
                           'payload': self.payload},
                     apns=messaging.APNSConfig(payload=messaging.APNSPayload(aps=messaging.Aps(sound='default',
                                                                                               alert=messaging.ApsAlert(
-                                                                                                  title=self.fr_title,
-                                                                                                  body=self.fr_content
+                                                                                                  title=self.title,
+                                                                                                  body=self.content
                                                                                               )))),
                     tokens=tokens,
                 )
