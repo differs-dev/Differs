@@ -29,7 +29,7 @@ class ResUsers(models.Model):
     products_preferences_ids = fields.One2many('products.preferences',
                                                'customer_preferences_id',
                                                string='Products Preferences')
-#     preferred_language = fields.Char(string='User Language')
+    preferred_language = fields.Char(string='User Language')
 
     @api.model
     def add_product_preference(self, variant_template: int, product_id: int, product_status: str):
@@ -63,12 +63,12 @@ class ResUsers(models.Model):
                 return True
         return False
     
-#     def update_user_language(self, new_lang):
-#         '''
-#         new_lang param is the lang 'en' or 'fr' that was sent from the caller
-#         '''
-#         self.preferred_language = new_lang
-#         _logger.info(self.preferred_language)
+    def update_user_language(self, new_lang):
+        '''
+        new_lang param is the lang 'en' or 'fr' that was sent from the caller
+        '''
+        self.preferred_language = new_lang
+        _logger.info(self.preferred_language)
 
     @api.model
     def delete_product_preference(self, variant_template: int, product_id: int):
