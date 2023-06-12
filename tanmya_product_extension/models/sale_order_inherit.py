@@ -491,8 +491,8 @@ class ImmediateStockPicking(models.TransientModel):
                                     }
                                 else:
                                     notification_vals = {
-                                        'title': 'commande livrée',
-                                        'content': f'La commande  #{order.name} vous a été livrée avec succès'
+                                        'fr_title': 'commande livrée',
+                                        'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
                                                    'Click here to place a new order',
                                         'payload': 'order_delivered',
                                         'target_action': 'FLUTTER_NOTIFICATION_CLICK',
@@ -521,8 +521,8 @@ class ImmediateStockPicking(models.TransientModel):
                                     }
                                 else:
                                     notification_vals = {
-                                        'title': 'Commande en cours',
-                                        'content': 'Votre commande est en route vers vous.',
+                                        'fr_title': 'Commande en cours',
+                                        'fr_content': 'Votre commande est en route vers vous.',
                                         'payload': 'order_on_its_way',
                                         'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                                         'notification_date': datetime.now(),
@@ -596,8 +596,8 @@ class StockBackOrderConfirmation1(models.TransientModel):
                                     }
                                 else:
                                     notification_vals = {
-                                        'title': 'commande livrée',
-                                        'content': f'La commande  #{order.name} vous a été livrée avec succès'
+                                        'fr_title': 'commande livrée',
+                                        'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
                                                    'Cliquez ici pour passer une nouvelle commande',
                                         'notification_date': datetime.now(),
                                         'payload': 'order_delivered',
@@ -626,8 +626,8 @@ class StockBackOrderConfirmation1(models.TransientModel):
                                     }
                                 else:
                                     notification_vals = {
-                                        'title': 'Commande en cours',
-                                        'content': 'Votre commande est en route vers vous.',
+                                        'fr_title': 'Commande en cours',
+                                        'fr_content': 'Votre commande est en route vers vous.',
                                         'notification_date': datetime.now(),
                                         'payload': 'order_on_its_way',
                                         'target_action': 'FLUTTER_NOTIFICATION_CLICK',
@@ -708,8 +708,8 @@ class StockBackOrderConfirmation1(models.TransientModel):
                                     }
                                 else:
                                     notification_vals = {
-                                        'title': 'Commande en cours',
-                                        'content': 'Votre commande est en route vers vous.',
+                                        'fr_title': 'Commande en cours',
+                                        'fr_content': 'Votre commande est en route vers vous.',
                                         'notification_date': datetime.now(),
                                         'payload': 'order_on_its_way',
                                         'target_action': 'FLUTTER_NOTIFICATION_CLICK',
