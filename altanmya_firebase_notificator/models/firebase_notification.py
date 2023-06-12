@@ -130,6 +130,9 @@ class FirebaseNotification(models.Model):
     def send(self):
         tokens = self.user_ids.mapped('firebase_account_id').mapped('token')
         firebase_app = self.get_firebase_app()
+        _logger.info('tokens')
+        _logger.info(tokens)
+        _logger.info(self.user_ids)
         if tokens:
             if type(tokens) == list and len(tokens) == 1:
                 if not self.notification_date:
