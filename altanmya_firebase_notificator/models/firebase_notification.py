@@ -79,6 +79,8 @@ class FirebaseNotification(models.Model):
                 'content_available': True,
                 'to': tokens[0] if type(tokens) == list and len(tokens) > 0 else tokens,
             }
+            _logger.info('data ya brooo')
+            _logger.info(data)
         resp = requests.post(url, headers=headers, json=data)
         raise ValidationError(_(resp.text.encode('utf8')))
 
@@ -120,6 +122,8 @@ class FirebaseNotification(models.Model):
                 else:
                     title = self.fr_title
                     content = self.fr_content
+                _logger.info('data ya brooo 2 ')
+                _logger.info(content)
                 messages = [
                     messaging.Message(
                         notification=messaging.Notification(
