@@ -133,6 +133,8 @@ class FirebaseNotification(models.Model):
         _logger.info('tokens')
         _logger.info(tokens)
         _logger.info(self.user_ids)
+        _logger.info(self.user_ids.firebase_account_id)
+        _logger.info(self.user_ids.firebase_account_id.token)
         if tokens:
             if type(tokens) == list and len(tokens) == 1:
                 if not self.notification_date:
