@@ -71,8 +71,9 @@
                 <xpath expr="//page[@name='general_information']" position="inside">
                     <notebook>
                         <page string="Mobile Description">
-                            <span>Mobile Description&nbsp;&nbsp;&nbsp;</span>
-                            <field name="mobile_description"/>
+                            <group>
+                                <field name="mobile_description"/>
+                            </group>
                         </page>
                     </notebook>
                 </xpath>
