@@ -9,10 +9,10 @@ class ProductTemplateInherit(models.Model):
 
     description = fields.Char('Description', translate=True)
     mobile_description = fields.Char('Description for the mobile', sanitize_attributes=False,
-                                      translate=True, sanitize_form=False)
-#     website_description = fields.Char('Description for the website', sanitize_attributes=False,
-#                                       translate=True, sanitize_form=False)
-    
+                                     translate=True, sanitize_form=False)
+    #     website_description = fields.Char('Description for the website', sanitize_attributes=False,
+    #                                       translate=True, sanitize_form=False)
+
     # Nutrition Value Fields
     calories = fields.Char(string='Calories')
     carbs = fields.Char(string='Carbs')
@@ -20,8 +20,7 @@ class ProductTemplateInherit(models.Model):
     fat = fields.Char(string='Fat')
     fiber = fields.Char(string='Fiber')
     iron = fields.Char(string='Iron')
-    
-    
+
     def get_preference_state(self, variant_template, product_id):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         for rec in user.products_preferences_ids:
@@ -32,7 +31,6 @@ class ProductTemplateInherit(models.Model):
                 if rec.template_id.id == product_id:
                     return rec.status
         return 'dislike'
-    
 
     def get_variant_attributes(self, product_id):
         product = self.env['product.product'].sudo().browse(product_id)
@@ -52,7 +50,7 @@ class ProductTemplateInherit(models.Model):
                 product_variant_details = {
                     'id': product.id,
                     'name': product.name,
-#                     'image_128': product.image_1920,
+                    #                     'image_128': product.image_1920,
                     'image_128': '',
                     'list_price': product.lst_price,
                     'uom': product.uom_id.name,
@@ -64,7 +62,7 @@ class ProductTemplateInherit(models.Model):
                     'iron': product.iron,
                     'description': product.description,
                     'preference_state': self.get_preference_state(1, product.id),
-                    'additional_description': product.website_description,
+                    'additional_description': product.mobile_description,
                     'composition': product.x_studio_composition,
                     'conservation_et_utilisation': product.x_studio_conservation_et_utilisation,
                     'product_more_info': product.x_studio_product_more_info,
@@ -107,7 +105,7 @@ class ProductTemplateInherit(models.Model):
                     'description': product.description,
                     'preference_state': self.get_preference_state(2, product.id),
                     'product_variants': self.get_products_variants_details(product.id),
-                    'additional_description': product.website_description,
+                    'additional_description': product.mobile_description,
                     'composition': product.x_studio_composition,
                     'conservation_et_utilisation': product.x_studio_conservation_et_utilisation,
                     'product_more_info': product.x_studio_product_more_info
@@ -141,7 +139,7 @@ class ProductTemplateInherit(models.Model):
                     'description': product.description,
                     'preference_state': self.get_preference_state(2, product.id),
                     'product_variants': self.get_products_variants_details(product.id),
-                    'additional_description': product.website_description,
+                    'additional_description': product.mobile_description,
                     'composition': product.x_studio_composition,
                     'conservation_et_utilisation': product.x_studio_conservation_et_utilisation,
                     'product_more_info': product.x_studio_product_more_info
