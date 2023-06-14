@@ -68,10 +68,8 @@
             <field name="inherit_id" ref="product.product_template_only_form_view"/>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <xpath expr="//notebook/page[@name='general_information']" position="inside">
-                    <page string="Mobile Description">
-                        <field name="mobile_description"/>
-                    </page>
+                <xpath expr="//page[@name='studio_page_pazCZ']" position="inside">
+                    <field name="mobile_description"/>
                 </xpath>
 
                 <page name="inventory" position="after">
