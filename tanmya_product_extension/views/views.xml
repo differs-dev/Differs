@@ -68,9 +68,14 @@
             <field name="inherit_id" ref="product.product_template_only_form_view"/>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='x_studio_website_description']" position="after">
-                    <field name="mobile_description"/>
-                </xpath>
+                <!--                <xpath expr="//notebook/page[@name='website_description']" position="inside">-->
+                <!--                    <field name="mobile_description"/>-->
+                <!--                </xpath>-->
+                <notebook>
+                    <page string="Mobile Description">
+                        <field name="mobile_description"/>
+                    </page>
+                </notebook>
                 <page name="inventory" position="after">
                     <page string="Nutritional Values">
                         <group>
