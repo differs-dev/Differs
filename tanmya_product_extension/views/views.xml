@@ -69,11 +69,9 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <xpath expr="//page[@name='general_information']" position="inside">
-                    <notebook>
-                        <page string="Mobile Description">
-                            <field name="mobile_description" string="Mobile Description"/>
-                        </page>
-                    </notebook>
+                    <page string="Mobile Description">
+                        <field name="mobile_description"/>
+                    </page>
                 </xpath>
 
                 <page name="inventory" position="after">
