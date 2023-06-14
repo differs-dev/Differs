@@ -73,7 +73,7 @@
                 <!--                </xpath>-->
                 <notebook>
                     <page string="Mobile Description">
-                        <field name="mobile_description"/>
+                        <field name="mobile_description" string="Mobile Description"/>
                     </page>
                 </notebook>
                 <page name="inventory" position="after">
