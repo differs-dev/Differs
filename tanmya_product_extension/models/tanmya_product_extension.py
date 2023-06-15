@@ -210,10 +210,21 @@ class TanmyaProducExt(models.Model):
     @api.constrains('calories')
     def _check_national_number(self):
         # for char and len in self.calories:
-        if self.calories and not str(self.calories).isdigit():
-            raise ValidationError("WTF")
-        elif len(self.calories) > 3:
+        text = str(self.calories)
+        for char in text:
+            if not char.isdigit():
+                if char == ',' or char == '.':
+                    pass
+                else:
+                    raise ValidationError("WTF")
+        if len(self.calories) > 3:
             raise ValidationError("WTF1")
+
+        # if ',' in self.calories or '.' in self.calories:
+        #     if self.calories and not str(self.calories).isdigit():
+        #         raise ValidationError("WTF")
+        # elif len(self.calories) > 3:
+        #     raise ValidationError("WTF1")
 
     @api.depends('list_price', 'price_extra', 'kit_template')
     @api.depends_context('uom')
