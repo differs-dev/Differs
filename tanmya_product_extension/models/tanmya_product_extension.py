@@ -196,7 +196,7 @@ class TanmyaProducExt(models.Model):
     servings = fields.Integer(string='Persons Servings')
 
     # Nutrition Value Fields
-    calories = fields.Float(string='Recipe Calories', digits=(2,2))
+    calories = fields.Char(string='Recipe Calories')
     carbs = fields.Char(string='Recipe Carbs')
     protein = fields.Char(string='Recipe Protin')
     fat = fields.Char(string='Recipe Fat')
