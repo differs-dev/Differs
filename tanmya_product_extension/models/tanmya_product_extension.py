@@ -1,6 +1,7 @@
 from datetime import date, datetime, timedelta
 from odoo import api, fields, models, tools
 import logging
+from odoo.exceptions import ValidationError
 import time
 
 _logger = logging.getLogger(__name__)
@@ -205,6 +206,14 @@ class TanmyaProducExt(models.Model):
 
     # Recipe Reviews
     reviews_ids = fields.One2many('tanmya.review', 'recipe_id', string='Recipe Reviews')
+
+    @api.constrains('calories')
+    def _check_national_number(self):
+        # for char and len in self.calories:
+        if self.calories and not str(self.calories).isdigit():
+            raise ValidationError("WTF")
+        elif len(self.calories) > 3:
+            raise ValidationError("WTF1")
 
     @api.depends('list_price', 'price_extra', 'kit_template')
     @api.depends_context('uom')
