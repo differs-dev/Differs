@@ -207,24 +207,67 @@ class TanmyaProducExt(models.Model):
     # Recipe Reviews
     reviews_ids = fields.One2many('tanmya.review', 'recipe_id', string='Recipe Reviews')
 
-    @api.constrains('calories')
-    def _check_national_number(self):
-        # for char and len in self.calories:
+    @api.constrains('calories', 'carbs', 'protein', 'fat', 'fiber', 'iron')
+    def _check_nutrition_value(self):
         text = str(self.calories)
         for char in text:
             if not char.isdigit():
                 if char == ',' or char == '.':
                     pass
                 else:
-                    raise ValidationError("WTF")
+                    raise ValidationError("Calories filed should contains numbers only")
         if len(self.calories) > 3:
-            raise ValidationError("WTF1")
-
-        # if ',' in self.calories or '.' in self.calories:
-        #     if self.calories and not str(self.calories).isdigit():
-        #         raise ValidationError("WTF")
-        # elif len(self.calories) > 3:
-        #     raise ValidationError("WTF1")
+            raise ValidationError("Calories filed should contains 3 characters maximum")
+        ####################################################
+        text = str(self.carbs)
+        for char in text:
+            if not char.isdigit():
+                if char == ',' or char == '.':
+                    pass
+                else:
+                    raise ValidationError("Carbs filed should contains numbers only")
+        if len(self.carbs) > 3:
+            raise ValidationError("Carbs filed should contains 3 characters maximum")
+        ####################################################
+        text = str(self.protein)
+        for char in text:
+            if not char.isdigit():
+                if char == ',' or char == '.':
+                    pass
+                else:
+                    raise ValidationError("Protein filed should contains numbers only")
+        if len(self.protein) > 3:
+            raise ValidationError("Protein filed should contains 3 characters maximum")
+        ####################################################
+        text = str(self.fat)
+        for char in text:
+            if not char.isdigit():
+                if char == ',' or char == '.':
+                    pass
+                else:
+                    raise ValidationError("Fat filed should contains numbers only")
+        if len(self.fat) > 3:
+            raise ValidationError("Fat filed should contains 3 characters maximum")
+        ####################################################
+        text = str(self.fiber)
+        for char in text:
+            if not char.isdigit():
+                if char == ',' or char == '.':
+                    pass
+                else:
+                    raise ValidationError("Fiber filed should contains numbers only")
+        if len(self.fiber) > 3:
+            raise ValidationError("Fiber filed should contains 3 characters maximum")
+        ####################################################
+        text = str(self.iron)
+        for char in text:
+            if not char.isdigit():
+                if char == ',' or char == '.':
+                    pass
+                else:
+                    raise ValidationError("Iron filed should contains numbers only")
+        if len(self.iron) > 3:
+            raise ValidationError("Iron filed should contains 3 characters maximum")
 
     @api.depends('list_price', 'price_extra', 'kit_template')
     @api.depends_context('uom')
