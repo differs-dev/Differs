@@ -90,7 +90,7 @@ class ResUsers(models.Model):
         return False
 
     @api.model
-    def get_user_preferences(self, products_type, limit=None, offset=0):
+    def get_user_preferences(self, products_type: int, limit=None, offset=0):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         user_preferences = []
         if user:
