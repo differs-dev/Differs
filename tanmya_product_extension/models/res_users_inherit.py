@@ -36,6 +36,11 @@ class ResUsers(models.Model):
         # variant_template : the product_id related to product variant or product template
         # 1 for product variant and 2 for product template
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
+        _logger.info('/////////////////////////////////////')
+        _logger.info(product_status)
+        _logger.info(product_id)
+        _logger.info(variant_template)
+        _logger.info('/////////////////////////////////////')
         if user:
             for preference in user.products_preferences_ids:
                 if variant_template == 1:
@@ -62,7 +67,7 @@ class ResUsers(models.Model):
                 user.products_preferences_ids = [(4, product_preference.id)]
                 return True
         return False
-    
+
     @api.model
     def update_user_language(self, new_lang, user_id):
         '''
@@ -77,6 +82,10 @@ class ResUsers(models.Model):
     @api.model
     def delete_product_preference(self, variant_template: int, product_id: int):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
+        _logger.info('/////////////////////////////////////')
+        _logger.info(product_id)
+        _logger.info(variant_template)
+        _logger.info('/////////////////////////////////////')
         if user:
             for line in user.products_preferences_ids:
                 if variant_template == 1:
@@ -300,7 +309,6 @@ class ResUsers(models.Model):
             else:
                 raise AccessError(_("User authentication failed due to invalid authentication values"))
 
-
     @api.model
     def set_address_info(self, vals):
         uid = self.env.uid
@@ -313,7 +321,6 @@ class ResUsers(models.Model):
             user.write(vals)
             return True
         return False
-
 
     @api.model
     def get_address_info(self):
@@ -337,7 +344,6 @@ class ResUsers(models.Model):
             }
             address_info_list.append(address_info)
         return address_info_list
-
 
     @api.model
     def add_new_address(self, address_vals):
@@ -366,7 +372,6 @@ class ResUsers(models.Model):
                 return new_address.id
         return False
 
-
     def search_in_address(self, address_vals, search_word):
         search_word1 = search_word.capitalize()
         search_word2 = search_word.lower()
@@ -374,12 +379,12 @@ class ResUsers(models.Model):
         result = False
         for key, val in address_vals.items():
             if key != 'id' and key != 'partner_latitude' and key != 'partner_longitude':
-                if search_word in str(val) or search_word1 in str(val) or search_word2 in str(val) or search_word3 in str(
-                        val):
+                if search_word in str(val) or search_word1 in str(val) or search_word2 in str(
+                        val) or search_word3 in str(
+                    val):
                     result = True
                     break
         return result
-
 
     @api.model
     def get_addresses_details(self, search_word=''):
@@ -410,7 +415,6 @@ class ResUsers(models.Model):
                         target_addresses.append(address)
                 return target_addresses
         return addresses_info_list
-
 
     @api.model
     def get_address_details(self):
@@ -452,7 +456,6 @@ class ResUsers(models.Model):
             }
             return [address_info]
 
-
     @api.model
     def update_address_info(self, address_id, vals):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
@@ -470,7 +473,6 @@ class ResUsers(models.Model):
             address.write(vals)
             return True
 
-
     @api.model
     def update_user_info(self, new_vals):
         # new_vals = {
@@ -486,19 +488,16 @@ class ResUsers(models.Model):
             return True
         return False
 
-
     @api.model
     def set_main_address_id(self, address_id):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         user.write({'main_address_id': address_id})
-
 
     @api.model
     def cancel_main_address(self, address_id):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         if user.main_address_id == address_id:
             user.write({'main_address_id': -2})
-
 
     @api.model
     def delete_address(self, address_id):
@@ -520,7 +519,6 @@ class ResUsers(models.Model):
         else:
             address = self.env['additional.address'].sudo().search([('id', '=', address_id)])
             address.unlink()
-
 
     @api.model
     def delete_user_account(self):
