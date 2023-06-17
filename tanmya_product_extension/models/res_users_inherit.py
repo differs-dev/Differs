@@ -32,7 +32,7 @@ class ResUsers(models.Model):
     preferred_language = fields.Char(string='User Language', default='fr')
 
     @api.model
-    def add_product_preference(self, variant_template: int, product_id: int, product_status: str):
+    def add_product_preference(self, variant_template: int, product_id: int, product_status='like'):
         # variant_template : the product_id related to product variant or product template
         # 1 for product variant and 2 for product template
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
