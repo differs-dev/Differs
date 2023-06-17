@@ -96,6 +96,7 @@ class ResUsers(models.Model):
         if user:
             products_preferences = []
             if products_type == 2:
+                _logger.info('helloloololollololololololololololololololololololololol')
                 products_preferences = self.env['products.preferences'].sudo().search(
                     [('id', 'in', user.products_preferences_ids.ids),
                      ('product_id', '!=', False),
