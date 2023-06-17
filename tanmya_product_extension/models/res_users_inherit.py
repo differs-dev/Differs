@@ -103,11 +103,9 @@ class ResUsers(models.Model):
                      ('product_id.kit_template', '!=', None)],
                     limit=limit, offset=offset)
                 _logger.info('///////////////////////////////////')
-                _logger.info(user.products_preferences_ids.ids)
+                _logger.info(test.ids[0].product_id)
                 _logger.info('///////////////////////////////////')
-                _logger.info(products_preferences)
-                _logger.info('///////////////////////////////////')
-                _logger.info(test)
+                _logger.info(test.ids[0].product_id.kit_template)
                 _logger.info('///////////////////////////////////')
                 for product_preference in products_preferences:
                     user_preference = {
