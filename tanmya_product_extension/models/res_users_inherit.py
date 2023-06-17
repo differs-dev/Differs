@@ -32,15 +32,10 @@ class ResUsers(models.Model):
     preferred_language = fields.Char(string='User Language', default='fr')
 
     @api.model
-    def add_product_preference(self, variant_template: int, product_id: int, product_status='like'):
+    def add_product_preference(self, variant_template: int, product_id: int, product_status: str):
         # variant_template : the product_id related to product variant or product template
         # 1 for product variant and 2 for product template
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
-        _logger.info('/////////////////////////////////////')
-        _logger.info(product_status)
-        _logger.info(product_id)
-        _logger.info(variant_template)
-        _logger.info('/////////////////////////////////////')
         if user:
             for preference in user.products_preferences_ids:
                 if variant_template == 1:
@@ -82,10 +77,6 @@ class ResUsers(models.Model):
     @api.model
     def delete_product_preference(self, variant_template: int, product_id: int):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
-        _logger.info('/////////////////////////////////////')
-        _logger.info(product_id)
-        _logger.info(variant_template)
-        _logger.info('/////////////////////////////////////')
         if user:
             for line in user.products_preferences_ids:
                 if variant_template == 1:
@@ -381,7 +372,7 @@ class ResUsers(models.Model):
             if key != 'id' and key != 'partner_latitude' and key != 'partner_longitude':
                 if search_word in str(val) or search_word1 in str(val) or search_word2 in str(
                         val) or search_word3 in str(
-                    val):
+                        val):
                     result = True
                     break
         return result
