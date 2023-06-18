@@ -7,6 +7,7 @@ from . import res_users_inherit
 from . import product_template_inherit
 from . import product_category
 from . import sale_coupon_apply_code_inherit
+from . import ir_ui_view
 
 
 
