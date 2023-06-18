@@ -55,6 +55,7 @@ class ResUsers(models.Model):
             elif variant_template == 2:
                 product_preferences_vals = {
                     'template_id': product_id,
+                    'product_id': product_id,
                     'status': product_status
                 }
             product_preference = self.env['products.preferences'].sudo().create(product_preferences_vals)
