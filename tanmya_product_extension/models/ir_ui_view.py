@@ -18,6 +18,9 @@ class View(models.Model):
                     view.groups_id and
                     view.inherit_id and
                     view.mode != 'primary'):
+                _logger.info('11111111111111111111111111111111111')
+                _logger.info(view.name)
+                _logger.info('11111111111111111111111111111111111')
                 raise ValidationError(
                     _("Inherited Qweb view cannot have 'Groups' define on the record. Use 'groups' attributes inside the view definition"))
 
