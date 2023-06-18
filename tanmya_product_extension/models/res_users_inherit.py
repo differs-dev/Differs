@@ -96,10 +96,10 @@ class ResUsers(models.Model):
         if user:
             products_preferences = []
             if products_type == 2:
-                test = self.env['products.preferences'].sudo().search([('id', '=', 1)], limit=limit, offset=offset)
                 products_preferences = self.env['products.preferences'].sudo().search(
                     [('id', 'in', user.products_preferences_ids.ids),
-                     ('product_id', '=', '')],
+                     ('product_id', '!=', False),
+                     ('product_id.kit_template', '!=', None)],
                     limit=limit, offset=offset)
                 for product_preference in products_preferences:
                     user_preference = {
