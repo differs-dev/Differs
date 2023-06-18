@@ -5,6 +5,7 @@ class ProductsPreferences(models.Model):
     _name = 'products.preferences'
 
     product_id = fields.Many2one('product.product', string='Product ID')
+    template_id = fields.Many2one('product.template', string='Product Template ID')
     status = fields.Selection([('like', 'Like'),
                                ('dislike', 'Dislike'),
                                # ('neutral','Neutral')
@@ -34,7 +35,7 @@ class IngredientsDetails(models.Model):
 
     def init(self):
         tools.drop_view_if_exists(self._cr, 'INGREDIENTS_DETAILS')
-        self._cr.execute("""CREATE VIEW INGREDIENTS_DETAILS AS
+        self._cr.execute("""CREATE OR REPLACE VIEW INGREDIENTS_DETAILS AS
                             SELECT  C.ID,
                                     C.SALE_ORDER_TEMPLATE_ID,
                                     C.PRODUCT_ID,
