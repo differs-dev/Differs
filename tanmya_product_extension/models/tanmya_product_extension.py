@@ -19,7 +19,7 @@ class Tanmyaprodcategory(models.Model):
                             default='by_ingredients')
 
     @api.model
-    def get_categories_by_ingredients(self, limit=None, offset=0):
+    def get_categories_by_ingredients(self, search_word='', limit=None, offset=0):
         categories = False
         categories_by_ing = []
         categories = self.env['tanmya.product.category'].sudo().search(
@@ -28,11 +28,23 @@ class Tanmyaprodcategory(models.Model):
             offset=offset)
         categories_details = []
         for ca_type in categories:
+            _logger.info('111111111111111111111111111')
             if ca_type.type == 'by_ingredients':
-                categories_by_ing += self.env['tanmya.product.category'].sudo().search(
-                    [('type', '=', 'by_ingredients')],
-                    limit=limit,
-                    offset=offset)
+                if search_word == '':
+                    categories_by_ing += self.env['tanmya.product.category'].sudo().search(
+                        [('type', '=', 'by_ingredients')],
+                        limit=limit,
+                        offset=offset)
+                else:
+                    categories_by_ing += self.env['tanmya.product.category'].sudo().search(
+                        ['|', '|', '|', '&',
+                         ('name', 'like', search_word),
+                         ('name', 'like', search_word.capitalize()),
+                         ('name', 'like', search_word.upper()),
+                         ('name', 'like', search_word.lower()),
+                         ('type', '=', 'by_ingredients')],
+                        limit=limit,
+                        offset=offset)
 
         if categories_by_ing:
             for category in categories_by_ing:
@@ -44,7 +56,7 @@ class Tanmyaprodcategory(models.Model):
                 categories_details.append(category_details)
         else:
             return categories_details
-
+        _logger.info('222222222222222222222')
         return categories_details
 
     @api.model
