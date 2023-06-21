@@ -69,6 +69,24 @@ class SaleOrderInerit(models.Model):
         print("Invalid User ID!")
         return False
 
+        # Get last cart(sale_order record) for specific user
+
+    @api.model
+    def get_user_cart_qun(self):
+        user_id = self.env.uid
+        if user_id:
+            user = self.env['res.users'].sudo().search([('id', '=', user_id)])
+            user_sale_order = self.env['sale.order'].sudo().search([('partner_id', '=', user.partner_id.id),
+                                                                    ('state', '=', 'draft')],
+                                                                   order='date_order desc', limit=1).order_line
+            if user_sale_order:
+                return len(user_sale_order)
+            else:
+                return 'z'
+
+        print("Invalid User ID!")
+        return False
+
     # Delete user cart
     @api.model
     def delete_user_cart(self):
