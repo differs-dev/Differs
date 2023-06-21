@@ -82,7 +82,7 @@ class SaleOrderInerit(models.Model):
             if user_sale_order:
                 return len(user_sale_order)
             else:
-                return 'z'
+                return '0'
 
         print("Invalid User ID!")
         return False
