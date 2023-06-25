@@ -33,12 +33,12 @@ class Tanmyaprodcategory(models.Model):
             _logger.info('//////////////////////////////////////////////////////////////////////////////////////////////////')
             if ca_type.type == 'by_ingredients':
                 if search_word == '':
-                    categories_by_ing += self.env['tanmya.product.category'].sudo().search(
+                    categories_by_ing = self.env['tanmya.product.category'].sudo().search(
                         [('type', '=', 'by_ingredients')],
                         limit=limit,
                         offset=offset)
                 else:
-                    categories_by_ing += self.env['tanmya.product.category'].sudo().search(
+                    categories_by_ing = self.env['tanmya.product.category'].sudo().search(
                         ['|', '|', '|', '&',
                          ('name', 'like', search_word),
                          ('name', 'like', search_word.capitalize()),
