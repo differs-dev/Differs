@@ -28,9 +28,6 @@ class Tanmyaprodcategory(models.Model):
             offset=offset)
         categories_details = []
         for ca_type in categories:
-            _logger.info('////////////////////////////////////////// ca type //////////////////////////////////////////////')
-            _logger.info(ca_type)
-            _logger.info('//////////////////////////////////////////////////////////////////////////////////////////////////')
             if ca_type.type == 'by_ingredients':
                 if search_word == '':
                     categories_by_ing = self.env['tanmya.product.category'].sudo().search(
@@ -72,12 +69,12 @@ class Tanmyaprodcategory(models.Model):
         for ca_type in categories:
             if ca_type.type == 'by_cuisine':
                 if search_word == '':
-                    categories_by_cui += self.env['tanmya.product.category'].sudo().search(
+                    categories_by_cui = self.env['tanmya.product.category'].sudo().search(
                         [('type', '=', 'by_cuisine')],
                         limit=limit,
                         offset=offset)
                 else:
-                    categories_by_cui += self.env['tanmya.product.category'].sudo().search(
+                    categories_by_cui = self.env['tanmya.product.category'].sudo().search(
                         ['|', '|', '|', '&',
                          ('name', 'like', search_word),
                          ('name', 'like', search_word.capitalize()),
