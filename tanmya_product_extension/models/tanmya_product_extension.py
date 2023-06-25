@@ -28,6 +28,9 @@ class Tanmyaprodcategory(models.Model):
             offset=offset)
         categories_details = []
         for ca_type in categories:
+            _logger.info('////////////////////////////////////////// ca type //////////////////////////////////////////////')
+            _logger.info(ca_type)
+            _logger.info('//////////////////////////////////////////////////////////////////////////////////////////////////')
             if ca_type.type == 'by_ingredients':
                 if search_word == '':
                     categories_by_ing += self.env['tanmya.product.category'].sudo().search(
