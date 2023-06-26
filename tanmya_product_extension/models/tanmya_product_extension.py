@@ -388,7 +388,7 @@ class TanmyaProducExt(models.Model):
     def publish_recipe(self, recipe_vals: dict):
         recipe_id = self.add_recipe(recipe_vals)
         _logger.info('//////////////////////////////////// zaid last day //////////////////////////////////////')
-        _logger.info(recipe_id)\
+        _logger.info(recipe_id)
         _logger.info('////////////////////////////////////////////////////////////////////////////////////////')
         if recipe_id:
             appr_category_id = self.env['approval.category'].sudo().search(
@@ -396,7 +396,9 @@ class TanmyaProducExt(models.Model):
                  ('description', '=', 'Approval type for approve on publish recipe for public or not.'),
                  ('has_product', '=', 'required')]).id
             recipe = self.env['product.product'].sudo().search([('id', '=', recipe_id)])
-
+            _logger.info('//////////////////////////////////// zaid last day 2 //////////////////////////////////////')
+            _logger.info(recipe)
+            _logger.info('////////////////////////////////////////////////////////////////////////////////////////')
             if appr_category_id:
                 appr_request_vals = {
                     'category_id': appr_category_id,
