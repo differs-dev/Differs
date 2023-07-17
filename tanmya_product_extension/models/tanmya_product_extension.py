@@ -353,7 +353,7 @@ class TanmyaProducExt(models.Model):
                     'product_uom_id': vals.get('uom_id')
                 }
                 self.env['sale.order.template.line'].sudo().create(sale_order_template_line_vals)
-
+            
             # Create Recipe
             recipe_vals = {
                 'owner_id': vals.get('owner_id'),
@@ -376,6 +376,7 @@ class TanmyaProducExt(models.Model):
                 'servings': vals.get('servings'),
                 'kit_template': sale_order_template_id.id,
             }
+            _logger.info('Add Recipe before creating the product')
             recipe_id = self.env['product.product'].sudo().create(recipe_vals)
             _logger.info('Add Recipe Completed!')
             _logger.info(recipe_id.id)
