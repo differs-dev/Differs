@@ -358,7 +358,7 @@ class TanmyaProducExt(models.Model):
             # Create Recipe
             recipe_vals = {
                 'owner_id': vals.get('owner_id'),
-                'image_1920': base64.b64decode(vals.get('recipe_image')),
+                'image_1920': vals.get('recipe_image'),
                 # 'image_1920_1': vals.get('recipe_image1'),
                 # 'image_1920_2': vals.get('recipe_image2'),
                 'name': vals.get('recipe_name'),
