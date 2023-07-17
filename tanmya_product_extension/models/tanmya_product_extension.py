@@ -377,11 +377,12 @@ class TanmyaProducExt(models.Model):
                 'kit_template': sale_order_template_id.id,
             }
             recipe_id = self.env['product.product'].sudo().create(recipe_vals)
-            print('Add Recipe Completed!')
+            _logger.info('Add Recipe Completed!')
+            _logger.info(recipe_id.id)
             return recipe_id.id
 
         except:
-            print('Error in add recipe!')
+            _logger.info('Error in add recipe!')
             return False
 
     @api.model
