@@ -1,6 +1,7 @@
 from datetime import date, datetime, timedelta
 from odoo import api, fields, models, tools
 import logging
+from odoo.exceptions import ValidationError
 import time
 
 _logger = logging.getLogger(__name__)
@@ -16,9 +17,9 @@ class Tanmyaprodcategory(models.Model):
                              ('by_cuisine', 'By Cuisine')],
                             string='Category Type',
                             default='by_ingredients')
-    
+
     @api.model
-    def get_categories_by_ingredients(self, limit=None, offset=0):
+    def get_categories_by_ingredients(self, search_word='', limit=None, offset=0):
         categories = False
         categories_by_ing = []
         categories = self.env['tanmya.product.category'].sudo().search(
@@ -28,10 +29,21 @@ class Tanmyaprodcategory(models.Model):
         categories_details = []
         for ca_type in categories:
             if ca_type.type == 'by_ingredients':
-                categories_by_ing += self.env['tanmya.product.category'].sudo().search(
-                    [('type', '=', 'by_ingredients')],
-                    limit=limit,
-                    offset=offset)
+                if search_word == '':
+                    categories_by_ing = self.env['tanmya.product.category'].sudo().search(
+                        [('type', '=', 'by_ingredients')],
+                        limit=limit,
+                        offset=offset)
+                else:
+                    categories_by_ing = self.env['tanmya.product.category'].sudo().search(
+                        ['|', '|', '|', '&',
+                         ('name', 'like', search_word),
+                         ('name', 'like', search_word.capitalize()),
+                         ('name', 'like', search_word.upper()),
+                         ('name', 'like', search_word.lower()),
+                         ('type', '=', 'by_ingredients')],
+                        limit=limit,
+                        offset=offset)
 
         if categories_by_ing:
             for category in categories_by_ing:
@@ -43,11 +55,10 @@ class Tanmyaprodcategory(models.Model):
                 categories_details.append(category_details)
         else:
             return categories_details
-
         return categories_details
 
     @api.model
-    def get_categories_by_cuisine(self, limit=None, offset=0):
+    def get_categories_by_cuisine(self, search_word='', limit=None, offset=0):
         categories = False
         categories_by_cui = []
         categories = self.env['tanmya.product.category'].sudo().search(
@@ -57,10 +68,21 @@ class Tanmyaprodcategory(models.Model):
         categories_details = []
         for ca_type in categories:
             if ca_type.type == 'by_cuisine':
-                categories_by_cui += self.env['tanmya.product.category'].sudo().search(
-                    [('type', '=', 'by_cuisine')],
-                    limit=limit,
-                    offset=offset)
+                if search_word == '':
+                    categories_by_cui = self.env['tanmya.product.category'].sudo().search(
+                        [('type', '=', 'by_cuisine')],
+                        limit=limit,
+                        offset=offset)
+                else:
+                    categories_by_cui = self.env['tanmya.product.category'].sudo().search(
+                        ['|', '|', '|', '&',
+                         ('name', 'like', search_word),
+                         ('name', 'like', search_word.capitalize()),
+                         ('name', 'like', search_word.upper()),
+                         ('name', 'like', search_word.lower()),
+                         ('type', '=', 'by_cuisine')],
+                        limit=limit,
+                        offset=offset)
 
         if categories_by_cui:
             for category in categories_by_cui:
@@ -100,7 +122,7 @@ class Tanmyaprodcategory(models.Model):
                     'image': category.image
                 }
                 categories_details.append(category_details)
-        
+
         return categories_details
 
     @api.model
@@ -110,12 +132,12 @@ class Tanmyaprodcategory(models.Model):
             categories = self.env['product.category'].sudo().search([], limit=limit, offset=offset)
         else:
             categories = self.env['product.category'].sudo().search(['|', '|', '|',
-                                                                            ('name', 'like', search_word),
-                                                                            ('name', 'like', search_word.capitalize()),
-                                                                            ('name', 'like', search_word.upper()),
-                                                                            ('name', 'like', search_word.lower())],
-                                                                           limit=limit,
-                                                                           offset=offset)
+                                                                     ('name', 'like', search_word),
+                                                                     ('name', 'like', search_word.capitalize()),
+                                                                     ('name', 'like', search_word.upper()),
+                                                                     ('name', 'like', search_word.lower())],
+                                                                    limit=limit,
+                                                                    offset=offset)
         categories_details = []
         if categories:
             for category in categories:
@@ -169,6 +191,7 @@ class Tanmyacustomerpotslines(models.Model):
                                 copy=False)
     qty = fields.Float('Quantity')
 
+
 class TanmyaProducExt(models.Model):
     _inherit = 'product.product'
 
@@ -204,6 +227,68 @@ class TanmyaProducExt(models.Model):
 
     # Recipe Reviews
     reviews_ids = fields.One2many('tanmya.review', 'recipe_id', string='Recipe Reviews')
+
+    @api.constrains('calories', 'carbs', 'protein', 'fat', 'fiber', 'iron')
+    def _check_nutrition_value(self):
+        text = str(self.calories)
+        for char in text:
+            if not char.isdigit():
+                if char == ',' or char == '.':
+                    pass
+                else:
+                    raise ValidationError("Calories filed should contains numbers only")
+        if len(self.calories) > 3:
+            raise ValidationError("Calories filed should contains 3 characters maximum")
+        ####################################################
+        text = str(self.carbs)
+        for char in text:
+            if not char.isdigit():
+                if char == ',' or char == '.':
+                    pass
+                else:
+                    raise ValidationError("Carbs filed should contains numbers only")
+        if len(self.carbs) > 3:
+            raise ValidationError("Carbs filed should contains 3 characters maximum")
+        ####################################################
+        text = str(self.protein)
+        for char in text:
+            if not char.isdigit():
+                if char == ',' or char == '.':
+                    pass
+                else:
+                    raise ValidationError("Protein filed should contains numbers only")
+        if len(self.protein) > 3:
+            raise ValidationError("Protein filed should contains 3 characters maximum")
+        ####################################################
+        text = str(self.fat)
+        for char in text:
+            if not char.isdigit():
+                if char == ',' or char == '.':
+                    pass
+                else:
+                    raise ValidationError("Fat filed should contains numbers only")
+        if len(self.fat) > 3:
+            raise ValidationError("Fat filed should contains 3 characters maximum")
+        ####################################################
+        text = str(self.fiber)
+        for char in text:
+            if not char.isdigit():
+                if char == ',' or char == '.':
+                    pass
+                else:
+                    raise ValidationError("Fiber filed should contains numbers only")
+        if len(self.fiber) > 3:
+            raise ValidationError("Fiber filed should contains 3 characters maximum")
+        ####################################################
+        text = str(self.iron)
+        for char in text:
+            if not char.isdigit():
+                if char == ',' or char == '.':
+                    pass
+                else:
+                    raise ValidationError("Iron filed should contains numbers only")
+        if len(self.iron) > 3:
+            raise ValidationError("Iron filed should contains 3 characters maximum")
 
     @api.depends('list_price', 'price_extra', 'kit_template')
     @api.depends_context('uom')
@@ -302,14 +387,16 @@ class TanmyaProducExt(models.Model):
     @api.model
     def publish_recipe(self, recipe_vals: dict):
         recipe_id = self.add_recipe(recipe_vals)
-
+        _logger.info(f"recipe added with this value: {recipe_vals} and we get this recipe {recipe_id}")
         if recipe_id:
             appr_category_id = self.env['approval.category'].sudo().search(
                 [('name', '=', 'Recipe Approval'),
                  ('description', '=', 'Approval type for approve on publish recipe for public or not.'),
                  ('has_product', '=', 'required')]).id
             recipe = self.env['product.product'].sudo().search([('id', '=', recipe_id)])
-
+            _logger.info('//////////////////////////////////// zaid last day 2 //////////////////////////////////////')
+            _logger.info(recipe)
+            _logger.info('////////////////////////////////////////////////////////////////////////////////////////')
             if appr_category_id:
                 appr_request_vals = {
                     'category_id': appr_category_id,
@@ -458,16 +545,16 @@ class TanmyaProducExt(models.Model):
         _logger.info(category_id)
         if category_id > 0:
             products = self.env['product.template'].sudo().search(['|', '|', '|',
-                                                                  ('name', 'like', search_word),
-                                                                  ('name', 'like', search_word1),
-                                                                  ('name', 'like', search_word2),
-                                                                  ('name', 'like', search_word3),
-                                                                  ('categ_id', '=', category_id),
-                                                                  ('is_published', '=', is_publish)],
-                                                                 limit=limit,
-                                                                 offset=offset,
-                                                                 order=order_by)
-            
+                                                                   ('name', 'like', search_word),
+                                                                   ('name', 'like', search_word1),
+                                                                   ('name', 'like', search_word2),
+                                                                   ('name', 'like', search_word3),
+                                                                   ('categ_id', '=', category_id),
+                                                                   ('is_published', '=', is_publish)],
+                                                                  limit=limit,
+                                                                  offset=offset,
+                                                                  order=order_by)
+
             products_details = []
             for product in products:
                 product_details = {
@@ -484,13 +571,13 @@ class TanmyaProducExt(models.Model):
                     'uom': product.uom_id.name,
                     'description': product.description,
                     'preference_state': self.get_preference_state(product.id),
-                    'additional_description' : product.website_description,
-                    'composition' : product.x_studio_composition,
-                    'conservation_et_utilisation' : product.x_studio_conservation_et_utilisation,
-                    'product_more_info' : product.x_studio_product_more_info
+                    'additional_description': product.website_description,
+                    'composition': product.x_studio_composition,
+                    'conservation_et_utilisation': product.x_studio_conservation_et_utilisation,
+                    'product_more_info': product.x_studio_product_more_info
                 }
                 products_details.append(product_details)
-            
+
         else:
             products = self.env['product.product'].sudo().search(['|', '|', '|',
                                                                   ('name', 'like', search_word),
@@ -502,7 +589,7 @@ class TanmyaProducExt(models.Model):
                                                                  limit=limit,
                                                                  offset=offset,
                                                                  order=order_by)
-            
+
             products_details = []
             for product in products:
                 product_details = {
@@ -519,10 +606,10 @@ class TanmyaProducExt(models.Model):
                     'iron': product.iron,
                     'description': product.description,
                     'preference_state': self.get_preference_state(product.id),
-                    'additional_description' : product.website_description,
-                    'composition' : product.x_studio_composition,
-                    'conservation_et_utilisation' : product.x_studio_conservation_et_utilisation,
-                    'product_more_info' : product.x_studio_product_more_info
+                    'additional_description': product.website_description,
+                    'composition': product.x_studio_composition,
+                    'conservation_et_utilisation': product.x_studio_conservation_et_utilisation,
+                    'product_more_info': product.x_studio_product_more_info
                 }
                 products_details.append(product_details)
         return products_details
@@ -559,7 +646,7 @@ class TanmyaProducExt(models.Model):
                                                                  ('recipe_status', '=', 'public')])
             recipe_count = int(len(recipes))
         return recipe_count
-    
+
     @api.model
     def get_count_all_user_recipes(self, user_id: int):
         recipe_count_1 = 0
@@ -595,6 +682,33 @@ class TanmyaProducExt(models.Model):
                     'rating': rating
                 }
                 review = self.env['tanmya.review'].sudo().create(review_vals)
+
+                # Send notification when a user adds a review on consumer recipe
+                if review:
+                    if recipe.owner_id.preferred_language == 'en':
+                        notification_vals = {
+                            'title': 'Recipe reviewed',
+                            'content': f'{review.user_id.name} just reviewed your recipe. Click here to see details.',
+                            'payload': 'recipe_reviewed',
+                            'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                            'notification_date': datetime.now(),
+                            'user_ids': [(6, 0, [recipe.owner_id.id])],
+                            'recipe_id': recipe_id,
+                        }
+                    elif recipe.owner_id.preferred_language == 'fr':
+                        notification_vals = {
+                            'fr_title': 'Recette revue',
+                            'fr_content': f'{review.user_id.name} viens de revoir ta recette. Cliquez ici pour voir les détails.',
+                            'payload': 'recipe_reviewed',
+                            'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                            'notification_date': datetime.now(),
+                            'user_ids': [(6, 0, [recipe.owner_id.id])],
+                            'recipe_id': recipe_id,
+                        }
+                    notification = self.env['firebase.notification'].sudo().create(notification_vals)
+                    if notification:
+                        #                         notification.send_notifications()
+                        notification.send()
 
     @api.model
     def get_recipe_reviews(self, reviews_ids=None, limit=None, offset=0):
@@ -745,3 +859,38 @@ class TanmyaProducExt(models.Model):
             recipes_details.append(recipe_details)
 
         return recipes_details
+
+    @api.model
+    def get_recipe_details(self, recipe_id: int):
+        if recipe_id:
+            recipe = self.env['product.product'].sudo().browse(recipe_id)
+            if recipe:
+                recipe_details = {
+                    'id': recipe.id,
+                    'name': recipe.product_tmpl_id.name,
+                    'image_1920': recipe.image_1920,
+                    'image_1920_1': recipe.image_1920_1,
+                    'image_1920_2': recipe.image_1920_2,
+                    'kit_template': [recipe.kit_template.id, recipe.kit_template.name],
+                    'list_price': recipe.product_tmpl_id.list_price,
+                    'owner_id': [recipe.owner_id.id, recipe.owner_id.name],
+                    'hours_preparation_time': recipe.hours_preparation_time,
+                    'minutes_preparation_time': recipe.minutes_preparation_time,
+                    'difficulty_level': recipe.difficulty_level,
+                    'instructions': recipe.instructions,
+                    'description': recipe.description,
+                    'servings': recipe.servings,
+                    'calories': recipe.calories,
+                    'protein': recipe.protein,
+                    'carbs': recipe.carbs,
+                    'fat': recipe.fat,
+                    'fiber': recipe.fiber,
+                    'iron': recipe.iron,
+                    'prod_category': recipe.prod_category.ids,
+                    'reviews_ids': recipe.reviews_ids.ids,
+                    'preference_state': recipe.get_preference_state(recipe.id),
+                    'total_rates': recipe.get_recipe_total_rates(recipe.id),
+                    'recipe_status': recipe.recipe_status
+                }
+                return recipe_details
+        return False
