@@ -382,8 +382,9 @@ class TanmyaProducExt(models.Model):
             _logger.info(recipe_id.id)
             return recipe_id.id
 
-        except:
+        except Exception as err:
             _logger.info('Error in add recipe!')
+            _logger.info(err)
             return False
 
     @api.model
