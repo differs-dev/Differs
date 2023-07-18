@@ -177,7 +177,7 @@ class ResUsers(models.Model):
             # if user exist and token is not expire
             if firebase_user and firebase_user.firebase_token_expired_date >= fields.Date.today():
                 firebase_user = firebase_user.with_user(firebase_user)
-                return firebase_user
+                return firebase_user.login
 
             # user not exist or token expired, so check firebase token
 
@@ -200,7 +200,7 @@ class ResUsers(models.Model):
                         vals = self._get_new_user_vals(firebase_user.uid, firebase_user.email, password, id_token)
                         firebase_user = self.sudo().create(vals)
                         firebase_user = firebase_user.with_user(firebase_user)
-                    return firebase_user
+                    return firebase_user.login
 
                 return False
             except Exception as e:
@@ -268,14 +268,13 @@ class ResUsers(models.Model):
             if user:
                 firebase_user_password = '123'
                 try:
-                    _logger.info(f"user log {user.login}")
-                    return super(ResUsers, cls).authenticate(db, user.login, firebase_user_password,
+                    return super(ResUsers, cls).authenticate(db, user, firebase_user_password,
                                                             user_agent_env)
                 except AccessDenied:
                     _logger.info(
                                 '-------------------------AccessDenied Existing User----------------------------')
                     _logger.info(user)
-                    return user.id
+                    return user
             else:
                 raise AccessError(_("User authentication failed due to invalid authentication values"))
 
