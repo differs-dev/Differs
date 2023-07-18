@@ -357,13 +357,14 @@ class TanmyaProducExt(models.Model):
             _logger.info('--------------------- images debug --------------------------')
             _logger.info(vals.get('recipe_image'))
             _logger.info(vals.get('recipe_image1'))
+            _logger.info(vals.get('recipe_image2'))
             _logger.info('--------------------- end of debug ----------------------------')
             # Create Recipe
             recipe_vals = {
                 'owner_id': vals.get('owner_id'),
                 'image_1920': vals.get('recipe_image'),
                 'image_1920_1': vals.get('recipe_image1'),
-                # 'image_1920_2': vals.get('recipe_image2'),
+                'image_1920_2': vals.get('recipe_image2'),
                 'name': vals.get('recipe_name'),
                 'hours_preparation_time': vals.get('hours_time'),
                 'minutes_preparation_time': vals.get('minutes_time'),
