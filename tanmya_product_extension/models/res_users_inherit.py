@@ -15,6 +15,8 @@ class ResUsers(models.Model):
     _inherit = 'res.users'
 
     firebase_uid = fields.Char(string='Firebase UserID')
+    firebase_token = fields.Char(string="Firebase Token")
+    firebase_token_expired_date = fields.Date(string ="Expire in",default=lambda self: fields.Date.add(fields.Date.today(), days=3))
     adults = fields.Integer(string='Adults')
     children = fields.Integer(string='Children')
     pets = fields.Integer(string='Pets')
@@ -166,28 +168,56 @@ class ResUsers(models.Model):
             return False
 
     @classmethod
-    def get_firebase_user(cls, id_token):
-        decoded_token = cls.check_firebase_id_token(id_token)
-        try:
-            if decoded_token:
-                firebase_uid = decoded_token['uid']
-                firebase_user = auth.get_user(firebase_uid)
+    def get_firebase_user(cls, id_token, password):
+        with cls.pool.cursor() as cr:
+            self = api.Environment(cr, SUPERUSER_ID, {})[cls._name]
+            # get user with this firebase token
+            firebase_user = self.env['res.user'].search([('firebase_token', '=', id_token)])
+
+            # if user exist and token is not expire
+            if firebase_user and firebase_user.firebase_token_expired_date >= fields.Date.today():
+                firebase_user = firebase_user.with_user(firebase_user)
                 return firebase_user
-            return False
-        except Exception as e:
-            _logger.info(e)
-            return False
+
+            # user not exist or token expired, so check firebase token
+
+            decoded_token = cls.check_firebase_id_token(id_token)
+            _logger.info(f"check firebase token {decoded_token}")
+            try:
+                if decoded_token:
+                    firebase_uid = decoded_token['uid']
+                    # get user by firebase user id
+                    firebase_user = self.env['res.user'].search([('firebase_uid', '=', firebase_uid)])
+                    # user exist, so update token
+                    if firebase_user:
+                        firebase_user.write({
+                            'firebase_token': id_token,
+                            'firebase_token_expired_date': fields.Date.add(fields.Date.today(), days=3)
+                        })
+                        firebase_user = firebase_user.with_user(firebase_user)
+                    # user not exist, so create one
+                    else:
+                        vals = self._get_new_user_vals(firebase_user.uid, firebase_user.email, password, id_token)
+                        firebase_user = self.sudo().create(vals)
+                        firebase_user = firebase_user.with_user(firebase_user)
+                    return firebase_user
+
+                return False
+            except Exception as e:
+                _logger.info(e)
+                return False
 
     @api.model
     def _get_firebase_user_domain(self, fuid):
         return [('firebase_uid', '=', fuid)]
 
     @api.model
-    def _get_new_user_vals(self, firebase_uid, email, phone_name):
+    def _get_new_user_vals(self, firebase_uid, email, phone_name, token):
         phone_name_list = phone_name.split(',')
         phone_parts = phone_name_list[0].split(' ')
         user_vals = {
             'firebase_uid': firebase_uid,
+            'firebase_token': token,
             'name': phone_name_list[1],
             'sel_groups_1_9_10': 9,  # 1 internal, 9 portal and 10 public user
             'login': email,
@@ -208,22 +238,6 @@ class ResUsers(models.Model):
         if user_firebase_notification_account:
             user_firebase_notification_account.unlink()
 
-    # this method to call when user login or signup from the mobile app
-    #     @api.model
-    #     def set_device_firebase_notification_token(self, firebase_device_token):
-    #         user_firebase_notification_account = self.env['firebase.account'].sudo().search(
-    #             [('user_id', '=', self.env.uid),
-    #              ('token', '=', firebase_device_token)])
-
-    #         if not user_firebase_notification_account or len(user_firebase_notification_account) < 1:
-    #             firebase_notification_account_vals = {
-    #                 'user_id': self.env.uid,
-    #                 'token': firebase_device_token,
-    #             }
-    #             new_firebase_notification_account = self.env['firebase.account'].sudo().create(
-    #                 firebase_notification_account_vals)
-
-    # this method to call when user login or signup from the mobile app
     @api.model
     def set_device_firebase_notification_token(self, firebase_device_token):
         user_firebase_notification_account = self.env['firebase.account'].sudo().search(
@@ -248,56 +262,19 @@ class ResUsers(models.Model):
     @classmethod
     def authenticate(cls, db, login, password, user_agent_env):
         try:
-            _logger.info('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
             return super(ResUsers, cls).authenticate(db, login, password, user_agent_env)
         except AccessDenied:
-            _logger.info('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
-            firebase_user = cls.get_firebase_user(login)
-            if firebase_user:
-                _logger.info('cccccccccccccccccccccccccccccccccccccccccccccc')
-                _logger.info('firebase_user')
+            user = cls.get_firebase_user(login)
+            if user:
                 firebase_user_password = '123'
-                user = False
-                with cls.pool.cursor() as cr:
-                    self = api.Environment(cr, SUPERUSER_ID, {})[cls._name]
-                    user = self.sudo().search(self._get_firebase_user_domain(firebase_user.uid), limit=1)
-                    user = user.with_user(user)
-                    _logger.info('user')
-                    if user:
-                        _logger.info('dddddddddddddddddddddddddddddddddddddddddddd')
-                        try:
-                            auth_res = super(ResUsers, cls).authenticate(db, user.login, firebase_user_password,
-                                                                         user_agent_env)
-                            _logger.info('////////////////////////////////////1')
-                            a = self.env['res.users'].sudo().search_read([('id', '=', auth_res)])
-                            _logger.info(a)
-                            return auth_res
-                        except AccessDenied:
-                            _logger.info(
+                try:
+                    return super(ResUsers, cls).authenticate(db, user.login, firebase_user_password,
+                                                            user_agent_env)
+                except AccessDenied:
+                    _logger.info(
                                 '-------------------------AccessDenied Existing User----------------------------')
-                            _logger.info(user)
-                            a = self.env['res.users'].sudo().search_read([('id', '=', user.id)])
-                            _logger.info(a)
-                            return user.id
-                    else:
-                        _logger.info('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
-                        vals = self._get_new_user_vals(firebase_user.uid, firebase_user.email, password)
-                        new_user = self.sudo().create(vals)
-                        new_user = user.with_user(new_user)
-                        _logger.info(new_user)
-                        if new_user:
-                            _logger.info('ffffffffffffffffffffffffffffffffffffffffffffff')
-                            try:
-                                auth_res = super(ResUsers, cls).authenticate(db, new_user.login, firebase_user_password,
-                                                                             user_agent_env)
-                                _logger.info('////////////////////////////////////2')
-                                a = self.env['res.users'].sudo().search_read([('id', '=', auth_res)])
-                                _logger.info(a)
-                                return auth_res
-                            except AccessDenied:
-                                _logger.info(
-                                    '-------------------------AccessDenied New User----------------------------')
-                                _logger.info("User authentication failed due to invalid authentication values")
+                    _logger.info(user)
+                    return user.id
             else:
                 raise AccessError(_("User authentication failed due to invalid authentication values"))
 
