@@ -190,7 +190,7 @@ class ResUsers(models.Model):
                     firebase_user = firebase_user.with_user(firebase_user)
                     # user exist, so update token
                     if firebase_user:
-                        firebase_user.write({
+                        firebase_user.sudo().write({
                             'firebase_token': id_token,
                             'firebase_token_expired_date': fields.Date.add(fields.Date.today(), days=3)
                         })
