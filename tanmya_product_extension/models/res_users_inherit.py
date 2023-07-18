@@ -16,7 +16,7 @@ class ResUsers(models.Model):
 
     firebase_uid = fields.Char(string='Firebase UserID')
     firebase_token = fields.Char(string="Firebase Token")
-    firebase_token_expired_date = fields.Date(string="Expire in", default=lambda self: fields.Date.add(fields.Date.today(), days=3))
+    firebase_token_expired_date = fields.Date(string ="Expire in",default=lambda self: fields.Date.add(fields.Date.today(), days=3))
     adults = fields.Integer(string='Adults')
     children = fields.Integer(string='Children')
     pets = fields.Integer(string='Pets')
@@ -190,11 +190,10 @@ class ResUsers(models.Model):
                     firebase_user = firebase_user.with_user(firebase_user)
                     # user exist, so update token
                     if firebase_user:
-                        cr.execute(
-                            "UPDATE res_users SET firebase_token = %s, firebase_token_expired_date = %s WHERE id=%s",
-                            [id_token,
-                             fields.Date.to_string(fields.Date.add(fields.Date.today(), days=3)),
-                             firebase_user.id])
+                        firebase_user.sudo().write({
+                            'firebase_token': id_token,
+                            'firebase_token_expired_date': fields.Date.add(fields.Date.today(), days=3)
+                        })
                     # user not exist, so create one
                     else:
                         vals = self._get_new_user_vals(firebase_user.uid, firebase_user.email, password, id_token)
