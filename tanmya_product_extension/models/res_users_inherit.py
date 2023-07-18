@@ -170,42 +170,43 @@ class ResUsers(models.Model):
     @classmethod
     def get_firebase_user(cls, id_token, password):
         with cls.pool.cursor() as cr:
-            self = api.Environment(cr, SUPERUSER_ID, {})[cls._name]
-            # get user with this firebase token
-            firebase_user = self.env['res.users'].search([('firebase_token', '=', id_token)])
+            env = api.Environment(cr, SUPERUSER_ID, {})
+            with env['res.users'].with_env(env).sudo() as firebase_user_model:
+                # Get user with this firebase token
+                firebase_user = firebase_user_model.search([('firebase_token', '=', id_token)])
 
-            # if user exist and token is not expire
-            if firebase_user and firebase_user.firebase_token_expired_date >= fields.Date.today():
-                firebase_user = firebase_user.with_user(firebase_user)
-                return firebase_user.login
-
-            # user not exist or token expired, so check firebase token
-
-            decoded_token = cls.check_firebase_id_token(id_token)
-            _logger.info(f"check firebase token {decoded_token}")
-            try:
-                if decoded_token:
-                    firebase_uid = decoded_token['uid']
-                    # get user by firebase user id
-                    firebase_user = self.env['res.users'].search([('firebase_uid', '=', firebase_uid)])
-                    # user exist, so update token
-                    if firebase_user:
-                        firebase_user.write({
-                            'firebase_token': id_token,
-                            'firebase_token_expired_date': fields.Date.add(fields.Date.today(), days=3)
-                        })
-                        firebase_user = firebase_user.with_user(firebase_user)
-                    # user not exist, so create one
-                    else:
-                        vals = self._get_new_user_vals(firebase_user.uid, firebase_user.email, password, id_token)
-                        firebase_user = self.sudo().create(vals)
-                        firebase_user = firebase_user.with_user(firebase_user)
+                # If user exists and token is not expired
+                if firebase_user and firebase_user.firebase_token_expired_date >= fields.Date.today():
+                    firebase_user = firebase_user.with_user(firebase_user)
                     return firebase_user.login
 
-                return False
-            except Exception as e:
-                _logger.info(e)
-                return False
+                # User does not exist or token expired, so check firebase token
+                decoded_token = cls.check_firebase_id_token(id_token)
+                _logger.info(f"check firebase token {decoded_token}")
+                try:
+                    if decoded_token:
+                        firebase_uid = decoded_token['uid']
+                        # Get user by firebase user id
+                        firebase_user = firebase_user_model.search([('firebase_uid', '=', firebase_uid)])
+                        # User exists, so update token
+                        if firebase_user:
+                            firebase_user.write({
+                                'firebase_token': id_token,
+                                'firebase_token_expired_date': fields.Date.add(fields.Date.today(), days=3)
+                            })
+                            firebase_user = firebase_user.with_user(firebase_user)
+                        # User does not exist, so create one
+                        else:
+                            vals = firebase_user_model._get_new_user_vals(firebase_user.uid, firebase_user.email,
+                                                                          password, id_token)
+                            firebase_user = firebase_user_model.create(vals)
+                            firebase_user = firebase_user.with_user(firebase_user)
+                        return firebase_user.login
+
+                    return False
+                except Exception as e:
+                    _logger.info(e)
+                    return False
 
     @api.model
     def _get_firebase_user_domain(self, fuid):
