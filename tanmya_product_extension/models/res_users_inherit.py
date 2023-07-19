@@ -169,14 +169,13 @@ class ResUsers(models.Model):
 
     @classmethod
     def update_firebase_token(cls, user_id, id_token):
-        with cls.pool.cursor() as user_cr:
-            with api.Environment(user_cr, SUPERUSER_ID, {}) as env:
-                user = env['res.users'].browse(user_id)
-                user.write({
-                    'firebase_token': id_token,
-                    'firebase_token_expired_date': fields.Date.add(fields.Date.today(), days=3)
-                })
-                return user
+        user = cls.env['res.users'].browse(user_id)
+        user.write({
+            'firebase_token': id_token,
+            'firebase_token_expired_date': fields.Date.add(fields.Date.today(), days=3)
+        })
+        _logger.info(f"user updated {user.firebase_token}")
+        return user
 
     @classmethod
     def get_firebase_user(cls, id_token, password):
