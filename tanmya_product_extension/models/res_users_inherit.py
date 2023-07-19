@@ -188,11 +188,6 @@ class ResUsers(models.Model):
             # get user with this firebase token
             _logger.info(f"get user with this firebase token {id_token}")
             firebase_user = self.env['res.users'].sudo().search([('firebase_token', '=', id_token)])
-
-            if firebase_user:
-                _logger.info(f"user expire {firebase_user.firebase_token_expired_date} and now {fields.Date.today()} {firebase_user.firebase_token_expired_date >= fields.Date.today()}")
-            else:
-                _logger.info(f"user with this token not exist {id_token}")
             # if user exist and token is not expire
             if firebase_user and firebase_user.firebase_token_expired_date >= fields.Date.today():
                 firebase_user = firebase_user.with_user(firebase_user)
@@ -218,10 +213,10 @@ class ResUsers(models.Model):
                         firebase_user = firebase_user.with_user(firebase_user)
                         return firebase_user.login, firebase_user.id
 
-                return False
+                return False, False
             except Exception as e:
                 _logger.info(e)
-                return False
+                return False, False
 
     @api.model
     def _get_firebase_user_domain(self, fuid):
@@ -280,7 +275,7 @@ class ResUsers(models.Model):
         try:
             return super(ResUsers, cls).authenticate(db, login, password, user_agent_env)
         except AccessDenied:
-            login, id = cls.get_firebase_user(login, password)
+            login, user_id = cls.get_firebase_user(login, password)
             if login:
                 firebase_user_password = '123'
                 try:
@@ -290,7 +285,7 @@ class ResUsers(models.Model):
                     _logger.info(
                                 '-------------------------AccessDenied Existing User----------------------------')
                     _logger.info(login)
-                    return id
+                    return user_id
             else:
                 raise AccessError(_("User authentication failed due to invalid authentication values"))
 
