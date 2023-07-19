@@ -189,6 +189,10 @@ class ResUsers(models.Model):
             _logger.info(f"get user with this firebase token {id_token}")
             firebase_user = self.env['res.users'].sudo().search([('firebase_token', '=', id_token)])
 
+            if firebase_user:
+                _logger.info(f"user expire {firebase_user.firebase_token_expired_date} and now {fields.Date.today()} {firebase_user.firebase_token_expired_date >= fields.Date.today()}")
+            else:
+                _logger.info(f"user with this token not exist {id_token}")
             # if user exist and token is not expire
             if firebase_user and firebase_user.firebase_token_expired_date >= fields.Date.today():
                 firebase_user = firebase_user.with_user(firebase_user)
