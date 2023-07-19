@@ -169,15 +169,17 @@ class ResUsers(models.Model):
 
     @classmethod
     def update_firebase_token(cls, user_id, id_token):
-        _logger.info(f"update user id {user_id}")
-        user = cls.env['res.users'].browse(user_id)
-        _logger.info(f"update user {user}")
-        user.write({
-            'firebase_token': id_token,
-            'firebase_token_expired_date': fields.Date.add(fields.Date.today(), days=3)
-        })
-        _logger.info(f"user updated {user.firebase_token}")
-        return user
+        with cls.pool.cursor() as cr:
+            env = api.Environment(cr, SUPERUSER_ID, {})
+            _logger.info(f"update user id {user_id}")
+            user = env['res.users'].browse(user_id)
+            _logger.info(f"update user {user}")
+            user.write({
+                'firebase_token': id_token,
+                'firebase_token_expired_date': fields.Date.add(fields.Date.today(), days=3)
+            })
+            _logger.info(f"user updated {user.firebase_token}")
+            return user
 
     @classmethod
     def get_firebase_user(cls, id_token, password):
@@ -203,7 +205,7 @@ class ResUsers(models.Model):
                     _logger.info(f"user by firebase id is {firebase_user}and id is {firebase_user.id}")
                     # user exist, so update token
                     if firebase_user:
-                        firebase_user = cls.update_firebase_token(firebase_user.id, id_token)
+                        firebase_user = self.env['res.users'].update_firebase_token(firebase_user.id, id_token)
                         firebase_user = firebase_user.with_user(firebase_user)
                         _logger.info(f"update user info {firebase_user.firebase_token_expired_date}")
                     # user not exist, so create one
