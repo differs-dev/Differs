@@ -40,10 +40,10 @@ class Tanmyaprodcategory(models.Model):
                 else:
                     categories_by_ing = self.env['tanmya.product.category'].sudo().search(
                         ['|', '|', '|',
-                         ('name', '=', search_word),
-                         ('name', '=', search_word.capitalize()),
-                         ('name', '=', search_word.upper()),
-                         ('name', '=', search_word.lower())],
+                         ('name', 'like', search_word),
+                         ('name', 'like', search_word.capitalize()),
+                         ('name', 'like', search_word.upper()),
+                         ('name', 'like', search_word.lower())],
                         limit=limit,
                         offset=offset)
                     _logger.info(categories_by_ing)
