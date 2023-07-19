@@ -172,7 +172,7 @@ class ResUsers(models.Model):
         with cls.pool.cursor() as cr:
             env = api.Environment(cr, SUPERUSER_ID, {})
             _logger.info(f"update user id {user_id}")
-            user = env['res.users'].browse(user_id)
+            user = env['res.users'].sudo().browse(user_id)
             _logger.info(f"update user {user}")
             user.write({
                 'firebase_token': id_token,
@@ -187,7 +187,7 @@ class ResUsers(models.Model):
             self = api.Environment(cr, SUPERUSER_ID, {})[cls._name]
             # get user with this firebase token
             _logger.info(f"get user with this firebase token {id_token}")
-            firebase_user = self.env['res.users'].search([('firebase_token', '=', id_token)])
+            firebase_user = self.env['res.users'].sudo().search([('firebase_token', '=', id_token)])
 
             # if user exist and token is not expire
             if firebase_user and firebase_user.firebase_token_expired_date >= fields.Date.today():
@@ -201,7 +201,7 @@ class ResUsers(models.Model):
             try:
                 if decoded_token:
                     # get user by firebase user id
-                    firebase_user = self.env['res.users'].search([('firebase_uid', '=', decoded_token['uid'])])
+                    firebase_user = self.env['res.users'].sudo().search([('firebase_uid', '=', decoded_token['uid'])])
                     _logger.info(f"user by firebase id is {firebase_user}and id is {firebase_user.id}")
                     # user exist, so update token
                     if firebase_user:
