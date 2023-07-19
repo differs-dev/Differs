@@ -169,8 +169,8 @@ class ResUsers(models.Model):
 
     @classmethod
     def update_firebase_token(cls, user_id, id_token):
-        _logger.info(f"update user {user_id}")
-        user = cls.env['res.users'].browse(user_id.id if isinstance(user_id, models.BaseModel) else user_id)
+        _logger.info(f"update user id {user_id}")
+        user = cls.env['res.users'].browse(user_id)
         _logger.info(f"update user {user}")
         user.write({
             'firebase_token': id_token,
@@ -287,7 +287,7 @@ class ResUsers(models.Model):
                     _logger.info(
                                 '-------------------------AccessDenied Existing User----------------------------')
                     _logger.info(user)
-                    return user
+                    return False
             else:
                 raise AccessError(_("User authentication failed due to invalid authentication values"))
 
