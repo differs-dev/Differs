@@ -169,7 +169,9 @@ class ResUsers(models.Model):
 
     @classmethod
     def update_firebase_token(cls, user_id, id_token):
-        user = cls.env['res.users'].browse(user_id)
+        _logger.info(f"update user {user_id}")
+        user = cls.env['res.users'].browse(user_id.id if isinstance(user_id, models.BaseModel) else user_id)
+        _logger.info(f"update user {user}")
         user.write({
             'firebase_token': id_token,
             'firebase_token_expired_date': fields.Date.add(fields.Date.today(), days=3)
@@ -198,7 +200,7 @@ class ResUsers(models.Model):
                 if decoded_token:
                     # get user by firebase user id
                     firebase_user = self.env['res.users'].search([('firebase_uid', '=', decoded_token['uid'])])
-                    _logger.info(f"user by firebase id is {firebase_user}")
+                    _logger.info(f"user by firebase id is {firebase_user}and id is {firebase_user.id}")
                     # user exist, so update token
                     if firebase_user:
                         firebase_user = cls.update_firebase_token(firebase_user.id, id_token)
