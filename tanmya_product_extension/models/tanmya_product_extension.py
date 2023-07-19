@@ -28,6 +28,8 @@ class Tanmyaprodcategory(models.Model):
             limit=limit,
             offset=offset)
         categories_details = []
+        _logger.info('---------------------------------------- search word ----------------------------------------------')
+        _logger.info(search_word)
         for ca_type in categories:
             if ca_type.type == 'by_ingredients':
                 if search_word == '':
@@ -45,6 +47,7 @@ class Tanmyaprodcategory(models.Model):
                          ('type', '=', 'by_ingredients')],
                         limit=limit,
                         offset=offset)
+                    _logger.info(categories_by_ing)
 
         if categories_by_ing:
             for category in categories_by_ing:
