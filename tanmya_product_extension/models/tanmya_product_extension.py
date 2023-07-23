@@ -59,7 +59,7 @@ class Tanmyaprodcategory(models.Model):
                     _logger.info('--------------------------ids------------------------------')
                     _logger.info(categories_ids)
                     categories_by_ing = self.env['tanmya.product.category'].sudo().search(
-                        [('id', 'in', categories_ids)],
+                        [('id', 'in', list(categories_ids))],
                         limit=limit,
                         offset=offset)
                     _logger.info(categories_by_ing)
