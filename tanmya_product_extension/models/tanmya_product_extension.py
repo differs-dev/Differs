@@ -53,15 +53,21 @@ class Tanmyaprodcategory(models.Model):
                     query = f"""select  id from tanmya_product_category where name like '%{search_word}%' and type = 'by_ingredients' ;"""
                     self.env.cr.execute(query)
                     categories_by_ing = self.env.cr.fetchall()
-                    
+                    categories_ids = []
+                    for cat in categories_by_ing:
+                        categories_ids.append(cat.id)
+                    categories_by_ing = self.env['tanmya.product.category'].sudo().search(
+                        [('id', 'in', categories_ids)],
+                        limit=limit,
+                        offset=offset)
                     _logger.info(categories_by_ing)
 
         if categories_by_ing:
             for category in categories_by_ing:
                 category_details = {
-                    'id': category['id'] if category.get('id') else '',
-                    'name': category['name'] if category.get('name') else '',
-                    'image': category['image'] if category.get('image') else ''
+                    'id': category.id,
+                    'name': category.name,
+                    'image': category.image
                 }
                 categories_details.append(category_details)
         else:
