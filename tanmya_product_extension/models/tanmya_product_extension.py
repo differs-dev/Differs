@@ -58,9 +58,9 @@ class Tanmyaprodcategory(models.Model):
         if categories_by_ing:
             for category in categories_by_ing:
                 category_details = {
-                    'id': category.get('id'),
-                    'name': category.get('name'),
-                    'image': category.get('image')
+                    'id': category['id'] if category.get('id'),
+                    'name': category['name'] if category.get('name'),
+                    'image': category['image'] if category.get('image')
                 }
                 categories_details.append(category_details)
         else:
