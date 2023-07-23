@@ -50,9 +50,10 @@ class Tanmyaprodcategory(models.Model):
                     #      ('type', '=', 'by_ingredients')],
                     #     limit=limit,
                     #     offset=offset)
-                    query = f"""select  id,name,image from tanmya_product_category where name like '%{search_word}%' and type = 'by_ingredients' ;"""
+                    query = f"""select  id from tanmya_product_category where name like '%{search_word}%' and type = 'by_ingredients' ;"""
                     self.env.cr.execute(query)
-                    categories_by_ing = self.env.cr.dictfetchall()
+                    categories_by_ing = self.env.cr.fetchall()
+                    
                     _logger.info(categories_by_ing)
 
         if categories_by_ing:
