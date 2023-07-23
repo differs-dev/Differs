@@ -42,7 +42,7 @@ class Tanmyaprodcategory(models.Model):
                         offset=offset)
                 else:
                     categories_by_ing = self.env['tanmya.product.category'].sudo().search(
-                        ['|', '|', '|','&',
+                        ['|', '|', '|',
                          ('name', 'like', search_word),
                          ('name', 'like', search_word.capitalize()),
                          ('name', 'like', search_word.upper()),
