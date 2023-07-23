@@ -43,10 +43,10 @@ class Tanmyaprodcategory(models.Model):
                 else:
                     categories_by_ing = self.env['tanmya.product.category'].sudo().search(
                         ['|', '|', '|','&',
-                         ('name', 'ilike', '%' + search_word + '%'),
-                         ('name', 'ilike', '%' + search_word.capitalize() + '%'),
-                         ('name', 'ilike', '%' + search_word.upper() + '%'),
-                         ('name', 'ilike', '%' + search_word.lower() + '%'),
+                         ('name', 'like', '%' + search_word + '%'),
+                         ('name', 'like', '%' + search_word.capitalize() + '%'),
+                         ('name', 'like', '%' + search_word.upper() + '%'),
+                         ('name', 'like', '%' + search_word.lower() + '%'),
                          ('type', '=', 'by_ingredients')],
                         limit=limit,
                         offset=offset)
