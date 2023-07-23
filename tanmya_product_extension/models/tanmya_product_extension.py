@@ -47,7 +47,7 @@ class Tanmyaprodcategory(models.Model):
                          ('name', 'like', search_word),
                          ('name', 'like', search_word.capitalize()),
                          ('name', 'like', search_word.upper()),
-                         ('name', 'like', search_word.lower()),]
+                         ('name', 'like', search_word.lower()),],
                         limit=limit,
                         offset=offset)
                     _logger.info(categories_by_ing)
