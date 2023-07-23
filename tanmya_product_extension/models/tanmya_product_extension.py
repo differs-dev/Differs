@@ -41,25 +41,13 @@ class Tanmyaprodcategory(models.Model):
                         limit=limit,
                         offset=offset)
                 else:
-                    # categories_by_ing = self.env['tanmya.product.category'].sudo().search(
-                    #     ['|', '|', '|','&',
-                    #      ('name', 'like', search_word),
-                    #      ('name', 'like', search_word.capitalize()),
-                    #      ('name', 'like', search_word.upper()),
-                    #      ('name', 'like', search_word.lower()),
-                    #      ('type', '=', 'by_ingredients')],
-                    #     limit=limit,
-                    #     offset=offset)
-                    query = f"""select  id from tanmya_product_category where name like '%{search_word}%' and type = 'by_ingredients' ;"""
-                    self.env.cr.execute(query)
-                    categories_by_ing = self.env.cr.dictfetchall()
-                    categories_ids = []
-                    for cat in categories_by_ing:
-                        categories_ids.append(cat['id'])
-                    _logger.info('--------------------------ids------------------------------')
-                    _logger.info(categories_ids)
                     categories_by_ing = self.env['tanmya.product.category'].sudo().search(
-                        [('id', 'in', list(categories_ids))],
+                        ['|', '|', '|','&',
+                         ('name', 'ilike', '%' + search_word + '%'),
+                         ('name', 'ilike', '%' + search_word.capitalize() + '%'),
+                         ('name', 'ilike', '%' + search_word.upper() + '%'),
+                         ('name', 'ilike', '%' + search_word.lower() + '%'),
+                         ('type', '=', 'by_ingredients')],
                         limit=limit,
                         offset=offset)
                     _logger.info(categories_by_ing)
