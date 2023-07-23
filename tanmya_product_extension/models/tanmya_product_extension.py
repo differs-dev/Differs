@@ -56,6 +56,8 @@ class Tanmyaprodcategory(models.Model):
                     categories_ids = []
                     for cat in categories_by_ing:
                         categories_ids.append(cat['id'])
+                    _logger.info('--------------------------ids------------------------------')
+                    _logger.info(categories_ids)
                     categories_by_ing = self.env['tanmya.product.category'].sudo().search(
                         [('id', 'in', categories_ids)],
                         limit=limit,
