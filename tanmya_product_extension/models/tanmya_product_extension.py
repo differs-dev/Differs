@@ -42,9 +42,12 @@ class Tanmyaprodcategory(models.Model):
                         offset=offset)
                 else:
                     categories_by_ing = self.env['tanmya.product.category'].sudo().search(
-                        [
+                        [('type', '=', 'by_ingredients'),
+                         '|', '|', '|',
                          ('name', 'like', search_word),
-                         ('type', '=', 'by_ingredients')],
+                         ('name', 'like', search_word.capitalize()),
+                         ('name', 'like', search_word.upper()),
+                         ('name', 'like', search_word.lower()),]
                         limit=limit,
                         offset=offset)
                     _logger.info(categories_by_ing)
