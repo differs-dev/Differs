@@ -164,6 +164,7 @@ class ResUsers(models.Model):
             return False
 
         except Exception as e:
+            _logger.info('token expiration')
             _logger.info(e)
             return False
 
