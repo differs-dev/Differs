@@ -440,12 +440,14 @@ class ResUsers(models.Model):
     @api.model
     def update_address_info(self, address_id, vals):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
+        _logger.info('---------------------- update address info ---------------------------------')
+        _logger.info(user)
         # address_id = user.partner_id.main_address_id
         if vals.get('country', False):
             country_id = self.env['res.country'].sudo().search([('name', '=', vals.get('country'))]).id
             vals['country_id'] = country_id
             del vals['country']
-
+        _logger.info(vals, address_id)
         if address_id == -1:
             user.write(vals)
             return True
