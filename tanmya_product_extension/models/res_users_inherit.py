@@ -446,6 +446,7 @@ class ResUsers(models.Model):
         if vals.get('country', False):
             country_id = self.env['res.country'].sudo().search([('name', '=', vals.get('country'))]).id
             vals['country_id'] = country_id
+            _logger.info(vals['country_id'])
             del vals['country']
         _logger.info(vals, address_id)
         if address_id == -1:
