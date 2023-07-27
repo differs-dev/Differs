@@ -444,6 +444,7 @@ class ResUsers(models.Model):
         _logger.info(user)
         # address_id = user.partner_id.main_address_id
         if vals.get('country', False):
+            _logger.info('before exiting the function')
             country_id = self.env['res.country'].sudo().search([('name', '=', vals.get('country'))]).id
             vals['country_id'] = country_id
             _logger.info(vals['country_id'])
