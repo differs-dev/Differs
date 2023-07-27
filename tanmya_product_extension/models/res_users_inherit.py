@@ -447,10 +447,9 @@ class ResUsers(models.Model):
             _logger.info('before exiting the function')
             country_id = self.env['res.country'].sudo().search([('name', '=', vals.get('country'))]).id
             vals['country_id'] = country_id
-            _logger.info(vals['country_id'])
             del vals['country']
-        _logger.info(vals, address_id)
-        if address_id == -1:
+        if address_id == -1
+            _logger.info(vals, address_id)
             _logger.info('done writing the vals of -1')
             _logger.info(vals)
             user.write(vals)
