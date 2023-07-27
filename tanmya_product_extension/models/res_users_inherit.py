@@ -451,10 +451,12 @@ class ResUsers(models.Model):
             del vals['country']
         _logger.info(vals, address_id)
         if address_id == -1:
+            _logger.info('done writing the vals of -1')
             user.write(vals)
             return True
         else:
             address = self.env['additional.address'].sudo().search([('id', '=', address_id)])
+            _logger.info('done writing the vals of else')
             address.write(vals)
             return True
 
