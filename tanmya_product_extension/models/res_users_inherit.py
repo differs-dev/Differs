@@ -372,6 +372,9 @@ class ResUsers(models.Model):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         address_info = False
         addresses_info_list = self.get_address_info()
+        _logger.info('addresses are')
+        _logger.info(addresses_info_list)
+        _logger.info(user.partner_id.address_ids)
         if user:
             for address in user.partner_id.address_ids:
                 address_info = {
