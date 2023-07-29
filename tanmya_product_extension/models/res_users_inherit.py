@@ -371,7 +371,7 @@ class ResUsers(models.Model):
     def get_addresses_details(self, search_word=''):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         address_info = False
-        addresses_info_list = self.get_address_info()
+        # addresses_info_list = self.get_address_info()
         _logger.info('addresses are')
         _logger.info(addresses_info_list)
         _logger.info(user.partner_id.address_ids)
