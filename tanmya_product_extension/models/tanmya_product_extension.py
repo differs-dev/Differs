@@ -360,6 +360,12 @@ class TanmyaProducExt(models.Model):
                     'product_uom_id': vals.get('uom_id')
                 }
                 self.env['sale.order.template.line'].sudo().create(sale_order_template_line_vals)
+            if vals.get('recipe_image') == 'New':
+                vals.get('recipe_image') = ''
+            if vals.get('recipe_image1') == 'New':
+                vals.get('recipe_image1') = ''
+            if vals.get('recipe_image2') == 'New':
+                vals.get('recipe_image2') = ''
             _logger.info('--------------------- images debug --------------------------')
             _logger.info(vals.get('recipe_image'))
             _logger.info(vals.get('recipe_image1'))
