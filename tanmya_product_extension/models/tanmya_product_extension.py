@@ -660,6 +660,8 @@ class TanmyaProducExt(models.Model):
             recipes = self.env['product.product'].sudo().search([('owner_id', '=', user_id),
                                                                  ('recipe_status', '=', 'public')])
             recipe_count = int(len(recipes))
+            _logger.info('----------------------- recipe count back -------------------------------')
+            _logger.info(recipe_count)
         return recipe_count
 
     @api.model
