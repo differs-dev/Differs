@@ -391,6 +391,7 @@ class ResUsers(models.Model):
                     'partner_longitude': address.partner_longitude
                 }
                 addresses_info_list.append(address_info)
+            _logger.info(addresses_info_list)
 
             if search_word and search_word != '':
                 target_addresses = []
