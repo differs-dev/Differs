@@ -447,6 +447,7 @@ class ResUsers(models.Model):
         _logger.info('---------------------- update address info ---------------------------------')
         _logger.info(user)
         # address_id = user.partner_id.main_address_id
+        _logger.info('reached here')
         if vals.get('country', False):
             _logger.info('before exiting the function')
             country_id = self.env['res.country'].sudo().search([('name', '=', vals.get('country'))]).id
