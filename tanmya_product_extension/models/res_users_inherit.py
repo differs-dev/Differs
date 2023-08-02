@@ -174,6 +174,7 @@ class ResUsers(models.Model):
             env = api.Environment(cr, SUPERUSER_ID, {})
             _logger.info(f"update user id {user_id}")
             user = env['res.users'].sudo().browse(user_id)
+            user = user.with_user(user)
             _logger.info(f"update user {user}")
             user.write({
                 'firebase_token': id_token,
@@ -283,8 +284,7 @@ class ResUsers(models.Model):
                     return super(ResUsers, cls).authenticate(db, login, firebase_user_password,
                                                             user_agent_env)
                 except AccessDenied:
-                    _logger.info(
-                                '-------------------------AccessDenied Existing User----------------------------')
+                    _logger.info( 'AccessDenied Existing User')
                     _logger.info(login)
                     return user_id
             else:
