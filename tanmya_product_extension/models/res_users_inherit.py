@@ -15,21 +15,11 @@ class ResUsers(models.Model):
     _inherit = 'res.users'
 
     firebase_uid = fields.Char(string='Firebase UserID')
+    firebase_token = fields.Char(string="Firebase Token")
+    firebase_token_expired_date = fields.Date(string="Expire in", default=lambda self: fields.Date.add(fields.Date.today(), days=3))
     adults = fields.Integer(string='Adults')
     children = fields.Integer(string='Children')
     pets = fields.Integer(string='Pets')
-    firebase_token_ids = fields.One2many('res.users.token', 'user_id', compute="_compute_last_token")
-    last_firebase_token_id = fields.Many2one('res.users.token', compute="_compute_last_token")
-    firebase_token = fields.Char(string="Firebase Token", related="last_firebase_token_id.firebase_token")
-    firebase_token_expired_date = fields.Date(string="Expire in", related="last_firebase_token_id.firebase_token_expired_date")
-
-    def _compute_last_token(self):
-        for record in self:
-            last_token = record.env['res.users.token'].sudo().search([
-                ('user_id', '=', record.id),
-            ], order='create_date desc', limit=1)
-
-            record.last_firebase_token_id = last_token.id
 
     gluten = fields.Boolean(string='Gluten')
     dairy = fields.Boolean(string='Dairy')
@@ -178,25 +168,33 @@ class ResUsers(models.Model):
             _logger.info(e)
             return False
 
-
-    def update_firebase_token(self, user_id, id_token):
-        self.env['res.users.token'].sudo().create({'user_id': user_id, 'firebase_token': id_token })  # populated by defaults
+    @classmethod
+    def update_firebase_token(cls, user_id, id_token):
+        with cls.pool.cursor() as cr:
+            env = api.Environment(cr, SUPERUSER_ID, {})
+            _logger.info(f"update user id {user_id}")
+            user = env['res.users'].sudo().browse(user_id)
+            _logger.info(f"update user {user}")
+            user.write({
+                'firebase_token': id_token,
+                'firebase_token_expired_date': fields.Date.add(fields.Date.today(), days=3)
+            })
+            _logger.info(f"user updated {user.firebase_token}")
+            return user.login, user.id
 
     @classmethod
     def get_firebase_user(cls, id_token, password):
         with cls.pool.cursor() as cr:
             self = api.Environment(cr, SUPERUSER_ID, {})[cls._name]
             # get user with this firebase token
-            db_token = self.env['res.users.token'].sudo().search([('firebase_token', '=', id_token)], limit=1)
             _logger.info(f"get user with this firebase token {id_token}")
-            firebase_user = self.env['res.users'].sudo().browse(db_token.user_id.id)
+            firebase_user = self.env['res.users'].sudo().search([('firebase_token', '=', id_token)])
             # if user exist and token is not expire
-            if firebase_user and firebase_user.last_firebase_token_id and firebase_user.last_firebase_token_id.firebase_token_expired_date >= fields.Date.today():
+            if firebase_user and firebase_user.firebase_token_expired_date >= fields.Date.today():
                 firebase_user = firebase_user.with_user(firebase_user)
-                _logger.info(
-                    f"user exist and token is not expire {firebase_user.login} and expire in {firebase_user.firebase_token_expired_date}")
+                _logger.info(f"user exist and token is not expire {firebase_user.login} and expire in {firebase_user.firebase_token_expired_date}")
                 return firebase_user.login, firebase_user.id
-    
+
             # user not exist or token expired, so check firebase token
             decoded_token = cls.check_firebase_id_token(id_token)
             _logger.info(f"user not exist {firebase_user} and firebase user info is {decoded_token}")
@@ -204,12 +202,10 @@ class ResUsers(models.Model):
                 if decoded_token:
                     # get user by firebase user id
                     firebase_user = self.env['res.users'].sudo().search([('firebase_uid', '=', decoded_token['uid'])])
-                    _logger.info(f"user by firebase id is {firebase_user}")
+                    _logger.info(f"user by firebase id is {firebase_user}and id is {firebase_user.id}")
                     # user exist, so update token
                     if firebase_user:
-                        firebase_user.update_firebase_token(firebase_user.id, id_token)
-                        _logger.info(f"update firebase successfully")
-                        return firebase_user.login, firebase_user.id
+                        return self.env['res.users'].update_firebase_token(firebase_user.id, id_token)
                     # user not exist, so create one
                     else:
                         _logger.info("fire base user not exist and we create new one")
@@ -217,11 +213,12 @@ class ResUsers(models.Model):
                         firebase_user = self.sudo().create(vals)
                         firebase_user = firebase_user.with_user(firebase_user)
                         return firebase_user.login, firebase_user.id
-    
+
                 return False, False
             except Exception as e:
                 _logger.info(e)
                 return False, False
+
     @api.model
     def _get_firebase_user_domain(self, fuid):
         return [('firebase_uid', '=', fuid)]
@@ -232,7 +229,7 @@ class ResUsers(models.Model):
         phone_parts = phone_name_list[0].split(' ')
         user_vals = {
             'firebase_uid': firebase_uid,
-            'firebase_token_ids': [(0, 0, {'firebase_token': token})],
+            'firebase_token': token,
             'name': phone_name_list[1],
             'sel_groups_1_9_10': 9,  # 1 internal, 9 portal and 10 public user
             'login': email,
@@ -286,7 +283,8 @@ class ResUsers(models.Model):
                     return super(ResUsers, cls).authenticate(db, login, firebase_user_password,
                                                             user_agent_env)
                 except AccessDenied:
-                    _logger.info( 'AccessDenied Existing User')
+                    _logger.info(
+                                '-------------------------AccessDenied Existing User----------------------------')
                     _logger.info(login)
                     return user_id
             else:
@@ -522,13 +520,6 @@ class ResUsers(models.Model):
         query = f"""DELETE from res_users where id = {self.env.uid};"""
         self._cr.execute(query)
 
-class ResUsers(models.Model):
-    _name = 'res.users.token'
-
-    user_id = fields.Many2one('res.users', string='User', ondelete='cascade')
-
-    firebase_token = fields.Char(string="Firebase Token")
-    firebase_token_expired_date = fields.Date(string="Expire in", default=lambda self: fields.Date.add(fields.Date.today(), days=3))
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
