@@ -193,12 +193,12 @@ class ResUsers(models.Model):
             # if user exist and token is not expire
             if firebase_user and firebase_user.last_firebase_token_id and firebase_user.last_firebase_token_id.firebase_token_expired_date >= fields.Date.today():
                 firebase_user = firebase_user.with_user(firebase_user)
-                _logger.info(f"user exist and token is not expire {firebase_user.login} and expire in {firebase_user.firebase_token_expired_date}")
+                _logger.info(f"user exist and expire in {firebase_user.firebase_token_expired_date}")
                 return firebase_user.login, firebase_user.id
 
             # user not exist or token expired, so check firebase token
             decoded_token = cls.check_firebase_id_token(id_token)
-            _logger.info(f"user not exist {firebase_user} and firebase user info is {decoded_token}")
+            _logger.info(f"user not exist {firebase_user}")
             try:
                 if decoded_token:
                     # get user by firebase user id
@@ -288,7 +288,7 @@ class ResUsers(models.Model):
                                                             user_agent_env)
                 except AccessDenied:
                     _logger.info( 'AccessDenied Existing User')
-                    _logger.info(login)
+                    # _logger.info(login)
                     return user_id
             else:
                 raise AccessError(_("User authentication failed due to invalid authentication values"))
