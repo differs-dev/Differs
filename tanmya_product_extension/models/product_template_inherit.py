@@ -145,6 +145,6 @@ class ProductTemplateInherit(models.Model):
                     'product_more_info': product.x_studio_product_more_info
                 }
                 products_details.append(product_details)
-        _logger.info('--------------------------------- products_details ----------------------------------')
-        _logger.info(products_details)
+        # _logger.info('--------------------------------- products_details ----------------------------------')
+        # _logger.info(products_details)
         return products_details
