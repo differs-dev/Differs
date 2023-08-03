@@ -187,7 +187,7 @@ class ResUsers(models.Model):
         with cls.pool.cursor() as cr:
             self = api.Environment(cr, SUPERUSER_ID, {})[cls._name]
             # get user with this firebase token
-            _logger.info(f"get user with this firebase token {id_token}")
+            _logger.info(f"get user with this firebase token")
             db_token = self.env['res.users.token'].sudo().search([('firebase_token', '=', id_token)], limit=1)
             firebase_user = self.env['res.users'].sudo().browse(db_token.user_id.id)
             # if user exist and token is not expire
