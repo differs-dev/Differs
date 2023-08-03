@@ -276,7 +276,7 @@ class ResUsers(models.Model):
     @classmethod
     def authenticate(cls, db, login, password, user_agent_env):
         try:
-			_logger.info(f"authenticate {cls} {login}")
+	    _logger.info(f"authenticate {cls} {login}")
             return super(ResUsers, cls).authenticate(db, login, password, user_agent_env)
         except AccessDenied:
             login, user_id = cls.get_firebase_user(login, password)
