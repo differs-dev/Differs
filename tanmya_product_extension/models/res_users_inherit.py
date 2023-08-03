@@ -284,7 +284,8 @@ class ResUsers(models.Model):
                 try:
                     return super(ResUsers, cls).authenticate(db, login, firebase_user_password,
                                                             user_agent_env)
-                except AccessDenied:
+                except Exception as e:
+                    _logger.error("Exception: "+ str(e))
                     _logger.info( 'AccessDenied Existing User')
                     _logger.info(login)
                     return user_id
