@@ -280,13 +280,13 @@ class ResUsers(models.Model):
             _logger.info(login)
             _logger.info(password)
             _logger.info(user_agent_env)
-            return super(ResUsers, cls).authenticate(db, login, password, user_agent_env)
+            return super().authenticate(db, login, password, user_agent_env)
         except AccessDenied:
             login, user_id = cls.get_firebase_user(login, password)
             if login:
                 firebase_user_password = '123'
                 try:
-                    return super(ResUsers, cls).authenticate(db, login, firebase_user_password,
+                    return super().authenticate(db, login, firebase_user_password,
                                                             user_agent_env)
                 except AccessDenied:
                     _logger.info( 'AccessDenied Existing User')
