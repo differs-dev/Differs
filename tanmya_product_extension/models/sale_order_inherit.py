@@ -73,6 +73,7 @@ class SaleOrderInerit(models.Model):
 
     @api.model
     def get_user_cart_qun(self):
+        _logger.info('------------------------ get user cart qun ------------------------')
         user_id = self.env.uid
         if user_id:
             user = self.env['res.users'].sudo().search([('id', '=', user_id)])
@@ -159,6 +160,7 @@ class SaleOrderInerit(models.Model):
     # Get details of user cart
     @api.model
     def get_cart_details(self):
+        _logger.info('------------------------ get cart details --------------------------')
         user_sale_order = self.get_user_cart()
         if user_sale_order:
             order_line = []
@@ -189,6 +191,7 @@ class SaleOrderInerit(models.Model):
                 'date_order': user_sale_order.date_order,
                 'coupon_discount': coupon_discount,
             }
+            _logger.info('------------------------ end get cart details --------------------------')
             return sale_order_details
         return False
 
