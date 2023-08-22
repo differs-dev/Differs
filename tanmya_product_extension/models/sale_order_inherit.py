@@ -138,7 +138,7 @@ class SaleOrderInerit(models.Model):
             line.product_uom_qty += add_qty
             if line.product_uom_qty == 0:
                 line.unlink()
-            return self.get_cart_details()
+            return self.get_cart_details(5)
 
         return False
 
