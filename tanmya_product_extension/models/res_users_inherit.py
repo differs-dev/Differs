@@ -281,6 +281,9 @@ class ResUsers(models.Model):
             return super(ResUsers, cls).authenticate(db, login, password, user_agent_env)
         except AccessDenied:
             login, user_id = cls.get_firebase_user(login, password)
+            _logger.info('-------------------- firebase info -------------------------')
+            _logger.info(login)
+            _logger.info(user_id)
             if login:
                 firebase_user_password = '123'
                 try:
