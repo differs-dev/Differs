@@ -165,14 +165,16 @@ class SaleOrderInerit(models.Model):
         if user_sale_order:
             order_line = []
             coupon_discount = 0.0
+            i = 0
             for line in user_sale_order.order_line:
+                i += 1
                 line_details = {
                     'id': line.id,
                     'product': {
                         'kit_template': line.product_id.kit_template.id,
                         'name': line.product_id.name,
                         # this line was changed from this :  line.product_id.image_1920 to this ''.
-                        'image': '',
+                        'image': line.product_id.image_1920 if i < 5 else '',
                         'product_attributes': self.get_variant_attributes(line.product_id.id)},
                     'price': line.price_unit,
                     'quantity': line.product_uom_qty,
