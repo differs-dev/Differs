@@ -168,6 +168,7 @@ class SaleOrderInerit(models.Model):
             i = 1
             for line in user_sale_order.order_line:
                 if i < (offset - 4):
+                    i += 1
                     continue
                 if i > offset:
                     break
