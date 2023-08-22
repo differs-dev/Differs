@@ -165,8 +165,10 @@ class SaleOrderInerit(models.Model):
         if user_sale_order:
             order_line = []
             coupon_discount = 0.0
-            i = (offset - 5) + 1
+            i = 1
             for line in user_sale_order.order_line:
+                if i < (offset - 4):
+                    continue
                 if i > offset:
                     break
                 line_details = {
