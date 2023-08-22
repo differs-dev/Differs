@@ -171,7 +171,8 @@ class SaleOrderInerit(models.Model):
                     'product': {
                         'kit_template': line.product_id.kit_template.id,
                         'name': line.product_id.name,
-                        'image': line.product_id.image_1920 or '',
+                        # this line was changed from this :  line.product_id.image_1920 to this ''.
+                        'image': '',
                         'product_attributes': self.get_variant_attributes(line.product_id.id)},
                     'price': line.price_unit,
                     'quantity': line.product_uom_qty,
