@@ -159,7 +159,7 @@ class SaleOrderInerit(models.Model):
 
     # Get details of user cart
     @api.model
-    def get_cart_details(self):
+    def get_cart_details(self, offset):
         _logger.info('------------------------ get cart details --------------------------')
         user_sale_order = self.get_user_cart()
         if user_sale_order:
@@ -167,7 +167,8 @@ class SaleOrderInerit(models.Model):
             coupon_discount = 0.0
             i = 0
             for line in user_sale_order.order_line:
-                i += 1
+                if i > offset:
+                    break
                 line_details = {
                     'id': line.id,
                     'product': {
@@ -185,6 +186,7 @@ class SaleOrderInerit(models.Model):
                 if line.price_unit < 0:
                     coupon_discount += line.price_unit * line.product_uom_qty
                 order_line.append(line_details)
+                i += 1
             sale_order_details = {
                 'id': user_sale_order.id,
                 'amount_total': user_sale_order.amount_total,
