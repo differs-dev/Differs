@@ -195,6 +195,7 @@ class SaleOrderInerit(models.Model):
                 'state': user_sale_order.state,
                 'date_order': user_sale_order.date_order,
                 'coupon_discount': coupon_discount,
+                'total_number_of_lines': len(user_sale_order.order_line)
             }
             _logger.info('------------------------ end get cart details --------------------------')
             return sale_order_details
