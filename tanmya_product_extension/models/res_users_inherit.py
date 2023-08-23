@@ -216,6 +216,8 @@ class ResUsers(models.Model):
                         
                         # check if user already exists in odoo 
                         existing_user = self.env['res.users'].search([('login', '=', decoded_token['email'])], limit=1)
+                        _logger.info('---------------- existing user already --------------------')
+                        _logger.info(existing_user)
                         if existing_user:
                             return existing_user.email, existing_user.id
                             
