@@ -213,6 +213,12 @@ class ResUsers(models.Model):
                     else:
                         _logger.info("fire base user not exist and we create new one")
                         vals = self._get_new_user_vals(decoded_token['uid'], decoded_token['email'], password, id_token)
+                        
+                        # check if user already exists in odoo 
+                        existing_user = self.env['res.users'].search([('login', '=', decoded_token['email'])], limit=1)
+                        if existing_user:
+                            return existing_user.email, existing_user.id
+                            
                         firebase_user = self.sudo().create(vals)
                         firebase_user = firebase_user.with_user(firebase_user)
                         return firebase_user.login, firebase_user.id
