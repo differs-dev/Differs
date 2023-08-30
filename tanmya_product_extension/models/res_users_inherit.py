@@ -221,8 +221,8 @@ class ResUsers(models.Model):
                         existing_user = self.env['res.users'].search([('login', '=', decoded_token['email'])], limit=1)
                         _logger.info('---------------- existing user already --------------------')
                         _logger.info(existing_user)
-                        if existing_user:
-                            return existing_user.email, existing_user.id
+                        # if existing_user:
+                        #     return existing_user.email, existing_user.id
                             
                         firebase_user = self.sudo().create(vals)
                         firebase_user = firebase_user.with_user(firebase_user)
