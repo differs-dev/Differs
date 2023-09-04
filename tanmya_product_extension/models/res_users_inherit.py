@@ -311,7 +311,9 @@ class ResUsers(models.Model):
         user_delivery_address = self.get_address_info()
         user_zip_code = ''
         if len(user_delivery_address) > 1:
+            _logger.info('user zip code is ')
             user_zip_code = user_delivery_address[0].get('zip')
+            _logger.info(user_zip_code)
         user_delivery_methods = self.env['delivery.carrier'].sudo().search_read([('zip_to', '=', user_zip_code)])
         _logger.info('------------------- user delivery methods ----------------------')
         _logger.info(user_delivery_methods)
