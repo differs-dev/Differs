@@ -416,6 +416,8 @@ class ResUsers(models.Model):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         if user.partner_id.main_address_id == -1:
             address = self.get_address_info()
+            _logger.info('address info 22')
+            _logger.info(address)
             return address
 
         elif user.partner_id.main_address_id == -2:
@@ -432,8 +434,8 @@ class ResUsers(models.Model):
                 'partner_latitude': 0.0,
                 'partner_longitude': 0.0
             }
-            _logger.info('address info 22')
-            _logger.info(address_info)
+        _logger.info('address info 22')
+        _logger.info(address_info)
             return [address_info]
 
         else:
