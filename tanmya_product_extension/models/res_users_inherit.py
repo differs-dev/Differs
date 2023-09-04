@@ -319,6 +319,8 @@ class ResUsers(models.Model):
         user = self.env['res.users'].sudo().search([('id', '=', uid)])
         address_info = False
         address_info_list = []
+        _logger.info('--------------------------- address info ---------------------------------')
+        _logger.info(user)
         if user:
             address_info = {
                 'id': -1,
