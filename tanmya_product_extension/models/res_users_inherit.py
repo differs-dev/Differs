@@ -310,6 +310,8 @@ class ResUsers(models.Model):
         _logger.info('User Delivery Methods')
         user_delivery_address = self.get_address_info()
         user_zip_code = ''
+        _logger.info('user_delivery_address ')
+        _logger.info(user_delivery_address)
         if len(user_delivery_address) > 1:
             _logger.info('user zip code is ')
             user_zip_code = user_delivery_address[0].get('zip')
