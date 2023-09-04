@@ -405,7 +405,7 @@ class ResUsers(models.Model):
         _logger.info('addresses are')
         _logger.info(addresses_info_list)
         _logger.info(user.partner_id.address_ids)
-        self.get_user_delivery_methods()
+        # self.get_user_delivery_methods()
         if user:
             for address in user.partner_id.address_ids:
                 address_info = {
