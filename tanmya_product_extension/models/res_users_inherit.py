@@ -334,6 +334,8 @@ class ResUsers(models.Model):
                 'phone': user.partner_id.phone
             }
             address_info_list.append(address_info)
+            _logger.info('address_info_list  ')
+            _logger.info(address_info_list)
         return address_info_list
 
     @api.model
