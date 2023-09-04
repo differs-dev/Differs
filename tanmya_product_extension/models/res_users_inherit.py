@@ -300,6 +300,21 @@ class ResUsers(models.Model):
             else:
                 raise AccessError(_("User authentication failed due to invalid authentication values"))
 
+    def get_user_deliver_methods(self):
+        """
+        This function is used to get the delivery methods that is related to the user using the zip code
+        params : user_zip_code A char representing the user delivery addres zip code
+        this function returns a list of delivery methods objects each one is a dictionary.
+        """
+        user_delivery_address = self.get_address_info()
+        user_zip_code = ''
+        if len(user_delivery_address) > 1:
+            user_zip_code = user_delivery_address[0].get('zip')
+        user_delivery_methods = self.env['delivery.carrier'].search_read([('zip_to', '=', user_zip_code)])
+        _logger.info('------------------- user delivery methods ----------------------')
+        _logger.info(user_delivery_methods)
+        return user_delivery_methods
+    
     @api.model
     def set_address_info(self, vals):
         uid = self.env.uid
