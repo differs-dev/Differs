@@ -434,8 +434,6 @@ class ResUsers(models.Model):
                 'partner_latitude': 0.0,
                 'partner_longitude': 0.0
             }
-        _logger.info('address info 22')
-        _logger.info(address_info)
             return [address_info]
 
         else:
