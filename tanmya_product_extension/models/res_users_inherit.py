@@ -300,6 +300,7 @@ class ResUsers(models.Model):
             else:
                 raise AccessError(_("User authentication failed due to invalid authentication values"))
 
+    @api.model
     def get_user_delivery_methods(self):
         """
         This function is used to get the delivery methods that is related to the user using the zip code
