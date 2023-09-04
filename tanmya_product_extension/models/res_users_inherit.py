@@ -306,6 +306,7 @@ class ResUsers(models.Model):
         params : user_zip_code A char representing the user delivery addres zip code
         this function returns a list of delivery methods objects each one is a dictionary.
         """
+        _logger.info('User Delivery Methods')
         user_delivery_address = self.get_address_info()
         user_zip_code = ''
         if len(user_delivery_address) > 1:
