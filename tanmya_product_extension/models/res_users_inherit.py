@@ -317,7 +317,7 @@ class ResUsers(models.Model):
                     _logger.info('try to login 1')
                     return super(ResUsers, cls).authenticate(db, login, firebase_user_password,
                                                             user_agent_env)
-                except exception as e:
+                except Exception as e:
                     print(e)
                 except AccessDenied:
                     _logger.info('try to login 2')
