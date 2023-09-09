@@ -214,7 +214,7 @@ class ResUsers(models.Model):
                         return firebase_user.login, firebase_user.id
                     # user not exist, so create one
                     else:
-                        _logger.info("fire base user not exist and we create new one")
+                        _logger.info("fire base user not exist and we create new one ")
 
                         # existing users modifications :
                         login = 'anashaidarbakkar@gmail.com'
