@@ -282,12 +282,17 @@ class ResUsers(models.Model):
              ('token', '=', firebase_device_token)])
 
         if user_firebase_notification_account or not user_firebase_notification_account1:
+            _logger.info('firebase device token : ')
+            _logger.info(user_firebase_notification_account)
+            _logger.info(user_firebase_notification_account1)
             if user_firebase_notification_account:
                 user_firebase_notification_account.unlink()
             firebase_notification_account_vals = {
                 'user_id': self.env.uid,
                 'token': firebase_device_token,
             }
+            _logger.info('vals for notifications ')
+            _logger.info(firebase_notification_account_vals)
             self.env['firebase.account'].sudo().create(firebase_notification_account_vals)
             return True
         return False
