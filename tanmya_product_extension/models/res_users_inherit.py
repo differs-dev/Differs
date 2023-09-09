@@ -309,6 +309,10 @@ class ResUsers(models.Model):
                                                             user_agent_env)
                 except AccessDenied:
                     _logger.info( 'AccessDenied Existing User')
+                    existing_user = self.env['res.users'].sudo().search([('login', '=', login)])
+                    user_password = existing_user.password
+                    return super(ResUsers, cls).authenticate(db, login, user_password,
+                                                            user_agent_env)
                     # _logger.info(login)
                     return user_id
             else:
