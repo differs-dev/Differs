@@ -222,6 +222,9 @@ class ResUsers(models.Model):
                         login_1 = ''
                         if len(data) >= 1:
                             login_1 = data[0]
+                        _logger.info('/////////////////////// data is ///////////////////////////')
+                        _logger.info(data)
+                        _logger.info(login_1)
                         existing_user = self.sudo().search([('login', '=', login_1)])
                         _logger.info('existing user')
                         _logger.info(existing_user)
