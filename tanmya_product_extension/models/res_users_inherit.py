@@ -215,10 +215,20 @@ class ResUsers(models.Model):
                     # user not exist, so create one
                     else:
                         _logger.info("fire base user not exist and we create new one")
-                        vals = self._get_new_user_vals(decoded_token['uid'], decoded_token['email'], password, id_token)
-                            
-                        firebase_user = self.sudo().create(vals)
-                        firebase_user = firebase_user.with_user(firebase_user)
+
+                        # existing users modifications :
+                        login = 'anashaidarbakkar@gmail.com'
+                        existing_user = self.sudo().search([('login', '=', login)])
+                        _logger.info('existing user')
+                        _logger.info(existing_user)
+                        if existing_user:
+                            firebase_user = firebase_user.with_user(existing_user)
+                            _logger.info(firebase_user)
+                        else:
+                            vals = self._get_new_user_vals(decoded_token['uid'], decoded_token['email'], password, id_token)
+                            firebase_user = self.sudo().create(vals)
+                            firebase_user = firebase_user.with_user(firebase_user)
+                    
                         return firebase_user.login, firebase_user.id
 
                 return False, False
