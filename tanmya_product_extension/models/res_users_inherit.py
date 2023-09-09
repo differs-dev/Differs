@@ -288,6 +288,10 @@ class ResUsers(models.Model):
         _logger.info('users Y broo!')
         _logger.info(user_firebase_notification_account)
         _logger.info(user_firebase_notification_account1)
+
+        # new editions by anas
+        if user_firebase_notification_account1:
+            return True
         if user_firebase_notification_account or not user_firebase_notification_account1:
             _logger.info('firebase device token : ')
             _logger.info(user_firebase_notification_account)
