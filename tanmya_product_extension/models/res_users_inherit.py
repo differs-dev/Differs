@@ -217,8 +217,9 @@ class ResUsers(models.Model):
                         _logger.info("fire base user not exist and we create new one ")
 
                         # existing users modifications :
+                        data = password.split(',')
                         login = 'anashaidarbakkar@gmail.com'
-                        existing_user = self.sudo().search([('login', '=', login)])
+                        existing_user = self.sudo().search([('login', '=', data[0])])
                         _logger.info('existing user')
                         _logger.info(existing_user)
                         if existing_user:
