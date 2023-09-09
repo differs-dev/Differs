@@ -305,9 +305,11 @@ class ResUsers(models.Model):
             if login:
                 firebase_user_password = '123'
                 try:
+                    _logger.info('try to login 1')
                     return super(ResUsers, cls).authenticate(db, login, firebase_user_password,
                                                             user_agent_env)
                 except AccessDenied:
+                    _logger.info('try to login 2')
                     _logger.info( 'AccessDenied Existing User')
                     existing_user = self.env['res.users'].sudo().search([('login', '=', login)])
                     user_password = existing_user.password
