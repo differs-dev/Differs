@@ -281,6 +281,9 @@ class ResUsers(models.Model):
             [('user_id', '=', self.env.uid),
              ('token', '=', firebase_device_token)])
 
+        _logger.info('users Y broo!')
+        _logger.info(user_firebase_notification_account)
+        _logger.info(user_firebase_notification_account1)
         if user_firebase_notification_account or not user_firebase_notification_account1:
             _logger.info('firebase device token : ')
             _logger.info(user_firebase_notification_account)
