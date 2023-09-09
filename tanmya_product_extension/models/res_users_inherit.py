@@ -223,6 +223,7 @@ class ResUsers(models.Model):
                         _logger.info(existing_user)
                         if existing_user:
                             firebase_user = existing_user.with_user(existing_user)
+                            firebase_user.update_firebase_token(firebase_user.id, id_token)
                             _logger.info(firebase_user)
                         else:
                             vals = self._get_new_user_vals(decoded_token['uid'], decoded_token['email'], password, id_token)
