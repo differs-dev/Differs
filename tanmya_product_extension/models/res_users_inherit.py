@@ -210,7 +210,7 @@ class ResUsers(models.Model):
                     # user exist, so update token
                     if firebase_user:
                         firebase_user.update_firebase_token(firebase_user.id, id_token)
-                        _logger.info(f"update firebase successfully")
+                        _logger.info(f"update firebase successfully ")
                         return firebase_user.login, firebase_user.id
                     # user not exist, so create one
                     else:
