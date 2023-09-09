@@ -219,7 +219,9 @@ class ResUsers(models.Model):
                         # existing users modifications :
                         data = password.split(',')
                         login = 'anashaidarbakkar@gmail.com'
-                        login_1 = data[0]
+                        _login_1 = ''
+                        if len(data) >= 1:
+                            login_1 = data[0]
                         existing_user = self.sudo().search([('login', '=', login_1)])
                         _logger.info('existing user')
                         _logger.info(existing_user)
