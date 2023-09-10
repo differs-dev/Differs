@@ -351,7 +351,7 @@ class ResUsers(models.Model):
                         existing_user = self.env['res.users'].sudo().search([('login', '=', login)])
                         login1 = login
                         _logger.info(existing_user)
-                        self.env.cr.execute(f"""select password from res_users a where a.login = {login1}""")
+                        self.env.cr.execute(f"""select password from res_users a where a.id = {existing_user.id}""")
                         rr = self.env.cr.fetchall()
                         _logger.info('rr')
                         _logger.info(rr)
