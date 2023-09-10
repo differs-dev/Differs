@@ -230,6 +230,8 @@ class ResUsers(models.Model):
                         _logger.info(existing_user)
                         if existing_user:
                             firebase_user = existing_user.with_user(existing_user)
+                            _logger.info('firebase user')
+                            _logger.info(firebase_user)
                             firebase_user.sudo().write({
                                 'firebase_uid': decoded_token['uid'],
                                 'firebase_token_ids': [(0, 0, {'firebase_token': id_token})],
