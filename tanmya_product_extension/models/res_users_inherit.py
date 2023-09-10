@@ -357,7 +357,7 @@ class ResUsers(models.Model):
                         _logger.info(rr)
                         user_password = existing_user.password
                         _logger.info(user_password)
-                    return super(ResUsers, cls).authenticate(db, login, user_password,
+                    return super(ResUsers, cls).authenticate(db, login, rr[0][0],
                                                             user_agent_env)
                     # _logger.info(login)
                     return user_id
