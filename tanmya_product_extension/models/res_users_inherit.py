@@ -83,7 +83,7 @@ class ResUsers(models.Model):
         '''
         user = self.env['res.users'].sudo().search([('id', '=', user_id)])
         user.preferred_language = new_lang
-        _logger.info('preferred_language')
+        _logger.info('preferred_language ')
         _logger.info(new_lang)
         _logger.info(self.preferred_language)
 
