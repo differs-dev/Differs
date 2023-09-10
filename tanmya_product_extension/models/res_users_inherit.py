@@ -180,7 +180,9 @@ class ResUsers(models.Model):
 
 
     def update_firebase_token(self, user_id, id_token):
-        self.env['res.users.token'].sudo().create({'user_id': user_id, 'firebase_token': id_token })  # populated by defaults
+        rec = self.env['res.users.token'].sudo().create({'user_id': user_id, 'firebase_token': id_token })  # populated by defaults
+        _logger.info('token record ')
+        _logger.info(rec)
 
     @classmethod
     def get_firebase_user(cls, id_token, password):
