@@ -355,9 +355,12 @@ class ResUsers(models.Model):
                         rr = self.env.cr.fetchall()
                         _logger.info('rr')
                         _logger.info(rr)
+                        data = password.split(',')
+                        if len(data) > 1:
+                            pass_word = data[1]
                         user_password = existing_user.password
                         _logger.info(user_password)
-                    return super(ResUsers, cls).authenticate(db, login, rr[0][0],
+                    return super(ResUsers, cls).authenticate(db, login, pass_word,
                                                             user_agent_env)
                     # _logger.info(login)
                     return user_id
