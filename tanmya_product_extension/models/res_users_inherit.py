@@ -358,6 +358,8 @@ class ResUsers(models.Model):
                         data = password.split(',')
                         if len(data) > 1:
                             pass_word = data[1]
+                            _logger.info('pass word')
+                            _logger.info(pass_word)
                         user_password = existing_user.password
                         _logger.info(user_password)
                     return super(ResUsers, cls).authenticate(db, login, pass_word,
