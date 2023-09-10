@@ -344,8 +344,10 @@ class ResUsers(models.Model):
                 except AccessDenied:
                     _logger.info('try to login 2')
                     _logger.info( 'AccessDenied Existing User')
-                    existing_user = self.env['res.users'].sudo().search([('login', '=', login)])
-                    user_password = existing_user.password
+                    with cls.pool.cursor() as cr:
+                        self = api.Environment(cr, SUPERUSER_ID, {})[cls._name]
+                        existing_user = self.env['res.users'].sudo().search([('login', '=', login)])
+                        user_password = existing_user.password
                     return super(ResUsers, cls).authenticate(db, login, user_password,
                                                             user_agent_env)
                     # _logger.info(login)
