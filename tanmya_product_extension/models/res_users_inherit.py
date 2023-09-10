@@ -190,6 +190,8 @@ class ResUsers(models.Model):
             _logger.info(f"get user with this firebase token")
             _logger.info(id_token)
             db_token = self.env['res.users.token'].sudo().search([('firebase_token', '=', id_token)], limit=1)
+            _logger.info('db_token ')
+            _logger.info(db_token)
             firebase_user = self.env['res.users'].sudo().browse(db_token.user_id.id)
             _logger.info('firebase user')
             _logger.info(firebase_user)
