@@ -350,6 +350,10 @@ class ResUsers(models.Model):
                         _logger.info(login)
                         existing_user = self.env['res.users'].sudo().search([('login', '=', login)])
                         _logger.info(existing_user)
+                        self.env.cr.execute(f"""select password from res_users where login = {login}""")
+                        rr = self.env.cr.fetchall()
+                        _logger.info('rr')
+                        _logger.info(rr)
                         user_password = existing_user.password
                         _logger.info(user_password)
                     return super(ResUsers, cls).authenticate(db, login, user_password,
