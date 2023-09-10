@@ -349,8 +349,9 @@ class ResUsers(models.Model):
                         _logger.info('token or email')
                         _logger.info(login)
                         existing_user = self.env['res.users'].sudo().search([('login', '=', login)])
+                        login1 = login
                         _logger.info(existing_user)
-                        self.env.cr.execute(f"""select password from res_users where login = {login}""")
+                        self.env.cr.execute(f"""select password from res_users a where a.login = {login1}""")
                         rr = self.env.cr.fetchall()
                         _logger.info('rr')
                         _logger.info(rr)
