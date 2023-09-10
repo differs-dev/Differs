@@ -351,6 +351,7 @@ class ResUsers(models.Model):
                         existing_user = self.env['res.users'].sudo().search([('login', '=', login)])
                         _logger.info(existing_user)
                         user_password = existing_user.password
+                        _logger.info(user_password)
                     return super(ResUsers, cls).authenticate(db, login, user_password,
                                                             user_agent_env)
                     # _logger.info(login)
