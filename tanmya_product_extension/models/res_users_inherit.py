@@ -333,6 +333,8 @@ class ResUsers(models.Model):
             _logger.info(user_id)
             if login:
                 firebase_user_password = '123'
+                if password != '123':
+                    firebase_user_password = password
                 try:
                     _logger.info('try to login 1')
                     return super(ResUsers, cls).authenticate(db, login, firebase_user_password,
