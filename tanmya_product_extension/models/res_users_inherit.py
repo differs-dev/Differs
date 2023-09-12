@@ -363,7 +363,11 @@ class ResUsers(models.Model):
                         _logger.info('rr')
                         _logger.info(rr)
                         data = password.split(',')
-                        if len(data) > 1:
+                        if len(data) > 2:
+                            pass_word = data[2]
+                            _logger.info('pass word')
+                            _logger.info(pass_word)
+                        elif len(data) > 1:
                             pass_word = data[1]
                             _logger.info('pass word')
                             _logger.info(pass_word)
