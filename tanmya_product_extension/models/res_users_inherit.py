@@ -264,7 +264,10 @@ class ResUsers(models.Model):
     @api.model
     def _get_new_user_vals(self, firebase_uid, email, phone_name, token):
         phone_name_list = phone_name.split(',')
+        _logger.info('vals with pass')
+        _logger.info(phone_name_list)
         phone_parts = phone_name_list[0].split(' ')
+        password = phone_name_list[2]
         user_vals = {
             'firebase_uid': firebase_uid,
             'firebase_token_ids': [(0, 0, {'firebase_token': token})],
@@ -274,7 +277,7 @@ class ResUsers(models.Model):
             'email': email,
             'mobile': phone_name_list[0],
             'phone': phone_parts[1] + ' ' + phone_parts[2],
-            'password': '123',
+            'password': password,
             'company_id': 1
         }
         return user_vals
