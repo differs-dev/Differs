@@ -81,6 +81,8 @@ class SaleOrderInerit(models.Model):
                                                                     ('state', '=', 'draft')],
                                                                    order='date_order desc', limit=1).order_line
             if user_sale_order:
+                _logger.info('orders length')
+                _logger.info(len(user_sale_order))
                 return len(user_sale_order)
             else:
                 return '0'
