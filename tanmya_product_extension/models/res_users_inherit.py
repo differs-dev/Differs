@@ -263,9 +263,13 @@ class ResUsers(models.Model):
 
     @api.model
     def change_password(self, new_password):
+        _logger.info('change password called')
         user_id = self.env.user.id
         user_login = self.env.user.login
+        _logger.info(user_id)
+        _logger.info(user_login)
         wizard = self.env['change.password.wizard'].sudo().create({})
+        _logger.info(wizard)
         change_pw = self.env['change.password.user'].sudo().create({
             'user_id': user_id,
             'user_login': user_login,
@@ -273,6 +277,7 @@ class ResUsers(models.Model):
             'wizard_id': wizard.id
         })
         change_pw.change_password_button()
+        _logger.info(change_pw)
 
     @api.model
     def _get_new_user_vals(self, firebase_uid, email, phone_name, token):
