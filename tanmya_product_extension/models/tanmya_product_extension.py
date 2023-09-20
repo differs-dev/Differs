@@ -778,12 +778,17 @@ class TanmyaProducExt(models.Model):
                                                                  ('recipe_status', '=', state)],
                                                                 limit=limit,
                                                                 offset=offset)
+            _logger.info('recipes 1  ARE  ')
+            _logger.info(recipes)
         else:
             recipes = self.env['product.product'].sudo().search([('kit_template', '!=', None),
                                                                  ('recipe_status', '=', state),
                                                                  ('owner_id', '=', owner_id)],
                                                                 limit=limit,
                                                                 offset=offset)
+            _logger.info('recipes 1  ARE  ')
+            _logger.info(recipes)
+            
         recipes_details = []
         if recipes:
             for recipe in recipes:
@@ -815,6 +820,8 @@ class TanmyaProducExt(models.Model):
                     'recipe_status': recipe.recipe_status
                 }
                 recipes_details.append(recipe_details)
+        _logger.info('recipes details are : : : ')
+        _logger.info(recipe_details)
         return recipes_details
 
     @api.model
