@@ -820,8 +820,6 @@ class TanmyaProducExt(models.Model):
                     'recipe_status': recipe.recipe_status
                 }
                 recipes_details.append(recipe_details)
-        _logger.info('recipes details are : : : ')
-        _logger.info(recipe_details)
         return recipes_details
 
     @api.model
