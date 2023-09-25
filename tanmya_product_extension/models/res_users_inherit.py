@@ -291,20 +291,28 @@ class ResUsers(models.Model):
         _logger.info('vals with pass')
         _logger.info(phone_name_list)
         phone_parts = ''
+        mobile = ''
         if len(phone_name_list) > 0:
             phone_parts = phone_name_list[0].split(' ')
+            mobile = phone_name_list[0]
         password = '123'
-        if len(phone_name_list) >= 2:
+        if len(phone_name_list) >= 3:
             password = phone_name_list[2]
+        name = ''
+        if len(phone_name_list) >= 2:
+            name = phone_name_list[1]
+        phone = ''
+        if len(phone_parts) >= 3:
+            phone = phone_parts[1] + ' ' + phone_parts[2]
         user_vals = {
             'firebase_uid': firebase_uid,
             'firebase_token_ids': [(0, 0, {'firebase_token': token})],
-            'name': phone_name_list[1],
+            'name': name,
             'sel_groups_1_9_10': 9,  # 1 internal, 9 portal and 10 public user
             'login': email,
             'email': email,
-            'mobile': phone_name_list[0],
-            'phone': phone_parts[1] + ' ' + phone_parts[2],
+            'mobile': mobile,
+            'phone': phone,
             'password': password,
             'company_id': 1
         }
