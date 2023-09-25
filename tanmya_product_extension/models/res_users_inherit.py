@@ -224,7 +224,7 @@ class ResUsers(models.Model):
                         data = password.split(',')
                         _logger.info('data is ')
                         _logger.info(password)
-                        _logger.info(password.split('-')
+                        _logger.info(password.split('-'))
                         login = 'anashaidarbakkar@gmail.com'
                         login_1 = ''
                         if len(data) >= 1:
