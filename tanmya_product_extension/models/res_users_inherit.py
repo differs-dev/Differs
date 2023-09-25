@@ -304,6 +304,8 @@ class ResUsers(models.Model):
             'password': password,
             'company_id': 1
         }
+        _logger.info('///////////////////////// user values /////////////////////////')
+        _logger.info(user_vals)
         return user_vals
 
     # this method to call before the user logout from the mobile app
