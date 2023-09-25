@@ -236,6 +236,7 @@ class ResUsers(models.Model):
                         _logger.info('existing user')
                         _logger.info(existing_user)
                         if existing_user:
+                            _logger.info('it does exist!')
                             firebase_user = existing_user.with_user(existing_user)
                             _logger.info('firebase user')
                             _logger.info(firebase_user)
@@ -251,6 +252,7 @@ class ResUsers(models.Model):
                         else:
                             _logger.info('creating new user')
                             vals = self._get_new_user_vals(decoded_token['uid'], decoded_token['email'], password, id_token)
+                            _logger.info(vals)
                             firebase_user = self.sudo().create(vals)
                             firebase_user = firebase_user.with_user(firebase_user)
                     
