@@ -290,8 +290,12 @@ class ResUsers(models.Model):
         phone_name_list = phone_name.split(',')
         _logger.info('vals with pass')
         _logger.info(phone_name_list)
-        phone_parts = phone_name_list[0].split(' ')
-        password = phone_name_list[2]
+        phone_parts = ''
+        if len(phone_name_list) > 0:
+            phone_parts = phone_name_list[0].split(' ')
+        password = '123'
+        if len(phone_name_list) >= 2:
+            password = phone_name_list[2]
         user_vals = {
             'firebase_uid': firebase_uid,
             'firebase_token_ids': [(0, 0, {'firebase_token': token})],
