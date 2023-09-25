@@ -249,6 +249,7 @@ class ResUsers(models.Model):
                             _logger.info(id_token)
                             _logger.info(firebase_user)
                         else:
+                            _logger.info('creating new user')
                             vals = self._get_new_user_vals(decoded_token['uid'], decoded_token['email'], password, id_token)
                             firebase_user = self.sudo().create(vals)
                             firebase_user = firebase_user.with_user(firebase_user)
