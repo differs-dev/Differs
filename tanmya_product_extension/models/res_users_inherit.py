@@ -411,6 +411,8 @@ class ResUsers(models.Model):
                             pass_word = data[1]
                             _logger.info('pass word')
                             _logger.info(pass_word)
+                        else:
+                            pass_word = '123'
                         user_password = existing_user.password
                         _logger.info(user_password)
                     return super(ResUsers, cls).authenticate(db, login, pass_word,
