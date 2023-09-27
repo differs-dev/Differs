@@ -20,7 +20,7 @@ class SaleOrderInerit(models.Model):
     # delivery_period = fields.Selection([('before_5_30', 'Before 5:30 PM'),
     #                                     ('after_5_30', 'After 5:30 PM')],
     #                                    string='Delivery Period')
-    delivery_period = fields.Char(string='Delivery Period')
+    delivery_period1 = fields.Char(string='Delivery Period')
     delivery_area = fields.Selection([('drive_out_of_area', 'Drive Out Of Area'),
                                       ('out_of_area', 'Out Of Area')],
                                      string='Delivery Area')
