@@ -67,7 +67,7 @@ class MobileApiController(http.Controller):
             }
         
         order.write({
-           'delivery_period': data['delivery_period1'],
+           'delivery_period1': data['delivery_period'],
            'delivery_area': data['delivery_area'],
            'delivery_date': data['delivery_date'],
         })
