@@ -9,7 +9,7 @@
                 <page string="Differs Order Info" name="differs_order_info">
                     <group string="Order Info" class="col-5">
                         <field name="delivery_address"/>
-                        <field name="delivery_period"/>
+                        <field name="delivery_period1"/>
                         <field name="delivery_area"/>
                         <field name="delivery_date"/>
                     </group>
