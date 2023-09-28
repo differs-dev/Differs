@@ -373,6 +373,8 @@ class TanmyaProducExt(models.Model):
             _logger.info(vals.get('recipe_image2'))
             _logger.info('--------------------- end of debug ----------------------------')
             # Create Recipe
+            _logger.info('recipe values before !!!!')
+            _logger.info(vals)
             recipe_vals = {
                 'owner_id': vals.get('owner_id'),
                 'image_1920': vals.get('recipe_image'),
@@ -394,6 +396,8 @@ class TanmyaProducExt(models.Model):
                 'servings': vals.get('servings'),
                 'kit_template': sale_order_template_id.id,
             }
+            _logger.info('recipe values after !!!!')
+            _logger.info(recipe_vals)
             _logger.info('Add Recipe before creating the product')
             recipe_id = self.env['product.product'].sudo().create(recipe_vals)
             _logger.info('Add Recipe Completed!')
