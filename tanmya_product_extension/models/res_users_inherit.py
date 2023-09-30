@@ -70,7 +70,10 @@ class ResUsers(models.Model):
                     'product_id': product_id,
                     'status': product_status
                 }
+            _logger.info('prefernced prod')
+            _logger.info(product_preference)
             product_preference = self.env['products.preferences'].sudo().create(product_preferences_vals)
+            _logger.info(product_preference)
             if product_preference:
                 user.products_preferences_ids = [(4, product_preference.id)]
                 return True
