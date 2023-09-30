@@ -89,6 +89,17 @@ class ApprovalRequestExt(models.Model):
 
         self.sudo()._get_user_approval_activities(user=self.env.user).action_feedback()
 
+    def action_refuse(self, approver=None):
+        if not isinstance(approver, models.BaseModel):
+            approver = self.mapped('approver_ids').filtered(
+                lambda approver: approver.user_id == self.env.user
+            )
+        approver.write({'status': 'refused'})
+        if self.category_id.name == 'Recipe Approval':
+            for line in self.product_line_ids:
+                line.product_id.recipe_status = 'private'
+        self.sudo()._get_user_approval_activities(user=self.env.user).action_feedback()
+
 
 class RecipeReviews(models.Model):
     _name = 'tanmya.review'
