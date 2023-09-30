@@ -71,7 +71,7 @@ class ResUsers(models.Model):
                     'status': product_status
                 }
             _logger.info('prefernced prod')
-            _logger.info(product_preference)
+            _logger.info(product_preferences_vals)
             product_preference = self.env['products.preferences'].sudo().create(product_preferences_vals)
             _logger.info(product_preference)
             if product_preference:
