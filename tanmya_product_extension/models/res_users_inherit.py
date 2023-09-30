@@ -114,6 +114,8 @@ class ResUsers(models.Model):
                      ('product_id', '!=', False),
                      ('product_id.kit_template', '!=', None)],
                     limit=limit, offset=offset)
+                _logger.info('products_preferences are :')
+                _logger.info(products_preferences)
                 for product_preference in products_preferences:
                     user_preference = {
                         'id': product_preference.product_id.id,
@@ -128,11 +130,15 @@ class ResUsers(models.Model):
                         'preference_status': product_preference.status,
                     }
                     user_preferences.append(user_preference)
+                    _logger.info('user_preferences are ::')
+                    _logger.info(user_preferences)
             else:
                 products_preferences = self.env['products.preferences'].sudo().search(
                     [('id', 'in', user.products_preferences_ids.ids),
                      ('template_id', '!=', False)],
                     limit=limit, offset=offset)
+                _logger.info('products_preferences are :')
+                _logger.info(products_preferences)
                 for product_preference in products_preferences:
                     user_preference = {
                         'id': product_preference.template_id.id,
@@ -144,6 +150,8 @@ class ResUsers(models.Model):
                         'preference_status': product_preference.status,
                     }
                     user_preferences.append(user_preference)
+                    _logger.info('user prefs are :')
+                    _logger.info(user_preferences)
         return user_preferences
 
     @classmethod
