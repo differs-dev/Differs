@@ -76,6 +76,8 @@ class ResUsers(models.Model):
             _logger.info(product_preference)
             if product_preference:
                 user.products_preferences_ids = [(4, product_preference.id)]
+                _logger.info('products_preferences_ids ll')
+                _logger.info(user.products_preferences_ids)
                 return True
         return False
 
