@@ -212,7 +212,8 @@ class TanmyaProducExt(models.Model):
     owner_id = fields.Many2one('res.users', string='Recipe Owner ID')
     recipe_status = fields.Selection([('private', 'Private'),
                                       ('pending', 'Pending'),
-                                      ('public', 'Public')],
+                                      ('public', 'Public'),
+                                      ('refused', 'Refused')],
                                      string='Recipe Status', default='private')
     nutritional_value = fields.Char(string='Nutritional Value :', default='', readonly=True)
     hours_preparation_time = fields.Char(string='Hours Preparation Time')
