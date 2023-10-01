@@ -60,11 +60,15 @@ class ResUsers(models.Model):
                         return True
             product_preferences_vals = {}
             if variant_template == 1:
+                _logger.info('product id 1')
+                _logger.info(product_id)
                 product_preferences_vals = {
                     'product_id': product_id,
                     'status': product_status
                 }
             elif variant_template == 2:
+                _logger.info('product id 2')
+                _logger.info(product_id)
                 product_preferences_vals = {
                     'template_id': product_id,
                     'product_id': product_id,
