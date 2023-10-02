@@ -65,44 +65,6 @@ class Tanmyaprodcategory(models.Model):
         return categories_details
 
     @api.model
-    def get_recipes_by_category(self, category_name='', order_by='name', limit=None, offset=0):
-        category_id = self.env['tanmya.product.category'].sudo().search([('name', '=', category_name)],
-                                                                order=order_by,
-                                                                limit=1,
-                                                                offset=offset).id
-        recipes = self.env['product.product'].sudo().search([('prod_category', 'in', category_id)])
-        recipes_details = []
-        for recipe in recipes:
-            recipe_details = {
-                'id': recipe.id,
-                'name': recipe.product_tmpl_id.name,
-                'image_1920': recipe.image_1920,
-                'image_1920_1': recipe.image_1920_1,
-                'image_1920_2': recipe.image_1920_2,
-                'kit_template': [recipe.kit_template.id, recipe.kit_template.name],
-                'list_price': recipe.product_tmpl_id.list_price,
-                'owner_id': [recipe.owner_id.id, recipe.owner_id.name],
-                'hours_preparation_time': recipe.hours_preparation_time,
-                'minutes_preparation_time': recipe.minutes_preparation_time,
-                'difficulty_level': recipe.difficulty_level,
-                'instructions': recipe.instructions,
-                'description': recipe.description,
-                'servings': recipe.servings,
-                'calories': recipe.calories,
-                'protein': recipe.protein,
-                'carbs': recipe.carbs,
-                'fat': recipe.fat,
-                'fiber': recipe.fiber,
-                'iron': recipe.iron,
-                'prod_category': recipe.prod_category.ids,
-                'reviews_ids': recipe.reviews_ids.ids,
-                'preference_state': self.get_preference_state(recipe.id),
-                'total_rates': self.get_recipe_total_rates(recipe.id)
-            }
-            recipes_details.append(recipe_details)
-        return recipes_details
-    
-    @api.model
     def get_categories_by_cuisine(self, search_word='', limit=None, offset=0):
         categories = False
         categories_by_cui = []
@@ -275,6 +237,44 @@ class TanmyaProducExt(models.Model):
     # Recipe Reviews
     reviews_ids = fields.One2many('tanmya.review', 'recipe_id', string='Recipe Reviews')
 
+    @api.model
+    def get_recipes_by_category(self, category_name='', order_by='name', limit=None, offset=0):
+        category_id = self.env['tanmya.product.category'].sudo().search([('name', '=', category_name)],
+                                                                order=order_by,
+                                                                limit=1,
+                                                                offset=offset).id
+        recipes = self.env['product.product'].sudo().search([('prod_category', 'in', category_id)])
+        recipes_details = []
+        for recipe in recipes:
+            recipe_details = {
+                'id': recipe.id,
+                'name': recipe.product_tmpl_id.name,
+                'image_1920': recipe.image_1920,
+                'image_1920_1': recipe.image_1920_1,
+                'image_1920_2': recipe.image_1920_2,
+                'kit_template': [recipe.kit_template.id, recipe.kit_template.name],
+                'list_price': recipe.product_tmpl_id.list_price,
+                'owner_id': [recipe.owner_id.id, recipe.owner_id.name],
+                'hours_preparation_time': recipe.hours_preparation_time,
+                'minutes_preparation_time': recipe.minutes_preparation_time,
+                'difficulty_level': recipe.difficulty_level,
+                'instructions': recipe.instructions,
+                'description': recipe.description,
+                'servings': recipe.servings,
+                'calories': recipe.calories,
+                'protein': recipe.protein,
+                'carbs': recipe.carbs,
+                'fat': recipe.fat,
+                'fiber': recipe.fiber,
+                'iron': recipe.iron,
+                'prod_category': recipe.prod_category.ids,
+                'reviews_ids': recipe.reviews_ids.ids,
+                'preference_state': self.get_preference_state(recipe.id),
+                'total_rates': self.get_recipe_total_rates(recipe.id)
+            }
+            recipes_details.append(recipe_details)
+        return recipes_details
+    
     @api.constrains('calories', 'carbs', 'protein', 'fat', 'fiber', 'iron')
     def _check_nutrition_value(self):
         text = str(self.calories)
