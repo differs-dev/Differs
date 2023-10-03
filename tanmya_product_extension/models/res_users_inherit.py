@@ -321,6 +321,10 @@ class ResUsers(models.Model):
         phone = ''
         if len(phone_parts) >= 3:
             phone = phone_parts[1] + ' ' + phone_parts[2]
+        _logger.info('login is !!')
+        _logger.info(email)
+        existed = self.env['res.users'].sudo().search([('login', '=', email)])
+        _logger.info(existed)
         user_vals = {
             'firebase_uid': firebase_uid,
             'firebase_token_ids': [(0, 0, {'firebase_token': token})],
