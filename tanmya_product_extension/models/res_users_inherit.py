@@ -10,10 +10,6 @@ import time
 
 _logger = logging.getLogger(__name__)
 
-# Initialize Firebase Admin SDK
-cred = credentials.Certificate("path/to/serviceAccountKey.json")  # Path to your Firebase Admin SDK JSON file
-firebase_admin.initialize_app(cred)
-
 class ResUsers(models.Model):
     _inherit = 'res.users'
 
