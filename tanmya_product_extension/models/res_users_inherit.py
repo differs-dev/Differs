@@ -284,8 +284,32 @@ class ResUsers(models.Model):
         return [('firebase_uid', '=', fuid)]
 
     @api.model
-    def change_password(self, new_password):
+    def change_password(self, email, new_password):
         _logger.info('change password called')
+
+        cred_info = {
+            "type": "service_account",
+            "project_id": "differs-2d6ab",
+            "private_key_id": "1bef2dff29a2296f3134c8b291743c9249b7cd81",
+            "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDEx7KWK4XsA41A\n0Oan8yMmPf6/77eTti73/Ma1dZRLcUyt1ebOM1h07qE8rWZu2h3MHKJcN0A3MDxj\nLznAOljWrs+BgFcx4swv4+rJJGJHQVb2hjnFNpD/SZpU1zCqOLM5UCe70yWR9hAw\n9nmRH1euah6MbiSLl0MO463x0hShK89LxTP0Mn0bsEGTJb8R+iVv/Nc8hNBqGqpz\nMVxJrYFT76SLfwk6GpPqsXZ7kMjHrdL0UEyRCrtfdzOg9BCdrsmL5dL6jOuEahSQ\nwAqrgrFG+sidk+I1f6/gP7Sq81CCrYz19aCq0TVzmmFsDygiVs6mcwYW9YM3MjtQ\n8eF/TYnFAgMBAAECggEAF6qU1e7CGpKKyILXWtepII5QNzFTeNZua7DhDS3o+fHU\ncQvKyH3wY4/XoH6SVT6yWrwO4txaQsjwWlVxsqbRzHAV0NNoqT1HpXLZ5/sSPtOi\n699Uz10yryFhCFchKTfMhlYXkUVhvV5EsD7UfBmy5+0nY2hTyN4WWJIVd4H2rTNr\ncTUiarjFJeTDejn1ev0dZ5ydf0Ehxy8zpry/miV4ib11ThTBDV1eNb+tPFQLSrV4\nnX8Tr41q//n16WdaVuvh51fzMRFPHPWtvm6SSmwmFCmGVlBeNJp5/WZRun0YgzgY\nicZWCc0NY52LYxVRrKbYBQCqne33j8FGqFF2Yf8++QKBgQD2JSV6v7m1uG6N+TXy\nHh/ut5aAl0XofFBnrOvnxKdtuvQoagkuwA9W9mSdRM0y+IcRjLVRtvv9YYGUJCG6\nlM0BkMmWMNX3xwu80amsZng/0J45NLNYk6EWbPCudKc4Do77u3nlHrkWtdaAnyfB\nSSwOW9dJxcl6gpUfnhx3N0FozwKBgQDMqJYfMaPZrzIRLIAlp5J8uLlRpd/39pey\nPqAwzd81mKhelve7niWf+qt15IznHMBnRr8fiF6OyYHOaHLbH//1vI90rxDIiKlp\nWLP/h0ioJaGo0ER9x0NlKcQbbVrfmuEwkzAP/QVfnN2y62lLHLTlMVE9sb7rvkPo\nQ9D5qV3hKwKBgECp95OsxJvxzNFtc/ecZGUxQ8+abhoqdnEWI49qwVV5dOUdHjZy\n7FS7PCl4xrOqSMmafpPuD3s8X29MorPCnazYnazgPYXve6zqI7oP3W1eYALFToxp\nlDsw+XXLXZbDdFq7oMVJcfR+ZtC5fxcvIuzOwds2o7yUi5qXzgCfuoZPAoGAKOPO\nCrF6UTXlxPSlLeDLLcwiiqOfmgVUzbIhg16+qBC2Ix/6oyu3zLzioQ1m8Y4XCwth\niEVQzyqHmtvXhtxf4ZMo/mEz8z0KzBeC7xzycVYDdJ0X8iFr37x2iBxTObXSJEhk\nI+2jszS+Ps82HGHB6sDtwGvQ/3zmSHO0Pw2Nyj0CgYEAk2jcds2AemRJtqHW/74p\nDxWgwQl1OsjdLk02Egn9/RRcaubIx2Ud2SsQ+AT4MOGC3USfamIglXgxWVBYwe1Y\nVB/ElGnkz/GijLWnUtjXCXkxPSRtjVLegipZurE5ksu+pajYRm7SSOGIpUkpc4h6\nLKal9qhFZVyLHOVYpwmlVWw=\n-----END PRIVATE KEY-----\n",
+            "client_email": "firebase-adminsdk-tx29x@differs-2d6ab.iam.gserviceaccount.com",
+            "client_id": "104484343744146204081",
+            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+            "token_uri": "https://oauth2.googleapis.com/token",
+            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+            "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-tx29x%40differs-2d6ab.iam.gserviceaccount.com"
+        }
+        try:
+            cred = credentials.Certificate(cred_info)
+            app = None
+            try:
+                app = firebase_admin.get_app()
+            except ValueError:
+                app = firebase_admin.initialize_app(cred)
+
+        user = auth.get_user_by_email(email)
+        auth.update_user(user.uid, password= new_password)  # Set a new password here
+        
         user_id = self.env.user.id
         user_login = self.env.user.login
         _logger.info(user_id)
