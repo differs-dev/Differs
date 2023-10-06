@@ -94,6 +94,8 @@ class Tanmyaprodcategory(models.Model):
                          ],
                         limit=limit,
                         offset=offset)
+                    _logger.info('categories after search')
+                    _logger.info(categories_by_cui)
         _logger.info('categories_by_cui after iterating : ')
         _logger.info(categories_by_cui)
 
