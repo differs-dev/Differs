@@ -73,6 +73,9 @@ class Tanmyaprodcategory(models.Model):
             limit=limit,
             offset=offset)
         categories_details = []
+        _logger.info('-------- categories by cuisine ----------')
+        _logger.info(categories)
+        
         for ca_type in categories:
             if ca_type.type == 'by_cuisine':
                 if search_word == '':
@@ -91,6 +94,8 @@ class Tanmyaprodcategory(models.Model):
                          ],
                         limit=limit,
                         offset=offset)
+        _logger.info('categories_by_cui after iterating : ')
+        _logger.info(categories_by_cui)
 
         if categories_by_cui:
             for category in categories_by_cui:
