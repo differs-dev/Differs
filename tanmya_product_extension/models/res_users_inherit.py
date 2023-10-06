@@ -286,9 +286,11 @@ class ResUsers(models.Model):
     @api.model
     def change_password(self, email, new_password):
         _logger.info('change password called')
+        _logger.info('email : ')
+        _logger.info(email)
         user_id = self.env.user.id
         user_login = self.env.user.login
-        if email == '':
+        if email != '':
             cred_info = {
                 "type": "service_account",
                 "project_id": "differs-2d6ab",
