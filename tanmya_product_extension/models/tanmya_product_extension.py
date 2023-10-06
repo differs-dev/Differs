@@ -84,6 +84,8 @@ class Tanmyaprodcategory(models.Model):
                         limit=limit,
                         offset=offset)
                 else:
+                    _logger.info('search_word : ')
+                    _logger.info(search_word)
                     categories_by_cui = self.env['tanmya.product.category'].sudo().search(
                         [('type', '=', 'by_cuisine'),
                          '|', '|', '|', 
