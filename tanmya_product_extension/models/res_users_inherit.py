@@ -99,6 +99,7 @@ class ResUsers(models.Model):
     def delete_product_preference(self, variant_template: int, product_id: int):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         if user:
+            _logger.info('-------------- dislike product triggered ------------------')
             for line in user.products_preferences_ids:
                 if variant_template == 1:
                     if line.product_id.id == product_id:
@@ -108,6 +109,7 @@ class ResUsers(models.Model):
                     if line.template_id.id == product_id:
                         line.unlink()
                         return True
+            _logger.info('---------------- product disliked succeessfully ----------------')
         return False
 
     @api.model
