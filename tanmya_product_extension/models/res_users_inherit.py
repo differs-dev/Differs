@@ -42,6 +42,22 @@ class ResUsers(models.Model):
                                                string='Products Preferences')
     preferred_language = fields.Char(string='User Language', default='fr')
 
+    def get_recipe_total_rates(self, recipe_id):
+        if recipe_id:
+            recipe = self.env['product.product'].sudo().search([('id', '=', recipe_id)])
+            if recipe:
+                if recipe.reviews_ids:
+                    total_rates = 0
+                    rates_count = len(recipe.reviews_ids)
+                    for review in recipe.reviews_ids:
+                        total_rates += float(review.rating)
+                    if rates_count != 0:
+                        return total_rates / rates_count
+                    return total_rates
+                else:
+                    return 0.0
+
+
     @api.model
     def add_product_preference(self, variant_template: int, product_id: int, product_status: str):
         # variant_template : the product_id related to product variant or product template
@@ -150,6 +166,7 @@ class ResUsers(models.Model):
                         'prod_category': product_preference.product_id.prod_category.ids,
                         'reviews_ids': product_preference.product_id.reviews_ids.ids,
                         'owner_id': [product_preference.product_id.owner_id.id, product_preference.product_id.owner_id.name],
+                        'total_rates': self.get_recipe_total_rates(product_preference.product_id.id),
                         
                         'uom': product_preference.product_id.uom_id.name,
                         'kit_template': product_preference.product_id.kit_template.id,
