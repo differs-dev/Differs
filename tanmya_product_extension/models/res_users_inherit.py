@@ -163,6 +163,7 @@ class ResUsers(models.Model):
                         'carbs': product_preference.product_id.carbs,
                         'fat': product_preference.product_id.fat,
                         'fiber': product_preference.product_id.fiber,
+                        'iron': recipe.iron,
                         'prod_category': product_preference.product_id.prod_category.ids,
                         'reviews_ids': product_preference.product_id.reviews_ids.ids,
                         'owner_id': [product_preference.product_id.owner_id.id, product_preference.product_id.owner_id.name],
