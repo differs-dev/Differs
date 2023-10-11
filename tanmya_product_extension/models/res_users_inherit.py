@@ -129,15 +129,32 @@ class ResUsers(models.Model):
                 for product_preference in products_preferences:
                     user_preference = {
                         'id': product_preference.product_id.id,
-                        'image_128': product_preference.product_id.image_1920,
+                        # 'image_128': product_preference.product_id.image_1920,
                         'image_1920': product_preference.product_id.image_1920,
+                        'image_1920_1': product_preference.product_id.image_1920_1,
+                        'image_1920_2': product_preference.product_id.image_1920_2,
                         'name': product_preference.product_id.name,
-                        'price': product_preference.product_id.list_price,
-                        'uom': product_preference.product_id.uom_id.name,
-                        'kit_template': product_preference.product_id.kit_template.id,
+                        'list_price': product_preference.product_id.list_price,
+
                         'hours_preparation_time': product_preference.product_id.hours_preparation_time,
                         'minutes_preparation_time': product_preference.product_id.minutes_preparation_time,
-                        'preference_status': product_preference.status,
+                        'difficulty_level': product_preference.product_id.difficulty_level,
+                        'instructions': product_preference.product_id.instructions,
+                        'description': product_preference.product_id.description,
+                        'servings': product_preference.product_id.servings,
+                        'calories': product_preference.product_id.calories,
+                        'protein': product_preference.product_id.protein,
+                        'carbs': product_preference.product_id.carbs,
+                        'fat': product_preference.product_id.fat,
+                        'fiber': product_preference.product_id.fiber,
+                        'prod_category': product_preference.product_id.prod_category.ids,
+                        'reviews_ids': product_preference.product_id.reviews_ids.ids,
+                        
+                        'uom': product_preference.product_id.uom_id.name,
+                        'kit_template': product_preference.product_id.kit_template.id,
+                        # 'hours_preparation_time': product_preference.product_id.hours_preparation_time,
+                        # 'minutes_preparation_time': product_preference.product_id.minutes_preparation_time,
+                        'recipe_status': product_preference.status,
                     }
                     user_preferences.append(user_preference)
                     _logger.info('user_preferences are ::')
