@@ -149,6 +149,7 @@ class ResUsers(models.Model):
                         'fiber': product_preference.product_id.fiber,
                         'prod_category': product_preference.product_id.prod_category.ids,
                         'reviews_ids': product_preference.product_id.reviews_ids.ids,
+                        'owner_id': [product_preference.product_id.owner_id.id, product_preference.product_id.owner_id.name],
                         
                         'uom': product_preference.product_id.uom_id.name,
                         'kit_template': product_preference.product_id.kit_template.id,
