@@ -90,8 +90,9 @@ class ProductTemplateInherit(models.Model):
                                                                   order=order_by)
             products_details = []
             for product in products:
+                prod_id = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product.id)], limit=1).id
                 product_details = {
-                    'id': product.product_variant_id.id,
+                    'id': prod_id,
                     'name': product.name,
                     'image_128': product.image_1920,
                     'list_price': product.list_price,
@@ -124,8 +125,9 @@ class ProductTemplateInherit(models.Model):
                                                                   order=order_by)
             products_details = []
             for product in products:
+                prod_id = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product.id)], limit=1).id
                 product_details = {
-                    'id': product.product_variant_id.id,
+                    'id': prod_id,
                     'name': product.name,
                     'image_128': product.image_1920,
                     'list_price': product.list_price,
