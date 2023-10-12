@@ -128,6 +128,16 @@ class ResUsers(models.Model):
             _logger.info('---------------- product disliked succeessfully ----------------')
         return False
 
+    def get_variant_attributes(self, product_id):
+        product = self.env['product.product'].sudo().browse(product_id)
+        product_attributes = ''
+        if product:
+            if product.product_template_attribute_value_ids:
+                if len(product.product_template_attribute_value_ids) > 0:
+                    product_attributes = product.product_template_attribute_value_ids[0].attribute_id.name + ': ' + \
+                                         product.product_template_attribute_value_ids[0].product_attribute_value_id.name
+        return product_attributes
+
     @api.model
     def get_user_preferences(self, products_type: int, limit=None, offset=0):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
@@ -203,7 +213,7 @@ class ResUsers(models.Model):
                         'fiber': product_preference.product_id.fiber,
                         'iron': product_preference.product_id.iron,
                         'description': product_preference.product_id.description,
-                        # 'product_variants': self.get_products_variants_details(product.id),
+                        'product_variants': self.get_products_variants_details(product_preference.product_id.id),
                         'additional_description': product_preference.product_id.mobile_description,
                         'composition': product_preference.product_id.x_studio_composition,
                         'conservation_et_utilisation': product_preference.product_id.x_studio_conservation_et_utilisation,
