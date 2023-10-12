@@ -189,12 +189,12 @@ class ResUsers(models.Model):
                 _logger.info(products_preferences)
                 for product_preference in products_preferences:
                     user_preference = {
-                        'id': product_preference.template_id.id,
-                        'image_128': product_preference.template_id.image_1920,
-                        'image_1920': product_preference.template_id.image_1920,
-                        'name': product_preference.template_id.name,
-                        'price': product_preference.template_id.list_price,
-                        'uom': product_preference.template_id.uom_id.name,
+                        'id': product_preference.product_id.id,
+                        'image_128': product_preference.product_id.image_1920,
+                        'image_1920': product_preference.product_id.image_1920,
+                        'name': product_preference.product_id.name,
+                        'price': product_preference.product_id.list_price,
+                        'uom': product_preference.product_id.uom_id.name,
                         'preference_status': product_preference.status,
                     }
                     user_preferences.append(user_preference)
