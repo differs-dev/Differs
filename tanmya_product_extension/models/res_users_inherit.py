@@ -128,16 +128,35 @@ class ResUsers(models.Model):
             _logger.info('---------------- product disliked succeessfully ----------------')
         return False
 
-    def get_variant_attributes(self, product_id):
-        product = self.env['product.product'].sudo().browse(product_id)
-        product_attributes = ''
-        if product:
-            if product.product_template_attribute_value_ids:
-                if len(product.product_template_attribute_value_ids) > 0:
-                    product_attributes = product.product_template_attribute_value_ids[0].attribute_id.name + ': ' + \
-                                         product.product_template_attribute_value_ids[0].product_attribute_value_id.name
-        return product_attributes
-
+     def get_products_variants_details(self, product_tmpl_id):
+        product_variants = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product_tmpl_id)])
+        products_variants_details = []
+        if product_variants:
+            for product in product_variants:
+                product_variant_details = {
+                    'id': product.id,
+                    'name': product.name,
+                    #                     'image_128': product.image_1920,
+                    'image_128': '',
+                    'list_price': product.lst_price,
+                    'uom': product.uom_id.name,
+                    'calories': product.calories,
+                    'carbs': product.carbs,
+                    'protein': product.protein,
+                    'fat': product.fat,
+                    'fiber': product.fiber,
+                    'iron': product.iron,
+                    'description': product.description,
+                    'preference_state': self.get_preference_state(1, product.id),
+                    'additional_description': product.mobile_description,
+                    'composition': product.x_studio_composition,
+                    'conservation_et_utilisation': product.x_studio_conservation_et_utilisation,
+                    'product_more_info': product.x_studio_product_more_info,
+                    'product_attributes': self.get_variant_attributes(product.id),
+                }
+                products_variants_details.append(product_variant_details)
+        return products_variants_details
+         
     @api.model
     def get_user_preferences(self, products_type: int, limit=None, offset=0):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
