@@ -128,6 +128,28 @@ class ResUsers(models.Model):
             _logger.info('---------------- product disliked succeessfully ----------------')
         return False
 
+    
+    def get_preference_state(self, variant_template, product_id):
+        user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
+        for rec in user.products_preferences_ids:
+            if variant_template == 1:
+                if rec.product_id.id == product_id:
+                    return rec.status
+            elif variant_template == 2:
+                if rec.template_id.id == product_id:
+                    return rec.status
+        return 'dislike'
+
+    def get_variant_attributes(self, product_id):
+        product = self.env['product.product'].sudo().browse(product_id)
+        product_attributes = ''
+        if product:
+            if product.product_template_attribute_value_ids:
+                if len(product.product_template_attribute_value_ids) > 0:
+                    product_attributes = product.product_template_attribute_value_ids[0].attribute_id.name + ': ' + \
+                                         product.product_template_attribute_value_ids[0].product_attribute_value_id.name
+        return product_attributes
+    
     def get_products_variants_details(self, product_tmpl_id):
         product_variants = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product_tmpl_id)])
         products_variants_details = []
