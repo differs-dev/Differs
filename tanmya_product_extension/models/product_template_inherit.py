@@ -91,7 +91,7 @@ class ProductTemplateInherit(models.Model):
             products_details = []
             for product in products:
                 product_details = {
-                    'id': product.product_id.id,
+                    'id': product.product_variant_id.id,
                     'name': product.name,
                     'image_128': product.image_1920,
                     'list_price': product.list_price,
@@ -125,7 +125,7 @@ class ProductTemplateInherit(models.Model):
             products_details = []
             for product in products:
                 product_details = {
-                    'id': product.product_id.id,
+                    'id': product.product_variant_id.id,
                     'name': product.name,
                     'image_128': product.image_1920,
                     'list_price': product.list_price,
