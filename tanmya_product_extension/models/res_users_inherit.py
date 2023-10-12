@@ -128,7 +128,7 @@ class ResUsers(models.Model):
             _logger.info('---------------- product disliked succeessfully ----------------')
         return False
 
-     def get_products_variants_details(self, product_tmpl_id):
+    def get_products_variants_details(self, product_tmpl_id):
         product_variants = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product_tmpl_id)])
         products_variants_details = []
         if product_variants:
