@@ -66,7 +66,7 @@ class ResUsers(models.Model):
         if user:
             for preference in user.products_preferences_ids:
                 if variant_template == 1:
-                    if preference.product_id.id == product_id:
+                    if preference.template_id.id == product_id:
                         preference.write({'status': product_status})
                         return True
                 elif variant_template == 2:
