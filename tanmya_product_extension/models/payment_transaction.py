@@ -89,6 +89,9 @@ class PaymentTransaction(models.Model):
         )  # Log the payment request data without the password
 
         response_content = self.acquirer_id._ogone_make_request(data)
+
+        _logger.info('|||||||||| ogone response content ||||||||||||')
+        _logger.info(response_content)
         try:
             tree = objectify.fromstring(response_content)
         except etree.XMLSyntaxError:
