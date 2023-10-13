@@ -82,10 +82,23 @@ class ApprovalRequestExt(models.Model):
                 lambda approver: approver.user_id == self.env.user
             )
         approver.write({'status': 'approved'})
+        
 
         if self.category_id.name == 'Recipe Approval':
             for line in self.product_line_ids:
                 line.product_id.recipe_status = 'public'
+                notification_vals = {
+                    'title': 'Recipe approved',
+                    'content': f'Your recipe was approved. Click here to see details.',
+                    'payload': 'recipe_approved',
+                    'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                    'notification_date': datetime.now(),
+                    'user_ids': [(6, 0, [line.product_id.owner_id.id])],
+                    'recipe_id': line.product_id.id,
+                }
+                notification = self.env['firebase.notification'].sudo().create(notification_vals)
+                if notification:
+                    notification.send()
 
         self.sudo()._get_user_approval_activities(user=self.env.user).action_feedback()
 
