@@ -88,18 +88,32 @@ class ApprovalRequestExt(models.Model):
         if self.category_id.name == 'Recipe Approval':
             for line in self.product_line_ids:
                 line.product_id.recipe_status = 'public'
-                notification_vals = {
-                    'title': 'Recipe approved',
-                    'content': f'Your recipe was approved. Click here to see details.',
-                    'payload': 'recipe_approved',
-                    'target_action': 'FLUTTER_NOTIFICATION_CLICK',
-                    'notification_date': datetime.now(),
-                    'user_ids': [(6, 0, [line.product_id.owner_id.id])],
-                    'recipe_id': line.product_id.id,
-                }
-                notification = self.env['firebase.notification'].sudo().create(notification_vals)
-                if notification:
-                    notification.send()
+                if line.product_id.owner_id.preferred_language == 'en':
+                    notification_vals = {
+                        'title': 'Recipe approved',
+                        'content': f'Your recipe was approved. Click here to see details.',
+                        'payload': 'recipe_approved',
+                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                        'notification_date': datetime.now(),
+                        'user_ids': [(6, 0, [line.product_id.owner_id.id])],
+                        'recipe_id': line.product_id.id,
+                    }
+                    notification = self.env['firebase.notification'].sudo().create(notification_vals)
+                    if notification:
+                        notification.send()
+                elif line.product_id.owner_id.preferred_language == 'fr':
+                    notification_vals = {
+                        'title': 'Recette approuvée',
+                        'content': f'Votre recette a été approuvée. Cliquez ici pour voir les détails.',
+                        'payload': 'recipe_approved',
+                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                        'notification_date': datetime.now(),
+                        'user_ids': [(6, 0, [line.product_id.owner_id.id])],
+                        'recipe_id': line.product_id.id,
+                    }
+                    notification = self.env['firebase.notification'].sudo().create(notification_vals)
+                    if notification:
+                        notification.send()
 
         self.sudo()._get_user_approval_activities(user=self.env.user).action_feedback()
 
@@ -112,7 +126,33 @@ class ApprovalRequestExt(models.Model):
         if self.category_id.name == 'Recipe Approval':
             for line in self.product_line_ids:
                 line.product_id.recipe_status = 'private'
-        self.sudo()._get_user_approval_activities(user=self.env.user).action_feedback()
+                if line.product_id.owner_id.preferred_language == 'en':
+                    notification_vals = {
+                        'title': 'Recipe refused',
+                        'content': f'Your recipe was refused. Click here to see details.',
+                        'payload': 'recipe_refused',
+                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                        'notification_date': datetime.now(),
+                        'user_ids': [(6, 0, [line.product_id.owner_id.id])],
+                        'recipe_id': line.product_id.id,
+                    }
+                    notification = self.env['firebase.notification'].sudo().create(notification_vals)
+                    if notification:
+                        notification.send()
+                elif line.product_id.owner_id.preferred_language == 'fr':
+                    notification_vals = {
+                        'title': 'Recette refusée',
+                        'content': f'Votre recette a été refusée. Cliquez ici pour voir les détails.',
+                        'payload': 'recipe_refused',
+                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                        'notification_date': datetime.now(),
+                        'user_ids': [(6, 0, [line.product_id.owner_id.id])],
+                        'recipe_id': line.product_id.id,
+                    }
+                    notification = self.env['firebase.notification'].sudo().create(notification_vals)
+                    if notification:
+                        notification.send()
+
 
 
 class RecipeReviews(models.Model):
