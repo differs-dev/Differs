@@ -86,13 +86,14 @@ class MobileApiController(http.Controller):
                 'state': 'error',
                 'state_message': "Access Denied!",
             }
-
+        _logger.info('------ computing payment reference -------')
         reference = request.env['payment.transaction']._compute_reference(
             ogone_acquirer.provider,
             prefix=None,
             **{},
             **{'sale_order_ids': [Command.set([order.id])]}
         )
+        _logger.info(reference)
 
         # Create the transaction
         tx_sudo = request.env['payment.transaction'].sudo().create({
@@ -109,7 +110,8 @@ class MobileApiController(http.Controller):
         })
 
         tx_sudo = tx_sudo._send_payment_mobile_request(data)
-
+        _logger.info('------- payment request was send ------')
+        
         # Monitor the transaction to make it available in the portal
         PaymentPostProcessing.monitor_transactions(tx_sudo)
         values = tx_sudo._get_processing_values()
