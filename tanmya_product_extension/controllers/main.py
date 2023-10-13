@@ -94,6 +94,7 @@ class MobileApiController(http.Controller):
             **{'sale_order_ids': [Command.set([order.id])]}
         )
         _logger.info(reference)
+        _logger.info(order.amount_total)
 
         # Create the transaction
         tx_sudo = request.env['payment.transaction'].sudo().create({
