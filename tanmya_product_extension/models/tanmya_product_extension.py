@@ -752,7 +752,7 @@ class TanmyaProducExt(models.Model):
             if recipe_count != 0:
                 user_recipes_rates = rates_sum / recipe_count
             _logger.info('******** recipes total rating **********')
-            _
+            _logger.info(user_recipes_rates)
             return user_recipes_rates
 
     @api.model
