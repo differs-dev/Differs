@@ -277,6 +277,8 @@ class FirebaseNotification(models.Model):
     @api.model
     def get_notifications_by_user(self, user_id: int):
         res = self.env['firebase.notification'].sudo().search_read([('user_ids', 'in', user_id)])
+        _logger.info('notifications are : ')
+        _logger.info(res)
         return res
 
     @api.model
