@@ -743,11 +743,11 @@ class TanmyaProducExt(models.Model):
             _logger.info('********* recipes **********')
             _logger.info(recipes)
             # recipe_count = int(len(recipes))
+            recipe_count = 0
             _logger.info('******* recipes count*******')
             _logger.info(recipe_count)
             user_recipes_rates = 0.0
             rates_sum = 0
-            recipe_count = 0
             for recipe in recipes:
                 rates_sum += self.get_recipe_total_rates(recipe.id)
                 if self.get_recipe_total_rates(recipe.id) != 0:
