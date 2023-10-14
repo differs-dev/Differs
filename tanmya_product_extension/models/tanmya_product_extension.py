@@ -742,13 +742,16 @@ class TanmyaProducExt(models.Model):
                                                                  ('recipe_status', '=', 'public')])
             _logger.info('********* recipes **********')
             _logger.info(recipes)
-            recipe_count = int(len(recipes))
+            # recipe_count = int(len(recipes))
             _logger.info('******* recipes count*******')
             _logger.info(recipe_count)
             user_recipes_rates = 0.0
             rates_sum = 0
+            recipe_count = 0
             for recipe in recipes:
                 rates_sum += self.get_recipe_total_rates(recipe.id)
+                if self.get_recipe_total_rates(recipe.id) != 0:
+                    recipe_count += 1
             if recipe_count != 0:
                 user_recipes_rates = rates_sum / recipe_count
             _logger.info('******** recipes total rating **********')
@@ -818,6 +821,7 @@ class TanmyaProducExt(models.Model):
 
     def get_recipe_total_rates(self, recipe_id):
         if recipe_id:
+            _logger
             recipe = self.env['product.product'].sudo().search([('id', '=', recipe_id)])
             if recipe:
                 if recipe.reviews_ids:
