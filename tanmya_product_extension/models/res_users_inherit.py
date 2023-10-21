@@ -238,10 +238,10 @@ class ResUsers(models.Model):
                     limit=limit, offset=offset)
                 _logger.info('products_preferences are :')
                 _logger.info(products_preferences)
-                _logger.info('product_id : ')
-                _logger.info(product_preference.product_id.id)
-                _logger.info(product_preference.template_id.id)
                 for product_preference in products_preferences:
+                    _logger.info('product_id : ')
+                    _logger.info(product_preference.product_id.id)
+                    _logger.info(product_preference.template_id.id)
                     user_preference = {
                         'id': product_preference.product_id.id,
                         'image_128': product_preference.product_id.image_1920,
