@@ -249,7 +249,7 @@ class ResUsers(models.Model):
                         'name': product_preference.product_id.name,
                         'list_price': product_preference.product_id.list_price,
                         'uom': product_preference.product_id.uom_id.name,
-                        'preference_status': product_preference.status,
+                        'preference_state': product_preference.status,
                         'calories': product_preference.product_id.calories,
                         'carbs': product_preference.product_id.carbs,
                         'protein': product_preference.product_id.protein,
@@ -261,7 +261,8 @@ class ResUsers(models.Model):
                         'additional_description': product_preference.product_id.mobile_description,
                         'composition': product_preference.product_id.x_studio_composition,
                         'conservation_et_utilisation': product_preference.product_id.x_studio_conservation_et_utilisation,
-                        'product_more_info': product_preference.product_id.x_studio_product_more_info
+                        'product_more_info': product_preference.product_id.x_studio_product_more_info,
+
                     }
                     user_preferences.append(user_preference)
                     _logger.info('user prefs of products are :')
