@@ -325,7 +325,7 @@ class ResUsers(models.Model):
                 firebase_user = firebase_user.with_user(firebase_user)
                 _logger.info(f"user exist and expire in {firebase_user.firebase_token_expired_date}")
                 return firebase_user.login, firebase_user.id
-
+            
             # user not exist or token expired, so check firebase token
             decoded_token = cls.check_firebase_id_token(id_token)
             _logger.info(f"user not exist {firebase_user}")
@@ -333,6 +333,8 @@ class ResUsers(models.Model):
                 if decoded_token:
                     # get user by firebase user id
                     firebase_user = self.env['res.users'].sudo().search([('firebase_uid', '=', decoded_token['uid'])])
+                    if not firebase_user:
+                        firebase_user = self.env['res.users'].sudo().search([('login', '=', decoded_token['email'])])
                     _logger.info(f"user by firebase id is {firebase_user}")
                     # user exist, so update token
                     if firebase_user:
