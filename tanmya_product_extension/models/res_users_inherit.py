@@ -333,8 +333,8 @@ class ResUsers(models.Model):
                 if decoded_token:
                     # get user by firebase user id
                     firebase_user = self.env['res.users'].sudo().search([('firebase_uid', '=', decoded_token['uid'])])
-                    if not firebase_user:
-                        firebase_user = self.env['res.users'].sudo().search([('login', '=', decoded_token['email'])])
+                    # if not firebase_user:
+                    #     firebase_user = self.env['res.users'].sudo().search([('login', '=', decoded_token['email'])])
                     _logger.info(f"user by firebase id is {firebase_user}")
                     # user exist, so update token
                     if firebase_user:
