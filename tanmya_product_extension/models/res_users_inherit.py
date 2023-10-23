@@ -837,7 +837,7 @@ class ResUsers(models.Model):
     def delete_user_account(self, id):
         user = self.env['res.users'].sudo().search([('id', '=', id)])
         request.session.logout(keep_db=True)
-        query = f"""DELETE from res_users where login = {id};"""
+        query = f"""DELETE from res_users where id = {id};"""
         _logger.info('deleted account:')
         _logger.info(user)
         self._cr.execute(query)
