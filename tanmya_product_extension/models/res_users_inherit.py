@@ -332,6 +332,10 @@ class ResUsers(models.Model):
             try:
                 if decoded_token:
                     # get user by firebase user id
+                    _logger.info('token data:::')
+                    _logger.info(decoded_token)
+                    _logger.info(decoded_token['uid'])
+                    _logger.info(decoded_token['email'])
                     firebase_user = self.env['res.users'].sudo().search([('firebase_uid', '=', decoded_token['uid'])])
                     # if not firebase_user:
                     #     firebase_user = self.env['res.users'].sudo().search([('login', '=', decoded_token['email'])])
