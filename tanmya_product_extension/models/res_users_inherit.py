@@ -840,7 +840,6 @@ class ResUsers(models.Model):
         query = f"""DELETE from res_users where login = {id};"""
         _logger.info('deleted account:')
         _logger.info(user)
-        _logger.info(
         self._cr.execute(query)
 
 class ResUsersToken(models.Model):
