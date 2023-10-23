@@ -834,10 +834,13 @@ class ResUsers(models.Model):
             address.unlink()
 
     @api.model
-    def delete_user_account(self):
-        user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
+    def delete_user_account(self, login):
+        user = self.env['res.users'].sudo().search([('login', '=', login)])
         request.session.logout(keep_db=True)
-        query = f"""DELETE from res_users where id = {self.env.uid};"""
+        query = f"""DELETE from res_users where login = {login};"""
+        _logger.info('deleted account:')
+        _logger.info(user)
+        _logger.info(
         self._cr.execute(query)
 
 class ResUsersToken(models.Model):
