@@ -701,6 +701,9 @@ class ResUsers(models.Model):
         _logger.info(user.partner_id.address_ids)
         # self.get_user_delivery_methods()
         if user:
+            _logger.info('------------ PARTNER ADDRESSES -------------------')
+            _logger.info(user.partner_id)
+            _logger.info(user.partner_id.address_ids)
             for address in user.partner_id.address_ids:
                 address_info = {
                     'id': address.id,
