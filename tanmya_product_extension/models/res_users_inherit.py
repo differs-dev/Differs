@@ -660,15 +660,20 @@ class ResUsers(models.Model):
                  Fals if not
         """
         if address_vals:
+            _logger.info('address_vals')
+            _logger.info(address_vals)
             if address_vals.get('country', False):
                 country_id = self.env['res.country'].sudo().search([('name', '=', address_vals.get('country'))]).id
                 address_vals['country_id'] = country_id
                 del address_vals['country']
 
             new_address = self.env['additional.address'].sudo().create(address_vals)
+            _logger.info('the new address')
+            _logger.info(new_address)
             if new_address:
                 user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
                 user.partner_id.address_ids = [(4, new_address.id)]
+                _logger.info(new_address.id)
                 return new_address.id
         return False
 
