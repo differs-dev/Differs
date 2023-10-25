@@ -362,6 +362,8 @@ class ResUsers(models.Model):
                         _logger.info(data)
                         _logger.info(login_1)
                         existing_user = self.sudo().search([('login', '=', login_1)])
+                        if not existing_user:
+                            existing_user = self.sudo().search(['|', ('login', '=', login_1), ('login', '=', decoded_token['email'])])
                         _logger.info('existing user')
                         _logger.info(existing_user)
                         if existing_user:
