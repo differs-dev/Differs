@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- Top menu item -->
+    <menuitem id="notification_menu_root"
+              name="Firebase Notificator"
+              web_icon="altanmya_firebase_notificator,static/description/icon.png"
+              sequence="0"/>
+
+    <!-- Notifications Menu Action -->
+    <record id="tanmya_firebase_notification_action" model="ir.actions.act_window">
+        <field name="name">Notifications</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">firebase.notification</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Notifiy your client
+            </p>
+            <p>
+                Send notifications to your users
+            </p>
+        </field>
+    </record>
+
+    <!-- Firebase Account Menu Action -->
+    <record id="tanmya_firebase_account_action" model="ir.actions.act_window">
+        <field name="name">Firebase Accounts</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">firebase.account</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Notifiy your client
+            </p>
+        </field>
+    </record>
+
+    <!--Show Notifications menu item-->
+    <menuitem id="notification_menu"
+              name="Notifications"
+              action="tanmya_firebase_notification_action"
+              parent="notification_menu_root"
+              sequence="1"/>
+
+    <!--Show Firebase Account menu item-->
+    <menuitem id="firebase_account_menu"
+              name="Firebase Accounts"
+              action="tanmya_firebase_account_action"
+              parent="notification_menu_root"
+              sequence="2"/>
+
+    <!-- Notifications Form View-->
+    <record id="notifications_form_view" model="ir.ui.view">
+        <field name="name">notifications.form.view</field>
+        <field name="model">firebase.notification</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="title"/>
+                        <field name="fr_title"/>
+                        <field name="content"/>
+                        <field name="fr_content"/>
+                        <field name="read_state"/>
+                        <field name="create_date" string="Creation Date"/>
+                        <field name="target_action" readonly="True"/>
+                        <field name="user_ids" widget="many2many_tags"/>
+                        <footer>
+                            <button name="send" string="Send" class="oe_highlight" type="object"/>
+                        </footer>
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Notifications List View-->
+    <record id="notifications_list_view" model="ir.ui.view">
+        <field name="name">notifications.list.view</field>
+        <field name="model">firebase.notification</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="title"/>
+                <field name="content"/>
+                <field name="notification_date"/>
+                <field name="target_action"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Firebase Account Form View-->
+    <record id="firebase_account_form_view" model="ir.ui.view">
+        <field name="name">firebase_account_form_view</field>
+        <field name="model">firebase.account</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="user_id"/>
+                        <field name="device"/>
+                        <field name="token"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Firebase Account List View-->
+    <record id="firebase_account_list_view" model="ir.ui.view">
+        <field name="name">firebase.account.list.view</field>
+        <field name="model">firebase.account</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="user_id"/>
+                <field name="device"/>
+                <field name="token"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>
