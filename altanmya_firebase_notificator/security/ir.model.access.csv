@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+firebase_notification,firebase.notification,model_firebase_notification,base.group_user,1,1,1,1
+firebase_account,firebase.account,model_firebase_account,base.group_user,1,1,1,1
