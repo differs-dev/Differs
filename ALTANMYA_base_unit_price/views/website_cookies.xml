@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_cookies" inherit_id="portal.portal_my_home">
+        <xpath expr="//t[1]/t[1]" position="before">
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/cookie-bar/cookiebar-latest.min.js?customize=1&amp;tracking=1&amp;thirdparty=1&amp;always=1&amp;noGeoIp=1&amp;showNoConsent=1&amp;showPolicyLink=1&amp;blocking=1"></script>
+        </xpath>
+    </template>
+    <template id="homepage_cookies" inherit_id="website.homepage">
+        <xpath expr="//t[1]/t[1]" position="before">
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/cookie-bar/cookiebar-latest.min.js?customize=1&amp;tracking=1&amp;thirdparty=1&amp;always=1&amp;noGeoIp=1&amp;showNoConsent=1&amp;showPolicyLink=1&amp;blocking=1"></script>
+        </xpath>
+    </template>
+</odoo>
