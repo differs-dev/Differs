@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sale_order_form_differs_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.differs.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[3]" position="after">
+                <page string="Differs Order Info" name="differs_order_info">
+                    <group string="Order Info" class="col-5">
+                        <field name="delivery_address"/>
+                        <field name="delivery_period1"/>
+                        <field name="delivery_area"/>
+                        <field name="delivery_date"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
