@@ -92,12 +92,12 @@ class ProductTemplateInherit(models.Model):
             products_details = []
             for product in products:
                 prod_id = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product.id)], limit=1).id
-                calories = re.findall(r'\d+', product.calories)
-                carbs = re.findall(r'\d+', product.carbs)
-                protein = re.findall(r'\d+', product.protein)
-                fat = re.findall(r'\d+', product.fat)
-                fiber = re.findall(r'\d+', product.fiber)
-                iron = re.findall(r'\d+', product.iron)
+                calories = re.findall(r'\d+', str(product.calories))
+                carbs = re.findall(r'\d+', str(product.carbs))
+                protein = re.findall(r'\d+', str(product.protein))
+                fat = re.findall(r'\d+', str(product.fat))
+                fiber = re.findall(r'\d+', str(product.fiber))
+                iron = re.findall(r'\d+', str(product.iron))
                 product_details = {
                     'id': prod_id,
                     'name': product.name,
@@ -133,12 +133,12 @@ class ProductTemplateInherit(models.Model):
             products_details = []
             for product in products:
                 prod_id = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product.id)], limit=1).id
-                calories = re.findall(r'\d+', product.calories)
-                carbs = re.findall(r'\d+', product.carbs)
-                protein = re.findall(r'\d+', product.protein)
-                fat = re.findall(r'\d+', product.fat)
-                fiber = re.findall(r'\d+', product.fiber)
-                iron = re.findall(r'\d+', product.iron)
+                calories = re.findall(r'\d+', str(product.calories))
+                carbs = re.findall(r'\d+', str(product.carbs))
+                protein = re.findall(r'\d+', str(product.protein))
+                fat = re.findall(r'\d+', str(product.fat))
+                fiber = re.findall(r'\d+', str(product.fiber))
+                iron = re.findall(r'\d+', str(product.iron))
                 product_details = {
                     'id': prod_id,
                     'name': product.name,
