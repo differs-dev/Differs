@@ -159,7 +159,7 @@ class ProductTemplateInherit(models.Model):
             for product in products:
                 prod_id = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product.id)], limit=1).id
                 
-                 if product.calories:
+                if product.calories:
                     calories = re.findall(r'\d+', str(product.calories))
                 else:
                     calories = product.calories
