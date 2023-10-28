@@ -139,7 +139,7 @@ class ProductTemplateInherit(models.Model):
                     'fiber': product.fiber,
                     'iron': product.iron,
                     'description': product.description,
-                    'preference_state': self.get_preference_state(2, product.id),
+                    'preference_state': self.get_preference_state(2, prod_id),
                     'product_variants': self.get_products_variants_details(product.id),
                     'additional_description': product.mobile_description,
                     'composition': product.x_studio_composition,
