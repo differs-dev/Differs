@@ -794,7 +794,7 @@ class TanmyaProducExt(models.Model):
                             'user_ids': [(6, 0, [recipe.owner_id.id])],
                             'recipe_id': recipe_id,
                         }
-                    else{
+                    else :
                         notification_vals = {
                             'fr_title': 'Recette revue',
                             'fr_content': f'{review.user_id.name} viens de revoir ta recette. Cliquez ici pour voir les détails.',
@@ -804,7 +804,6 @@ class TanmyaProducExt(models.Model):
                             'user_ids': [(6, 0, [recipe.owner_id.id])],
                             'recipe_id': recipe_id,
                         }
-                    }
                     notification = self.env['firebase.notification'].sudo().create(notification_vals)
                     if notification:
                         #                         notification.send_notifications()
