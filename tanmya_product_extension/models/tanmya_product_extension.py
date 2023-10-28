@@ -794,6 +794,17 @@ class TanmyaProducExt(models.Model):
                             'user_ids': [(6, 0, [recipe.owner_id.id])],
                             'recipe_id': recipe_id,
                         }
+                    else{
+                        notification_vals = {
+                            'fr_title': 'Recette revue',
+                            'fr_content': f'{review.user_id.name} viens de revoir ta recette. Cliquez ici pour voir les détails.',
+                            'payload': 'recipe_reviewed',
+                            'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                            'notification_date': datetime.now(),
+                            'user_ids': [(6, 0, [recipe.owner_id.id])],
+                            'recipe_id': recipe_id,
+                        }
+                    }
                     notification = self.env['firebase.notification'].sudo().create(notification_vals)
                     if notification:
                         #                         notification.send_notifications()
