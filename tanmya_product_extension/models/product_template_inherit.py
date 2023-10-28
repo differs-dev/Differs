@@ -92,12 +92,37 @@ class ProductTemplateInherit(models.Model):
             products_details = []
             for product in products:
                 prod_id = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product.id)], limit=1).id
-                calories = re.findall(r'\d+', str(product.calories))
-                carbs = re.findall(r'\d+', str(product.carbs))
-                protein = re.findall(r'\d+', str(product.protein))
-                fat = re.findall(r'\d+', str(product.fat))
-                fiber = re.findall(r'\d+', str(product.fiber))
-                iron = re.findall(r'\d+', str(product.iron))
+                
+                if product.calories:
+                    calories = re.findall(r'\d+', str(product.calories))
+                else:
+                    calories = product.calories
+                    
+                if product.carbs:
+                    carbs = re.findall(r'\d+', str(product.carbs))
+                else:
+                    carbs = product.carbs
+                    
+                if product.protein:
+                    protein = re.findall(r'\d+', str(product.protein))
+                else:
+                    protein = product.protein
+                    
+                if product.fat:
+                    fat = re.findall(r'\d+', str(product.fat))
+                else:
+                    fat = product.fat
+                    
+                if product.fiber:
+                    fiber = re.findall(r'\d+', str(product.fiber))
+                else:
+                    fiber = product.fiber
+
+                if product.iron:
+                    iron = re.findall(r'\d+', str(product.iron))
+                else:
+                    iron = product.iron
+                    
                 product_details = {
                     'id': prod_id,
                     'name': product.name,
