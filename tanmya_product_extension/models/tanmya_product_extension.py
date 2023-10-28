@@ -774,6 +774,11 @@ class TanmyaProducExt(models.Model):
 
                 # Send notification when a user adds a review on consumer recipe
                 if review:
+                    
+                    if recipe.owner_id:
+                        owner = recipe.owner
+                    else:
+                        owner = self.env.uid
                     if recipe.owner_id.preferred_language == 'en':
                         notification_vals = {
                             'title': 'Recipe reviewed',
@@ -781,7 +786,7 @@ class TanmyaProducExt(models.Model):
                             'payload': 'recipe_reviewed',
                             'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                             'notification_date': datetime.now(),
-                            'user_ids': [(6, 0, [recipe.owner_id.id])],
+                            'user_ids': [(6, 0, [owner.id])],
                             'recipe_id': recipe_id,
                         }
                     elif recipe.owner_id.preferred_language == 'fr':
@@ -791,7 +796,7 @@ class TanmyaProducExt(models.Model):
                             'payload': 'recipe_reviewed',
                             'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                             'notification_date': datetime.now(),
-                            'user_ids': [(6, 0, [recipe.owner_id.id])],
+                            'user_ids': [(6, 0, [owner.id])],
                             'recipe_id': recipe_id,
                         }
                     else :
@@ -801,7 +806,7 @@ class TanmyaProducExt(models.Model):
                             'payload': 'recipe_reviewed',
                             'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                             'notification_date': datetime.now(),
-                            'user_ids': [(6, 0, [recipe.owner_id.id])],
+                            'user_ids': [(6, 0, [owner.id])],
                             'recipe_id': recipe_id,
                         }
                     notification = self.env['firebase.notification'].sudo().create(notification_vals)
