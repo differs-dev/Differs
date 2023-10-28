@@ -778,7 +778,7 @@ class TanmyaProducExt(models.Model):
                     if recipe.owner_id:
                         owner = recipe.owner
                     else:
-                        owner = self.env.uid
+                        owner = self.env['res.users'].search([('id', '=', self.env.uid)])
                     if recipe.owner_id.preferred_language == 'en':
                         notification_vals = {
                             'title': 'Recipe reviewed',
