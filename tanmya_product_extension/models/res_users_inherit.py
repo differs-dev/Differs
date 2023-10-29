@@ -79,7 +79,7 @@ class ResUsers(models.Model):
                 _logger.info(product_id)
                 prod = self.env['product.product'].search([('id', '=', product_id)])
                 product_preferences_vals = {
-                    'product_id': prod.id,
+                    # 'product_id': prod.id,
                     'template_id': product_id,
                     'status': product_status
                 }
@@ -237,7 +237,7 @@ class ResUsers(models.Model):
                 products_preferences = self.env['products.preferences'].sudo().search(
                     [('id', 'in', user.products_preferences_ids.ids),
                      ('template_id', '!=', False),
-                    ('product_id.kit_template', '=', None)
+                    # ('product_id.kit_template', '=', None)
                     ],
                     limit=limit, offset=offset)
                 _logger.info('products_preferences are :')
