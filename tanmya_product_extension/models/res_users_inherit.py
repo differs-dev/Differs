@@ -248,7 +248,7 @@ class ResUsers(models.Model):
                         'image_1920': product_preference.template_id.image_1920,
                         'name': product_preference.template_id.name,
                         'list_price': product_preference.template_id.list_price,
-                        'uom': product_preference.uom_id.template_id.name,
+                        'uom': product_preference.template_id.uom_id.name,
                         'preference_state': product_preference.status,
                         'calories': product_preference.template_id.calories,
                         'carbs': product_preference.template_id.carbs,
