@@ -184,7 +184,7 @@ class ResUsers(models.Model):
     def get_user_preferences(self, products_type: int, limit=None, offset=0):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         user_preferences = []
-        _logeger.info('user prefs')
+        _logger.info('user prefs')
         _logger.info(user.products_preferences_ids.ids)
         if user:
             products_preferences = []
