@@ -120,7 +120,7 @@ class ResUsers(models.Model):
             _logger.info('-------------- dislike product triggered ------------------')
             for line in user.products_preferences_ids:
                 if variant_template == 1:
-                    if line.product_id.id == product_id:
+                    if line.template_id.id == product_id:
                         line.unlink()
                         return True
                 elif variant_template == 2:
