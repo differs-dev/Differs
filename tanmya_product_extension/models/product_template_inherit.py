@@ -124,7 +124,7 @@ class ProductTemplateInherit(models.Model):
                     iron = product.iron
                     
                 product_details = {
-                    'id': prod_id,
+                    'id': product.id,
                     'name': product.name,
                     'image_128': product.image_1920,
                     'list_price': product.list_price,
@@ -196,7 +196,7 @@ class ProductTemplateInherit(models.Model):
                 # fiber = re.findall(r'\d+', str(product.fiber))
                 # iron = re.findall(r'\d+', str(product.iron))
                 product_details = {
-                    'id': prod_id,
+                    'id': product.id,
                     'name': product.name,
                     'image_128': product.image_1920,
                     'list_price': product.list_price,
