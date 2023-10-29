@@ -79,7 +79,7 @@ class ResUsers(models.Model):
                 _logger.info(product_id)
                 prod = self.env['product.product'].search([('id', '=', product_id)])
                 product_preferences_vals = {
-                    'template_id': product_id,
+                    'product_id': product_id,
                     'status': product_status
                 }
             elif variant_template == 2:
@@ -184,6 +184,8 @@ class ResUsers(models.Model):
     def get_user_preferences(self, products_type: int, limit=None, offset=0):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         user_preferences = []
+        _logeger.info('user prefs')
+        _logger.info(user.products_preferences_ids.ids)
         if user:
             products_preferences = []
             if products_type == 2:
