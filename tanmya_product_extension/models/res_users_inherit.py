@@ -80,6 +80,7 @@ class ResUsers(models.Model):
                 prod = self.env['product.product'].search([('id', '=', product_id)])
                 product_preferences_vals = {
                     'product_id': product_id,
+                    'template_id': product_id,
                     'status': product_status
                 }
             elif variant_template == 2:
@@ -235,7 +236,7 @@ class ResUsers(models.Model):
             else:
                 products_preferences = self.env['products.preferences'].sudo().search(
                     [('id', 'in', user.products_preferences_ids.ids),
-                     # ('template_id', '!=', False),
+                     ('template_id', '!=', False),
                     ('product_id.kit_template', '=', None)
                     ],
                     limit=limit, offset=offset)
