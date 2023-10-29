@@ -77,8 +77,9 @@ class ResUsers(models.Model):
             if variant_template == 1:
                 _logger.info('product id 1')
                 _logger.info(product_id)
+                prod = self.env['product.product'].search([('id', '=', product_id)])
                 product_preferences_vals = {
-                    'product_id': product_id,
+                    'product_id': prod.id,
                     'status': product_status
                 }
             elif variant_template == 2:
