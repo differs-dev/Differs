@@ -198,6 +198,7 @@ class ProductTemplateInherit(models.Model):
                 _logger.info('product data')
                 _logger.info(product.id)
                 _logger.info(product.name)
+                _logger.info(prod_name)
                 product_details = {
                     'id': product.id,
                     'name': prod_name,
