@@ -195,6 +195,9 @@ class ProductTemplateInherit(models.Model):
                 # fat = re.findall(r'\d+', str(product.fat))
                 # fiber = re.findall(r'\d+', str(product.fiber))
                 # iron = re.findall(r'\d+', str(product.iron))
+                _logger.info('product data')
+                _logger.info(product.id)
+                _logger.info(product.name)
                 product_details = {
                     'id': product.id,
                     'name': product.name,
