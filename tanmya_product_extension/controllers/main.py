@@ -71,6 +71,10 @@ class MobileApiController(http.Controller):
            'delivery_area': data['delivery_area'],
            'delivery_date': data['delivery_date'],
         })
+        _logger.info('------------------- delivery data -------------------------')
+        _logger.info(data['delivery_area'])
+        _logger.info(data['delivery_date'])
+        _logger.info(data['delivery_period'])
         
         ogone_acquirer = request.env['payment.acquirer'].sudo().search([('provider', '=', 'ogone')], limit=1)
         if not ogone_acquirer:
