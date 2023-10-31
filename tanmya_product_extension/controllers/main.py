@@ -75,6 +75,9 @@ class MobileApiController(http.Controller):
         _logger.info(data['delivery_area'])
         _logger.info(data['delivery_date'])
         _logger.info(data['delivery_period'])
+        extra_charge = 0
+        if data['delivery_area'] == 'out_of_area':
+            extra_charge = 200
         
         ogone_acquirer = request.env['payment.acquirer'].sudo().search([('provider', '=', 'ogone')], limit=1)
         if not ogone_acquirer:
@@ -104,7 +107,7 @@ class MobileApiController(http.Controller):
         tx_sudo = request.env['payment.transaction'].sudo().create({
             'acquirer_id': ogone_acquirer.id,
             'reference': reference,
-            'amount': order.amount_total,
+            'amount': order.amount_total + extra_charge,
             'currency_id': order.currency_id.id,
             'partner_id': order.partner_id.id,
             'token_id': None,
