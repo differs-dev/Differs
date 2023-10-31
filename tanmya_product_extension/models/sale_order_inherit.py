@@ -261,6 +261,9 @@ class SaleOrderInerit(models.Model):
             if user_sale_orders:
                 user_carts = []
                 for sale_order in user_sale_orders:
+                    _logger.info('sale order info are : -------------')
+                    _logger.info(sale_order.amount)
+                    _logger.info(sale_order.delivery_area)
                     if sale_order.picking_ids:
                         if sale_order.picking_ids[0].state != 'done':
                             user_carts.append(self.get_sale_order_details(sale_order))
