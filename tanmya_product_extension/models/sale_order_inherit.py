@@ -264,8 +264,8 @@ class SaleOrderInerit(models.Model):
                     _logger.info('sale order info are : -------------')
                     _logger.info(sale_order.amount_total)
                     _logger.info(sale_order.delivery_area)
-                    if sale_order.delivery_area == 'out_of_area':
-                        sale_order.amount_total += 200
+                    # if sale_order.delivery_area == 'out_of_area':
+                    #     sale_order.amount_total += 200
                     if sale_order.picking_ids:
                         if sale_order.picking_ids[0].state != 'done':
                             user_carts.append(self.get_sale_order_details(sale_order))
