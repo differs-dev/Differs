@@ -285,6 +285,8 @@ class FirebaseNotification(models.Model):
     def get_notifications_length(self, user_id: int):
         res = len(self.env['firebase.notification'].sudo().search_read(
             [('user_ids', 'in', user_id), ('read_state', '=', False)]))
+        _logger.info('notifications length : ')
+        _logger.info(res)
         return res
 
     @api.model
