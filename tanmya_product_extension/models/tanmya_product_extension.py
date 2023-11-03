@@ -664,7 +664,8 @@ class TanmyaProducExt(models.Model):
                                                                   ('name', 'like', search_word2),
                                                                   ('name', 'like', search_word3),
                                                                   ('kit_template', '=', None),
-                                                                  ('is_published', '=', is_publish)],
+                                                                  ('is_published', '=', is_publish),
+                                                                  ('name', 'not in', selectedProducts)],
                                                                  limit=limit,
                                                                  offset=offset,
                                                                  order=order_by)
