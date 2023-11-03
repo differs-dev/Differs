@@ -616,7 +616,7 @@ class TanmyaProducExt(models.Model):
 
     @api.model
     def get_products_details(self, search_word='', category_id=-1, order_by='name', limit=None, offset=0,
-                             is_publish=True):
+                             is_publish=True, selectedProducts=[]):
         search_word1 = search_word.capitalize()
         search_word2 = search_word.lower()
         search_word3 = search_word.upper()
@@ -628,7 +628,8 @@ class TanmyaProducExt(models.Model):
                                                                    ('name', 'like', search_word2),
                                                                    ('name', 'like', search_word3),
                                                                    ('categ_id', '=', category_id),
-                                                                   ('is_published', '=', is_publish)],
+                                                                   ('is_published', '=', is_publish),
+                                                                   ('name', 'not in', selectedProducts)],
                                                                   limit=limit,
                                                                   offset=offset,
                                                                   order=order_by)
