@@ -118,7 +118,7 @@ class Tanmyaprodcategory(models.Model):
         return categories_details
 
     @api.model
-    def get_categories_details(self, search_word='', limit=None, offset=0):
+    def get_categories_details(self, search_word='', limit=None, offset=0, selectedCategories=[]):
         categories = False
         if search_word == '':
             categories = self.env['tanmya.product.category'].sudo().search([],
@@ -130,7 +130,8 @@ class Tanmyaprodcategory(models.Model):
                                                                             ('name', 'like', search_word),
                                                                             ('name', 'like', search_word.capitalize()),
                                                                             ('name', 'like', search_word.upper()),
-                                                                            ('name', 'like', search_word.lower())],
+                                                                            ('name', 'like', search_word.lower()),
+                                                                            ('name', 'not in', selectedCategories)],
                                                                            limit=limit,
                                                                            offset=offset)
         categories_details = []
