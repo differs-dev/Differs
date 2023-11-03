@@ -4,7 +4,7 @@ import logging
 import pprint
 
 from lxml import etree, objectify
-
+ 
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError, UserError
 
