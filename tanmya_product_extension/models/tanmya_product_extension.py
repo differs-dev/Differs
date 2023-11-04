@@ -405,6 +405,8 @@ class TanmyaProducExt(models.Model):
                 print('Ingredients Details Is Correct')
 
             for i in range(len(vals.get('ingredients_names'))):
+                _logger.info('uom_ids are : ')
+                _logger.info(vals.get('uom_id'))
                 uom_id = self.env['uom.uom'].sudo().search([('name', '=', vals.get('uom_id')[i])], limit=1).id
                 _logger.info('uom are : ')
                 _logger.info(uom_id)
