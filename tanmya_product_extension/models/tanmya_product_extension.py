@@ -522,7 +522,7 @@ class TanmyaProducExt(models.Model):
                         # for line in sale_order_template.sale_order_template_line_ids:
                         #     line.unlink()
                         for i in range(len(vals.get('ingredients_names'))):
-                            uom_id = self.env['uom.uom'].sudo().search([('name', '=', vals.get('uom_id')[i])], limit=1).id
+                            # uom_id = self.env['uom.uom'].sudo().search([('name', '=', vals.get('uom_id')[i])], limit=1).id
                             _logger.info('iteration number : ')
                             _logger.info(i)
                             _logger.info(vals.get('ingredients_products')[i])
