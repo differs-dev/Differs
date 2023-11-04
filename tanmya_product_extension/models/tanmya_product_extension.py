@@ -519,8 +519,8 @@ class TanmyaProducExt(models.Model):
                 # update sale order template lines fields
                 if vals.get('ingredients_products'):
                     if len(vals.get('ingredients_products')) > 0:
-                        for line in sale_order_template.sale_order_template_line_ids:
-                            line.unlink()
+                        # for line in sale_order_template.sale_order_template_line_ids:
+                        #     line.unlink()
                         for i in range(len(vals.get('ingredients_products'))):
                             uom_id = self.env['uom.uom'].sudo().search([('name', '=', vals.get('uom_id')[i])], limit=1).id
                             _logger.info('uom are : ')
@@ -528,6 +528,8 @@ class TanmyaProducExt(models.Model):
                             _logger.info(vals.get('ingredients_qty'))
                             _logger.info(vals.get('ingredients_names'))
                             _logger.info(uom_id)
+                            existing_line = self.env['sale.order.template.line'].sudo().search([('sale_order_template_id', '=', sale_order_template.id), 
+                                                                               ('product_id', '=', vals.get('ingredients_products')[i])])
                             sale_order_template_line_vals = {
                                 'name': vals.get('ingredients_names')[i],
                                 'sale_order_template_id': sale_order_template.id,
@@ -535,7 +537,10 @@ class TanmyaProducExt(models.Model):
                                 'product_uom_qty': vals.get('ingredients_qty')[i],
                                 'product_uom_id': 1
                             }
-                            self.env['sale.order.template.line'].sudo().create(sale_order_template_line_vals)
+                            if existing_line:
+                                self.env['sale.order.template.line'].sudo().write(sale_order_template_line_vals)
+                            else:
+                                self.env['sale.order.template.line'].sudo().create(sale_order_template_line_vals)
 
                 # update recipe fields
                 new_recipe_vals = {}
