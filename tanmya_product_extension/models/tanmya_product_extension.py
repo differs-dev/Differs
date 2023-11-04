@@ -523,6 +523,8 @@ class TanmyaProducExt(models.Model):
                         #     line.unlink()
                         for i in range(len(vals.get('ingredients_products'))):
                             uom_id = self.env['uom.uom'].sudo().search([('name', '=', vals.get('uom_id')[i])], limit=1).id
+                            _logger.info('iteration number : ')
+                            _logger.info(i)
                             _logger.info('uom are : ')
                             _logger.info(vals.get('ingredients_products'))
                             _logger.info(vals.get('ingredients_qty'))
