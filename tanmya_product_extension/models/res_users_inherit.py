@@ -261,7 +261,7 @@ class ResUsers(models.Model):
                         'fiber': product_preference.template_id.fiber,
                         'iron': product_preference.template_id.iron,
                         'description': product_preference.template_id.description,
-                        'product_variants': self.get_products_variants_details(product_preference.product_id.id),
+                        'product_variants': self.get_products_variants_details(product_preference.id),
                         'additional_description': product_preference.template_id.mobile_description,
                         'composition': product_preference.template_id.x_studio_composition,
                         'conservation_et_utilisation': product_preference.template_id.x_studio_conservation_et_utilisation,
