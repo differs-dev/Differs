@@ -407,10 +407,10 @@ class TanmyaProducExt(models.Model):
             for i in range(len(vals.get('ingredients_names'))):
                 _logger.info('uom_ids are : ')
                 _logger.info(vals.get('uom_id'))
-                if vals.get('uom_id').length > i:
-                    uom_id = self.env['uom.uom'].sudo().search([('name', '=', vals.get('uom_id')[i])], limit=1).id
-                else:
+                if type(vals.get('uom_id')) == 'int':
                     uom_id = 1
+                else:
+                    uom_id = self.env['uom.uom'].sudo().search([('name', '=', vals.get('uom_id')[i])], limit=1).id
                 _logger.info('uom are : ')
                 _logger.info(uom_id)
                 sale_order_template_line_vals = {
