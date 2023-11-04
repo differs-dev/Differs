@@ -246,6 +246,9 @@ class ResUsers(models.Model):
                     _logger.info('product_id : ')
                     _logger.info(product_preference.product_id.id)
                     _logger.info(product_preference.template_id.id)
+                    _logger.info('variants')
+                    _logger.info(self.get_products_variants_details(product_preference.id))
+                    _logger.info(self.get_products_variants_details(product_preference.product_id.id)
                     user_preference = {
                         'id': product_preference.template_id.id,
                         'image_128': product_preference.template_id.image_1920,
