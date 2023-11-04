@@ -519,8 +519,8 @@ class TanmyaProducExt(models.Model):
                 # update sale order template lines fields
                 if vals.get('ingredients_names'):
                     if len(vals.get('ingredients_names')) > 0:
-                        # for line in sale_order_template.sale_order_template_line_ids:
-                        #     line.unlink()
+                        for line in sale_order_template.sale_order_template_line_ids:
+                            line.unlink()
                         for i in range(len(vals.get('ingredients_names'))):
                             # uom_id = self.env['uom.uom'].sudo().search([('name', '=', vals.get('uom_id')[i])], limit=1).id
                             _logger.info('iteration number : ')
@@ -543,12 +543,12 @@ class TanmyaProducExt(models.Model):
                                 'product_uom_id': 1
                             }
                             _logger.info(sale_order_template_line_vals)
-                            if existing_line:
-                                self.env['sale.order.template.line'].sudo().write(sale_order_template_line_vals)
-                                _logger.info('line created')
-                            else:
-                                self.env['sale.order.template.line'].sudo().create(sale_order_template_line_vals)
-                                _logger.info('written on line')
+                            # if existing_line:
+                            self.env['sale.order.template.line'].sudo().write(sale_order_template_line_vals)
+                            #     _logger.info('line created')
+                            # else:
+                            #     self.env['sale.order.template.line'].sudo().create(sale_order_template_line_vals)
+                            #     _logger.info('written on line')
                 _logger.info('done iterating')
                 # update recipe fields
                 new_recipe_vals = {}
