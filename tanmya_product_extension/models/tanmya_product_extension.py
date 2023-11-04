@@ -533,7 +533,7 @@ class TanmyaProducExt(models.Model):
                                 'sale_order_template_id': sale_order_template.id,
                                 'product_id': vals.get('ingredients_products')[i],
                                 'product_uom_qty': vals.get('ingredients_qty')[i],
-                                'product_uom_id': uom_id
+                                'product_uom_id': 1
                             }
                             self.env['sale.order.template.line'].sudo().create(sale_order_template_line_vals)
 
