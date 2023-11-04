@@ -405,12 +405,15 @@ class TanmyaProducExt(models.Model):
                 print('Ingredients Details Is Correct')
 
             for i in range(len(vals.get('ingredients_names'))):
+                uom_id = self.env['uom.uom'].sudo().search([('name', '=', vals.get('uom_id'))])
+                _logger.info('uom are : ')
+                _logger.info(uom_id)
                 sale_order_template_line_vals = {
                     'name': vals.get('ingredients_names')[i],
                     'sale_order_template_id': sale_order_template_id.id,
                     'product_id': vals.get('ingredients_products')[i],
                     'product_uom_qty': vals.get('ingredients_qty')[i],
-                    'product_uom_id': vals.get('uom_id')
+                    'product_uom_id': uom_id
                 }
                 self.env['sale.order.template.line'].sudo().create(sale_order_template_line_vals)
             if vals.get('recipe_image') == 'New':
