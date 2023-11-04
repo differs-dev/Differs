@@ -533,6 +533,8 @@ class TanmyaProducExt(models.Model):
                             _logger.info(uom_id)
                             existing_line = self.env['sale.order.template.line'].sudo().search([('sale_order_template_id', '=', sale_order_template.id), 
                                                                                ('product_id', '=', vals.get('ingredients_products')[i])])
+                            _logger.info('line : ')
+                            _logger.info(existing_line)
                             sale_order_template_line_vals = {
                                 'name': vals.get('ingredients_names')[i],
                                 'sale_order_template_id': sale_order_template.id,
@@ -540,10 +542,13 @@ class TanmyaProducExt(models.Model):
                                 'product_uom_qty': vals.get('ingredients_qty')[i],
                                 'product_uom_id': 1
                             }
+                            _logger.info(sale_order_template_line_vals)
                             if existing_line:
                                 self.env['sale.order.template.line'].sudo().write(sale_order_template_line_vals)
+                                _logger.info('line created')
                             else:
                                 self.env['sale.order.template.line'].sudo().create(sale_order_template_line_vals)
+                                _logger.info('written on line')
                 _logger.info('done iterating')
                 # update recipe fields
                 new_recipe_vals = {}
