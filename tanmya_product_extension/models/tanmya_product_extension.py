@@ -518,7 +518,7 @@ class TanmyaProducExt(models.Model):
 
                 # update sale order template lines fields
                 _logger.info('ooookkkkk')
-                _logger.info(vals.get('ingredients_products')[i])
+                _logger.info(vals.get('ingredients_products'))
                 if vals.get('ingredients_names'):
                     if len(vals.get('ingredients_names')) > 0:
                         for line in sale_order_template.sale_order_template_line_ids:
