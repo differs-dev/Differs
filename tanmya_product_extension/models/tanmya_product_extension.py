@@ -517,11 +517,11 @@ class TanmyaProducExt(models.Model):
                         new_sale_order_vals)
 
                 # update sale order template lines fields
-                if vals.get('ingredients_products'):
-                    if len(vals.get('ingredients_products')) > 0:
+                if vals.get('ingredients_names'):
+                    if len(vals.get('ingredients_names')) > 0:
                         # for line in sale_order_template.sale_order_template_line_ids:
                         #     line.unlink()
-                        for i in range(len(vals.get('ingredients_products'))):
+                        for i in range(len(vals.get('ingredients_names'))):
                             uom_id = self.env['uom.uom'].sudo().search([('name', '=', vals.get('uom_id')[i])], limit=1).id
                             _logger.info('iteration number : ')
                             _logger.info(i)
@@ -544,7 +544,7 @@ class TanmyaProducExt(models.Model):
                                 self.env['sale.order.template.line'].sudo().write(sale_order_template_line_vals)
                             else:
                                 self.env['sale.order.template.line'].sudo().create(sale_order_template_line_vals)
-
+                _logger.info('done iterating')
                 # update recipe fields
                 new_recipe_vals = {}
                 if type(vals.get('recipe_image')) == str:
