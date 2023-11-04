@@ -546,7 +546,7 @@ class TanmyaProducExt(models.Model):
                             }
                             _logger.info(sale_order_template_line_vals)
                             # if existing_line:
-                            self.env['sale.order.template.line'].sudo().write(sale_order_template_line_vals)
+                            self.env['sale.order.template.line'].sudo().create(sale_order_template_line_vals)
                             #     _logger.info('line created')
                             # else:
                             #     self.env['sale.order.template.line'].sudo().create(sale_order_template_line_vals)
