@@ -530,7 +530,7 @@ class TanmyaProducExt(models.Model):
                             _logger.info(vals.get('ingredients_products'))
                             _logger.info(vals.get('ingredients_qty'))
                             _logger.info(vals.get('ingredients_names'))
-                            _logger.info(uom_id)
+                            # _logger.info(uom_id)
                             existing_line = self.env['sale.order.template.line'].sudo().search([('sale_order_template_id', '=', sale_order_template.id), 
                                                                                ('product_id', '=', vals.get('ingredients_products')[i])])
                             _logger.info('line : ')
