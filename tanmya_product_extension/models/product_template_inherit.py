@@ -158,7 +158,7 @@ class ProductTemplateInherit(models.Model):
             products_details = []
             for product in products:
                 prod_name = self.env['product.template'].sudo().search_read([('id', '=', product.id)], limit=1)[0]['name']
-                
+                name = self._cr.execute(f"SELECT name FROM product_template where id = {product.id}")
                 if product.calories:
                     calories = re.findall(r'\d+', str(product.calories))[0]
                 else:
@@ -199,6 +199,7 @@ class ProductTemplateInherit(models.Model):
                 _logger.info(product.id)
                 _logger.info(product.name)
                 _logger.info(prod_name)
+                _logger.info(name)
                 product_details = {
                     'id': product.id,
                     'name': prod_name,
