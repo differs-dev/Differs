@@ -80,8 +80,12 @@ class ProductTemplateInherit(models.Model):
         search_word3 = search_word.upper()
         _logger.info('user lang :::')
         _logger.info(self.env.user.preferred_language)
+        if self.env.user.preferred_language == 'fr':
+            user_lang = 'fr_FR'
+        else:
+            user_lang = 'en_EN'
         if category_id > 0:
-            products = self.env['product.template'].with_context(lang=self.env.user.preferred_language).sudo().search(['|', '|', '|',
+            products = self.env['product.template'].with_context(lang=user_lang).sudo().search(['|', '|', '|',
                                                                    ('name', 'like', search_word),
                                                                    ('name', 'like', search_word1),
                                                                    ('name', 'like', search_word2),
@@ -148,7 +152,7 @@ class ProductTemplateInherit(models.Model):
                 products_details.append(product_details)
 
         else:
-            products = self.env['product.template'].with_context(lang=self.env.user.preferred_language).sudo().search(['|', '|', '|',
+            products = self.env['product.template'].with_context(lang=user_lang).sudo().search(['|', '|', '|',
                                                                    ('name', 'like', search_word),
                                                                    ('name', 'like', search_word1),
                                                                    ('name', 'like', search_word2),
