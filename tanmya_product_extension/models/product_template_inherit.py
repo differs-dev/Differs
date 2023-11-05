@@ -44,7 +44,7 @@ class ProductTemplateInherit(models.Model):
         return product_attributes
 
     def get_products_variants_details(self, product_tmpl_id):
-        product_variants = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product_tmpl_id)])
+        product_variants = self.env['product.product'].with_context(lang=self.env.user.preferred_language).sudo().search([('product_tmpl_id', '=', product_tmpl_id)])
         products_variants_details = []
         if product_variants:
             for product in product_variants:
@@ -79,7 +79,7 @@ class ProductTemplateInherit(models.Model):
         search_word2 = search_word.lower()
         search_word3 = search_word.upper()
         if category_id > 0:
-            products = self.env['product.template'].sudo().search(['|', '|', '|',
+            products = self.env['product.template'].with_context(lang=self.env.user.preferred_language).sudo().search(['|', '|', '|',
                                                                    ('name', 'like', search_word),
                                                                    ('name', 'like', search_word1),
                                                                    ('name', 'like', search_word2),
@@ -146,7 +146,7 @@ class ProductTemplateInherit(models.Model):
                 products_details.append(product_details)
 
         else:
-            products = self.env['product.template'].sudo().search(['|', '|', '|',
+            products = self.env['product.template'].with_context(lang=self.env.user.preferred_language).sudo().search(['|', '|', '|',
                                                                    ('name', 'like', search_word),
                                                                    ('name', 'like', search_word1),
                                                                    ('name', 'like', search_word2),
