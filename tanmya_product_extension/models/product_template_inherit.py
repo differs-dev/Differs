@@ -84,6 +84,8 @@ class ProductTemplateInherit(models.Model):
             user_lang = 'fr_FR'
         else:
             user_lang = 'en_EN'
+        _logger.info('------------------------------=== user lang ===----------------------------------------')
+        _logger.info(user_lang)
         if category_id > 0:
             products = self.env['product.template'].with_context(lang=user_lang).sudo().search(['|', '|', '|',
                                                                    ('name', 'like', search_word),
