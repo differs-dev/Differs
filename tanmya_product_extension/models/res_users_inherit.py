@@ -483,7 +483,8 @@ class ResUsers(models.Model):
             'mobile': mobile,
             'phone': phone,
             'password': password,
-            'company_id': 1
+            'company_id': 1,
+            'preferred_language': 'fr'
         }
         _logger.info('///////////////////////// user values /////////////////////////')
         _logger.info(user_vals)
