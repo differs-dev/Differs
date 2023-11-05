@@ -78,6 +78,8 @@ class ProductTemplateInherit(models.Model):
         search_word1 = search_word.capitalize()
         search_word2 = search_word.lower()
         search_word3 = search_word.upper()
+        _logger.info('user lang :::')
+        _logger.info(lang=self.env.user.preferred_language)
         if category_id > 0:
             products = self.env['product.template'].with_context(lang=self.env.user.preferred_language).sudo().search(['|', '|', '|',
                                                                    ('name', 'like', search_word),
