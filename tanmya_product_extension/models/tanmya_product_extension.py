@@ -809,7 +809,7 @@ class TanmyaProducExt(models.Model):
                 if review:
                     
                     if recipe.owner_id:
-                        owner = recipe.owner
+                        owner = recipe.owner_id
                     else:
                         owner = self.env['res.users'].search([('id', '=', self.env.uid)])
                     if recipe.owner_id.preferred_language == 'en':
