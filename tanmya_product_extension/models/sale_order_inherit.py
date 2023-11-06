@@ -224,6 +224,8 @@ class SaleOrderInerit(models.Model):
                     'price_total': line.price_total,
                 }
                 order_line.append(line_details)
+            _logger.info('delivery_area: ------------------------------------')
+            _logger.info(delivery_area)
             sale_order_details = {
                 'id': sale_order.id,
                 'amount_total': sale_order.amount_total,
@@ -231,7 +233,7 @@ class SaleOrderInerit(models.Model):
                 'cart_quantity': sale_order.cart_products_qty,
                 'state': sale_order.state,
                 'date_order': sale_order.date_order,
-                'delivery_charge': sale_order.delivery_area == 'out_of_area' ? 200 : 0
+                # 'delivery_charge': sale_order.delivery_area == 'out_of_area' ? 200 : 0
             }
             return sale_order_details
 
