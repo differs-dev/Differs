@@ -294,3 +294,10 @@ class FirebaseNotification(models.Model):
         res = self.env['firebase.notification'].sudo().search([('user_ids', 'in', user_id)])
         for i in res:
             i.write({'read_state': True})
+         
+    @api.model
+    def update_read_notification_state(self, notification_id: int):
+        res = self.env['firebase.notification'].sudo().search([('id', '=', notification_id)])
+        for i in res:
+            i.write({'read_state': True})
+
