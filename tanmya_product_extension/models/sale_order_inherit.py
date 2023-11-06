@@ -225,7 +225,7 @@ class SaleOrderInerit(models.Model):
                 }
                 order_line.append(line_details)
             _logger.info('delivery_area: ------------------------------------')
-            _logger.info(delivery_area)
+            _logger.info(sale_order.delivery_area)
             sale_order_details = {
                 'id': sale_order.id,
                 'amount_total': sale_order.amount_total,
