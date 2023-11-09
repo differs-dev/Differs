@@ -210,6 +210,7 @@ class SaleOrderInerit(models.Model):
     def get_sale_order_details(self, sale_order):
         if sale_order:
             order_line = []
+            total_without_charges = 0
             for line in sale_order.order_line:
                 line_details = {
                     'id': line.id,
@@ -223,12 +224,14 @@ class SaleOrderInerit(models.Model):
                     'currency': line.currency_id.name,
                     'price_total': line.price_total,
                 }
+                total_without_charges += line.price_total
                 order_line.append(line_details)
             _logger.info('delivery_area: ------------------------------------')
             _logger.info(sale_order.delivery_area)
+            _logger.info(total_without_charges)
             delivery_charge = 0
             if sale_order.delivery_area == 'out_of_area':
-                delivery_charge = 200
+                delivery_charge = 200 + (sale_order.amount_total + total_without_charges)
             sale_order_details = {
                 'id': sale_order.id,
                 'amount_total': sale_order.amount_total,
