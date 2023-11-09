@@ -231,7 +231,7 @@ class SaleOrderInerit(models.Model):
             _logger.info(total_without_charges)
             delivery_charge = 0
             if sale_order.delivery_area == 'out_of_area':
-                delivery_charge = 200 + (sale_order.amount_total + total_without_charges)
+                delivery_charge = (sale_order.amount_total - total_without_charges)
             sale_order_details = {
                 'id': sale_order.id,
                 'amount_total': sale_order.amount_total,
