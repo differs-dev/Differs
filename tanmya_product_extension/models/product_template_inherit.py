@@ -21,6 +21,17 @@ class ProductTemplateInherit(models.Model):
     fat = fields.Char(string='Fat')
     fiber = fields.Char(string='Fiber')
     iron = fields.Char(string='Iron')
+    en_name = fields.Char('English Name', compute='compute_name')
+    fr_name = fields.Char('Frensh Name', compute='compute_name')
+
+     def compute_name(self):
+        for rec in self:
+            en_name = rec.name
+            fr_name = rec.name
+            _logger.info('names in product :  : : : : : : : ; ; ; ; ; ; ')
+            _logger.info(rec.name)
+            _logger.info(en_name)
+            _logger.info(fr_name)
 
     def get_preference_state(self, variant_template, product_id):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
@@ -133,7 +144,7 @@ class ProductTemplateInherit(models.Model):
                     
                 product_details = {
                     'id': product.id,
-                    'name': prod_id.en_name,
+                    'name': product.en_name,
                     'image_128': product.image_1920,
                     'list_price': product.list_price,
                     'uom': product.uom_id.name,
@@ -212,7 +223,7 @@ class ProductTemplateInherit(models.Model):
                 _logger.info(name)
                 product_details = {
                     'id': product.id,
-                    'name': prod_id.en_name,
+                    'name': product.en_name,
                     'image_128': product.image_1920,
                     'list_price': product.list_price,
                     'uom': product.uom_id.name,
