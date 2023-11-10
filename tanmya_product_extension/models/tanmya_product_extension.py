@@ -252,7 +252,6 @@ class TanmyaProducExt(models.Model):
     # Recipe Reviews
     reviews_ids = fields.One2many('tanmya.review', 'recipe_id', string='Recipe Reviews')
 
-    @api.depends('name')
     def compute_name(self):
         for rec in self:
             en_name = rec.name
