@@ -21,8 +21,8 @@ class ProductTemplateInherit(models.Model):
     fat = fields.Char(string='Fat')
     fiber = fields.Char(string='Fiber')
     iron = fields.Char(string='Iron')
-    en_name = fields.Char('English Name', compute='compute_name')
-    fr_name = fields.Char('Frensh Name', compute='compute_name')
+    en_name = fields.Char('English Name')
+    fr_name = fields.Char('Frensh Name')
 
     def compute_name(self):
         for rec in self:
