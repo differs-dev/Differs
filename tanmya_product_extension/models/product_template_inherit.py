@@ -133,7 +133,7 @@ class ProductTemplateInherit(models.Model):
                     
                 product_details = {
                     'id': product.id,
-                    'name': product.name,
+                    'name': prod_id.name,
                     'image_128': product.image_1920,
                     'list_price': product.list_price,
                     'uom': product.uom_id.name,
@@ -165,6 +165,7 @@ class ProductTemplateInherit(models.Model):
                                                                   order=order_by)
             products_details = []
             for product in products:
+                prod_id = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product.id)], limit=1).id
                 prod_name = self.env['product.template'].sudo().search_read([('id', '=', product.id)], limit=1)[0]['name']
                 self._cr.execute(f"SELECT name FROM product_template where id = {product.id}")
                 name = self._cr.fetchone()
@@ -211,7 +212,7 @@ class ProductTemplateInherit(models.Model):
                 _logger.info(name)
                 product_details = {
                     'id': product.id,
-                    'name': product.name,
+                    'name': prod_id.name,
                     'image_128': product.image_1920,
                     'list_price': product.list_price,
                     'uom': product.uom_id.name,
