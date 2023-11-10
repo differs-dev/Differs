@@ -256,6 +256,10 @@ class TanmyaProducExt(models.Model):
     def compute_name(self):
         en_name = self.with_context(lang='en_US').name
         fr_name = self.with_context(lang='fr_FR').name
+        _logger.info('names in product :  : : : : : : : ; ; ; ; ; ; ')
+        _logger.info(self.name)
+        _logger.info(en_name)
+        _logger.info(fr_name)
             
     @api.model
     def get_recipes_by_category(self, category_name='', order_by='name', limit=None, offset=0):
