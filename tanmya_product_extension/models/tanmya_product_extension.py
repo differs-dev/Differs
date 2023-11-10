@@ -254,8 +254,8 @@ class TanmyaProducExt(models.Model):
 
     @api.depends('name')
     def compute_name(self):
-        en_name = self.with_context(lang='en_US').name
-        fr_name = self.with_context(lang='fr_FR').name
+        en_name = self.name
+        fr_name = self.name
         _logger.info('names in product :  : : : : : : : ; ; ; ; ; ; ')
         _logger.info(self.name)
         _logger.info(en_name)
