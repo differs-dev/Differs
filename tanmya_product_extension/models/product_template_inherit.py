@@ -133,7 +133,7 @@ class ProductTemplateInherit(models.Model):
                     
                 product_details = {
                     'id': product.id,
-                    'name': prod_id.name,
+                    'name': prod_id.en_name,
                     'image_128': product.image_1920,
                     'list_price': product.list_price,
                     'uom': product.uom_id.name,
@@ -212,7 +212,7 @@ class ProductTemplateInherit(models.Model):
                 _logger.info(name)
                 product_details = {
                     'id': product.id,
-                    'name': prod_id.name,
+                    'name': prod_id.en_name,
                     'image_128': product.image_1920,
                     'list_price': product.list_price,
                     'uom': product.uom_id.name,
