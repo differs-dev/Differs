@@ -217,6 +217,8 @@ class TanmyaProducExt(models.Model):
     _inherit = 'product.product'
 
     kit_template = fields.Many2one("sale.order.template", string="Pot Template", check_company=True)
+    en_name = fields.Char('English Name', compute='compute_name')
+    fr_name = fields.Char('Frensh Name', compute='compute_name')
     favorite = fields.Boolean(string='Add to favorite')
     prod_category = fields.Many2many("tanmya.product.category", string="category")
     image_1920_1 = fields.Image(string="Image1")
@@ -250,6 +252,11 @@ class TanmyaProducExt(models.Model):
     # Recipe Reviews
     reviews_ids = fields.One2many('tanmya.review', 'recipe_id', string='Recipe Reviews')
 
+    @api.depends('name')
+    def compute_name(self):
+        en_name = self.with_context(lang='en_US').name
+        fr_name = self.with_context(lang='fr_FR').name
+            
     @api.model
     def get_recipes_by_category(self, category_name='', order_by='name', limit=None, offset=0):
         category_id = self.env['tanmya.product.category'].sudo().search([('name', '=', category_name)],
