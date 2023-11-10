@@ -812,6 +812,8 @@ class TanmyaProducExt(models.Model):
                         owner = recipe.owner_id
                     else:
                         owner = self.env['res.users'].search([('id', '=', self.env.uid)])
+                    _logger.info('--------------- owner is -----------------------')
+                    _logger.info(owner)
                     if recipe.owner_id.preferred_language == 'en':
                         notification_vals = {
                             'title': 'Recipe reviewed',
@@ -842,6 +844,8 @@ class TanmyaProducExt(models.Model):
                             'user_ids': [(6, 0, [owner.id])],
                             'recipe_id': recipe_id,
                         }
+                    _logger.info('---------------- notification to send ------------------------')
+                    _logger.info(notification_vals)
                     notification = self.env['firebase.notification'].sudo().create(notification_vals)
                     if notification:
                         #                         notification.send_notifications()
