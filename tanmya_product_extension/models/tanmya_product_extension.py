@@ -254,12 +254,13 @@ class TanmyaProducExt(models.Model):
 
     @api.depends('name')
     def compute_name(self):
-        en_name = self.name
-        fr_name = self.name
-        _logger.info('names in product :  : : : : : : : ; ; ; ; ; ; ')
-        _logger.info(self.name)
-        _logger.info(en_name)
-        _logger.info(fr_name)
+        for rec in self:
+            en_name = self.name
+            fr_name = self.name
+            _logger.info('names in product :  : : : : : : : ; ; ; ; ; ; ')
+            _logger.info(self.name)
+            _logger.info(en_name)
+            _logger.info(fr_name)
             
     @api.model
     def get_recipes_by_category(self, category_name='', order_by='name', limit=None, offset=0):
