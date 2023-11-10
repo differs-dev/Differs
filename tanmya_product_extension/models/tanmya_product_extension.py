@@ -838,6 +838,8 @@ class TanmyaProducExt(models.Model):
                         notification_vals = {
                             'fr_title': 'Recette revue',
                             'fr_content': f'{review.user_id.name} viens de revoir ta recette. Cliquez ici pour voir les détails.',
+                            'title': 'Recipe reviewed',
+                            'content': f'{review.user_id.name} just reviewed your recipe. Click here to see details.',
                             'payload': 'recipe_reviewed',
                             'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                             'notification_date': datetime.now(),
