@@ -24,7 +24,7 @@ class ProductTemplateInherit(models.Model):
     en_name = fields.Char('English Name', compute='compute_name')
     fr_name = fields.Char('Frensh Name', compute='compute_name')
 
-     def compute_name(self):
+    def compute_name(self):
         for rec in self:
             en_name = rec.name
             fr_name = rec.name
