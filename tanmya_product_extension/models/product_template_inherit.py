@@ -41,7 +41,7 @@ class ProductTemplateInherit(models.Model):
             _logger.info(rec.en_name)
             _logger.info(rec.fr_name)
 
-    def _compute_price_from_pricelist(self):
+    def compute_price_from_pricelist(self):
         price_list = self.env['product.pricelist'].sudo().search([('name', '=', 'X1.5 cost factor')])
         price = price_list.get_product_price(self, 1, False)
         return price
@@ -196,7 +196,7 @@ class ProductTemplateInherit(models.Model):
             products_details = []
             for product in products:
                 _logger.info('product price ::::::::::::::::::::::::::::::::::::::::::::::::::::')
-                price1 = _compute_price_from_pricelist()
+                price1 = self.compute_price_from_pricelist()
                 _logger.info(price1)
                 prod_id = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product.id)], limit=1)
                 prod_name = self.env['product.template'].sudo().search_read([('id', '=', product.id)], limit=1)[0]['name']
