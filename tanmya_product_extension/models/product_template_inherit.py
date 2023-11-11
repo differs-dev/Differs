@@ -41,6 +41,11 @@ class ProductTemplateInherit(models.Model):
             _logger.info(rec.en_name)
             _logger.info(rec.fr_name)
 
+    def _compute_price_from_pricelist(self):
+        price_list = self.env['product.pricelist'].sudo().search([('name', '=', 'X1.5 cost factor')])
+        price = price_list.get_product_price(self, 1, False)
+        return price
+
     def get_preference_state(self, variant_template, product_id):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         for rec in user.products_preferences_ids:
@@ -190,6 +195,9 @@ class ProductTemplateInherit(models.Model):
                                                                   order=order_by)
             products_details = []
             for product in products:
+                _logger.info('product price ::::::::::::::::::::::::::::::::::::::::::::::::::::')
+                price1 = product_compute_price_from_pricelist
+                _logger.info(price1)
                 prod_id = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product.id)], limit=1)
                 prod_name = self.env['product.template'].sudo().search_read([('id', '=', product.id)], limit=1)[0]['name']
                 self._cr.execute(f"select src, lang, value from ir_translation WHERE type IN ('model', 'model_terms') AND res_id = {product.id} AND name = 'product.template,name'")
