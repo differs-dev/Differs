@@ -76,9 +76,12 @@ class MobileApiController(http.Controller):
         _logger.info(data['delivery_date'])
         _logger.info(data['delivery_period'])
         extra_charge = 0
-        if data['delivery_area'] == 'out_of_area':
-            order.amount_total += 200
-        order.amount_total += data['method_cost']
+        shipping_method_service = self.env['delivery.carrier'].sudo().search([('id', '=', data['shipping_method_id'])]).product_id
+        _logger.info(' ----------------------- shipping method -------------------------- ')
+        _logger.info(shipping_method_service)
+        # if data['delivery_area'] == 'out_of_area':
+        #     order.amount_total += 200
+        # order.amount_total += data['method_cost']
         
         ogone_acquirer = request.env['payment.acquirer'].sudo().search([('provider', '=', 'ogone')], limit=1)
         if not ogone_acquirer:
