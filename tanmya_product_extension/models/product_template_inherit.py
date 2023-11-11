@@ -31,12 +31,12 @@ class ProductTemplateInherit(models.Model):
             _logger.info(self.env.user.preferred_language)
             if self.env.user.preferred_language == 'en':
                 _logger.info('cond 1')
-                en_name = rec.name
-                fr_name = ''
+                rec.en_name = rec.name
+                rec.fr_name = ''
             else:
                 _logger.info('cond 2')
-                fr_name = rec.name
-                en_name = ''
+                rec.fr_name = rec.name
+                rec.en_name = ''
             _logger.info('names in product :  : : : : : : : ; ; ; ; ; ; ')
             _logger.info(rec.name)
             _logger.info(en_name)
