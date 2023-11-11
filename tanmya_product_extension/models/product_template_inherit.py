@@ -43,7 +43,8 @@ class ProductTemplateInherit(models.Model):
 
     def compute_price_from_pricelist(self):
         price_list = self.env['product.pricelist'].with_context(lang='en_US').sudo().search([('name', 'like', 'X1.5')])
-        price = price_list.get_product_price(self, 1, False)
+        product = self.env['product.template'].sudo().search([('id', '=', self.id)])
+        price = price_list.get_product_price(product, 1, False)
         return price
 
     def get_preference_state(self, variant_template, product_id):
