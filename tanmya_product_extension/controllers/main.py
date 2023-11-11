@@ -130,7 +130,7 @@ class MobileApiController(http.Controller):
         elif tx_sudo.state == 'pending':
             message = tx_sudo.acquirer_id.pending_msg
         elif tx_sudo.state == 'done':
-            order.with_context(send_email=True).action_confirm()
+            # order.with_context(send_email=True).action_confirm()
             order.payment_automation()
             message = tx_sudo.acquirer_id.done_msg
         elif tx_sudo.state == 'cancel':
