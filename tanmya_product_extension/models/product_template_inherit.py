@@ -26,18 +26,18 @@ class ProductTemplateInherit(models.Model):
 
     def compute_name(self):
         _logger.info('self.env.user.preferred_language : ')
-        _logger.info(rec.id)
+        _logger.info(self.id)
         _logger.info(self.env.user.preferred_language)
         if self.env.user.preferred_language == 'en':
             _logger.info('cond 1')
-            en_name = rec.name
+            en_name = self.name
             fr_name = ''
         else:
             _logger.info('cond 2')
-            fr_name = rec.name
+            fr_name = self.name
             en_name = ''
         _logger.info('names in product :  : : : : : : : ; ; ; ; ; ; ')
-        _logger.info(rec.name)
+        _logger.info(self.name)
         _logger.info(en_name)
         _logger.info(fr_name)
 
