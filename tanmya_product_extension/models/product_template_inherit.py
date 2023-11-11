@@ -173,7 +173,7 @@ class ProductTemplateInherit(models.Model):
                 products_details.append(product_details)
 
         else:
-            products = self.env['product.template'].with_context(lang=user_lang).search(['|', '|', '|',
+            products = self.env['product.template'].with_context(lang=user_lang).sudo().search(['|', '|', '|',
                                                                    ('name', 'like', search_word),
                                                                    ('name', 'like', search_word1),
                                                                    ('name', 'like', search_word2),
