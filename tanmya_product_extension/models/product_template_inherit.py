@@ -42,7 +42,7 @@ class ProductTemplateInherit(models.Model):
             _logger.info(rec.fr_name)
 
     def compute_price_from_pricelist(self):
-        price_list = self.env['product.pricelist'].sudo().search([('name', 'like', 'X1.5')])
+        price_list = self.env['product.pricelist'].with_context(lang='en_US').sudo().search([('name', 'like', 'X1.5')])
         price = price_list.get_product_price(self, 1, False)
         return price
 
