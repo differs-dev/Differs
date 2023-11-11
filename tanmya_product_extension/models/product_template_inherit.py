@@ -102,7 +102,7 @@ class ProductTemplateInherit(models.Model):
         if self.env.user.preferred_language == 'fr':
             user_lang = 'fr_FR'
         else:
-            user_lang = 'en_EN'
+            user_lang = 'en_US'
         _logger.info('------------------------------=== user lang ===----------------------------------------')
         _logger.info(user_lang)
         if category_id > 0:
@@ -240,7 +240,7 @@ class ProductTemplateInherit(models.Model):
                 _logger.info(name)
                 product_details = {
                     'id': product.id,
-                    'name': product_name,
+                    'name': product.name,
                     'image_128': product.image_1920,
                     'list_price': product.list_price,
                     'uom': product.uom_id.name,
