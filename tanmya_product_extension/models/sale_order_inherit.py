@@ -365,7 +365,7 @@ class SaleOrderInerit(models.Model):
                 except:
                     super(SaleOrderInerit, rec).action_cancel()
                 rec.action_draft()
-                rec._modify_corder()
+                # rec._modify_corder()
                 try:
                     rec.saletype = False
                 except:
