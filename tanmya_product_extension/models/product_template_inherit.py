@@ -141,7 +141,11 @@ class ProductTemplateInherit(models.Model):
                     iron = re.findall(r'\d+', str(product.iron))[0]
                 else:
                     iron = product.iron
-                    
+                id = product.id
+                self.env.cr.execute("""select name from product_template where id = {id}""")
+                name = self.env.cr.fetchone()
+                _logger.info('---------------------------------- sql name ---------------------------------------')
+                _logger.info(name)
                 product_details = {
                     'id': product.id,
                     'name': product.name,
