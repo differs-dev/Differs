@@ -360,12 +360,12 @@ class SaleOrderInerit(models.Model):
             rec_date_order_invoice = datetime(rec_date_order2.year, rec_date_order2.month, rec_date_order2.day)
 
             if rec.state == 'draft':
-                # try:
-                #     super(SaleOrderInerit, rec)._action_cancel()
-                # except:
-                #     super(SaleOrderInerit, rec).action_cancel()
-                # rec.action_draft()
-                # rec._modify_corder()
+                try:
+                    super(SaleOrderInerit, rec)._action_cancel()
+                except:
+                    super(SaleOrderInerit, rec).action_cancel()
+                rec.action_draft()
+                rec._modify_corder()
                 try:
                     rec.saletype = False
                 except:
