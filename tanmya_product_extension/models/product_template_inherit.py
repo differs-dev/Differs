@@ -39,8 +39,8 @@ class ProductTemplateInherit(models.Model):
                 rec.en_name = ''
             _logger.info('names in product :  : : : : : : : ; ; ; ; ; ; ')
             _logger.info(rec.name)
-            _logger.info(en_name)
-            _logger.info(fr_name)
+            _logger.info(rec.en_name)
+            _logger.info(rec.fr_name)
 
     def get_preference_state(self, variant_template, product_id):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
