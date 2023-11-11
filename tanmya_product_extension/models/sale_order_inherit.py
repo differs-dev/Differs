@@ -224,7 +224,8 @@ class SaleOrderInerit(models.Model):
                     'currency': line.currency_id.name,
                     'price_total': line.price_total,
                 }
-                total_without_charges += line.price_total
+                if line.product_id.detailed_type == 'service:
+                    total_without_charges += line.price_total
                 order_line.append(line_details)
             _logger.info('delivery_area: ------------------------------------')
             _logger.info(sale_order.delivery_area)
