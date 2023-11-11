@@ -191,7 +191,7 @@ class ProductTemplateInherit(models.Model):
                 # _logger.info('----------------------- the new way ---------------------------')
                 # _logger.info(product.en_name)
                 # _logger.info(product.fr_name)
-                self._cr.execute(f"select src, value from ir_translation WHERE type IN ('model', 'model_terms') AND res_id = {product.id} AND name = 'product.template,name'")
+                self._cr.execute(f"select src, lang, value from ir_translation WHERE type IN ('model', 'model_terms') AND res_id = {product.id} AND name = 'product.template,name'")
                 names = self._cr.fetchall()
                 _logger.info('|||||||||||||||||||||||||||||||||||||||||||||| names ||||||||||||||||||||||||||||||||||||')
                 _logger.info(names)
