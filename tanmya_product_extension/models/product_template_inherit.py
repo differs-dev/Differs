@@ -196,7 +196,7 @@ class ProductTemplateInherit(models.Model):
             products_details = []
             for product in products:
                 _logger.info('product price ::::::::::::::::::::::::::::::::::::::::::::::::::::')
-                price1 = product_compute_price_from_pricelist
+                price1 = product_compute_price_from_pricelist()
                 _logger.info(price1)
                 prod_id = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product.id)], limit=1)
                 prod_name = self.env['product.template'].sudo().search_read([('id', '=', product.id)], limit=1)[0]['name']
