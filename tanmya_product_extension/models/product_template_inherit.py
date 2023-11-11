@@ -43,7 +43,11 @@ class ProductTemplateInherit(models.Model):
 
     def compute_price_from_pricelist(self):
         price_list = self.env['product.pricelist'].with_context(lang='en_US').sudo().search([('name', 'like', 'X1.5')])
-        product = self.get_products_variants_details(self.id)[0]
+        variants = self.get_products_variants_details(self.id)
+        _logger.info('variants ; ;')
+        _logger.info(variants)
+        if len(variants) > 0:
+            product = variants[0]
         _logger.info('---------------- targeted prod -----------------------------')
         _logger.info(product)
         if product :
