@@ -36,7 +36,7 @@ class ProductTemplateInherit(models.Model):
             ('res_id', '=', rec.id),
             ('type', 'in', ['model', 'model_terms']),
             ])
-            rec.en_name = name_translated.filtered(lambda l: l.lang == 'en_EN').value
+            rec.en_name = name_translated.filtered(lambda l: l.lang == 'en_US').value 
             rec.fr_name = name_translated.filtered(lambda l: l.lang == 'fr_FR').value
             _logger.info(rec.en_name)
             _logger.info(rec.fr_name)
