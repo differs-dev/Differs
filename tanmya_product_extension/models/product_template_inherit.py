@@ -21,13 +21,17 @@ class ProductTemplateInherit(models.Model):
     fat = fields.Char(string='Fat')
     fiber = fields.Char(string='Fiber')
     iron = fields.Char(string='Iron')
-    en_name = fields.Char('English Name')
-    fr_name = fields.Char('Frensh Name')
+    en_name = fields.Char('English Name', compute='compute_name')
+    fr_name = fields.Char('Frensh Name', compute='compute_name')
 
     def compute_name(self):
         for rec in self:
-            en_name = rec.name
-            fr_name = rec.name
+            if self.env.user.preferred_language == 'en':
+                en_name = rec.name
+                fr_name = ''
+            else:
+                fr_name = rec.name
+                en_name = ''
             _logger.info('names in product :  : : : : : : : ; ; ; ; ; ; ')
             _logger.info(rec.name)
             _logger.info(en_name)
