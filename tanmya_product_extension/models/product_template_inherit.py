@@ -213,7 +213,11 @@ class ProductTemplateInherit(models.Model):
                     iron = re.findall(r'\d+', str(product.iron))[0]
                 else:
                     iron = product.iron
-                    
+                self.env.cr.execute("""select name from product_template where id = {id}""")
+                name = self.env.cr.fetchone()
+                _logger.info('---------------------------------- sql name ---------------------------------------')
+                _logger.info(name)
+                
                 # calories = re.findall(r'\d+', str(product.calories))
                 # carbs = re.findall(r'\d+', str(product.carbs))
                 # protein = re.findall(r'\d+', str(product.protein))
