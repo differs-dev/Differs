@@ -46,6 +46,7 @@ class ProductTemplateInherit(models.Model):
         variants = self.get_products_variants_details(self.id)
         _logger.info('variants ; ;')
         _logger.info(variants)
+        product = self.env['product.product']
         if len(variants) > 0:
             product = variants[0]
         _logger.info('---------------- targeted prod -----------------------------')
