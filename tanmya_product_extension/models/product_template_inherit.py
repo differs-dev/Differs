@@ -120,32 +120,32 @@ class ProductTemplateInherit(models.Model):
             for product in products:
                 prod_id = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product.id)], limit=1)
                 
-                if product.calories:
+                if str(product.calories) > 0:
                     calories = re.findall(r'\d+', str(product.calories))[0]
                 else:
                     calories = product.calories
                     
-                if product.carbs:
+                if str(product.carbs) > 0:
                     carbs = re.findall(r'\d+', str(product.carbs))[0]
                 else:
                     carbs = product.carbs
                     
-                if product.protein:
+                if str(product.protein) > 0:
                     protein = re.findall(r'\d+', str(product.protein))[0]
                 else:
                     protein = product.protein
                     
-                if product.fat:
+                if str(product.fat) > 0:
                     fat = re.findall(r'\d+', str(product.fat))[0]
                 else:
                     fat = product.fat
                     
-                if product.fiber:
+                if str(product.fiber) > 0:
                     fiber = re.findall(r'\d+', str(product.fiber))[0]
                 else:
                     fiber = product.fiber
 
-                if product.iron:
+                if str(product.iron) > 0:
                     iron = re.findall(r'\d+', str(product.iron))[0]
                 else:
                     iron = product.iron
@@ -193,32 +193,32 @@ class ProductTemplateInherit(models.Model):
                     product_name = product.fr_name
                 else:
                     product_name = product.en_name
-                if product.calories:
+                if str(product.calories) > 0:
                     calories = re.findall(r'\d+', str(product.calories))[0]
                 else:
                     calories = product.calories
                     
-                if product.carbs:
+                if str(product.carbs) > 0:
                     carbs = re.findall(r'\d+', str(product.carbs))[0]
                 else:
                     carbs = product.carbs
                     
-                if product.protein:
+                if str(product.protein) > 0:
                     protein = re.findall(r'\d+', str(product.protein))[0]
                 else:
                     protein = product.protein
                     
-                if product.fat:
+                if str(product.fat) > 0:
                     fat = re.findall(r'\d+', str(product.fat))[0]
                 else:
                     fat = product.fat
                     
-                if product.fiber:
+                if str(product.fiber) > 0:
                     fiber = re.findall(r'\d+', str(product.fiber))[0]
                 else:
                     fiber = product.fiber
 
-                if product.iron:
+                if str(product.iron) > 0:
                     iron = re.findall(r'\d+', str(product.iron))[0]
                 else:
                     iron = product.iron
