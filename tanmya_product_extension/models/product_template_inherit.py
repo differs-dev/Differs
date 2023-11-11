@@ -179,10 +179,13 @@ class ProductTemplateInherit(models.Model):
                                                                   order=order_by)
             products_details = []
             for product in products:
-                prod_id = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product.id)], limit=1)
-                prod_name = self.env['product.template'].sudo().search_read([('id', '=', product.id)], limit=1)[0]['name']
-                self._cr.execute(f"SELECT name FROM product_template where id = {product.id}")
-                name = self._cr.fetchone()
+                # prod_id = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product.id)], limit=1)
+                # prod_name = self.env['product.template'].sudo().search_read([('id', '=', product.id)], limit=1)[0]['name']
+                # self._cr.execute(f"SELECT name FROM product_template where id = {product.id}")
+                # name = self._cr.fetchone()
+                _logger.info('----------------------- the new way ---------------------------')
+                _logger.info(product.en_name)
+                _logger.info(product.fr_name)
                 if product.calories:
                     calories = re.findall(r'\d+', str(product.calories))[0]
                 else:
