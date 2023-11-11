@@ -119,36 +119,43 @@ class ProductTemplateInherit(models.Model):
             products_details = []
             for product in products:
                 prod_id = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product.id)], limit=1)
-                
-                if len(str(product.calories)) > 0:
-                    calories = re.findall(r'\d+', str(product.calories))[0]
+
+                calories_re = re.findall(r'\d+', str(product.calories))
+                if len(calories_re) > 0:
+                    calories = calories_re[0]
                 else:
                     calories = product.calories
-                    
-                if len(str(product.carbs)) > 0:
-                    carbs = re.findall(r'\d+', str(product.carbs))[0]
+
+                carbs_re = re.findall(r'\d+', str(product.carbs))
+                if len(carbs_re) > 0:
+                    carbs = carbs_re[0]
                 else:
                     carbs = product.carbs
-                    
-                if len(str(product.protein)) > 0:
-                    protein = re.findall(r'\d+', str(product.protein))[0]
+
+                protein_re = re.findall(r'\d+', str(product.protein))
+                if len(protein_re) > 0:
+                    protein = protein_re[0]
                 else:
                     protein = product.protein
                     
-                if len(str(product.fat)) > 0:
-                    fat = re.findall(r'\d+', str(product.fat))[0]
+                fat_re = re.findall(r'\d+', str(product.fat))
+                if len(fat_re) > 0:
+                    fat = fat_re[0]
                 else:
                     fat = product.fat
-                    
-                if len(str(product.fiber)) > 0:
-                    fiber = re.findall(r'\d+', str(product.fiber))[0]
+
+                fiber_re = re.findall(r'\d+', str(product.fiber))
+                if len(fiber_re) > 0:
+                    fiber = fiber_re[0]
                 else:
                     fiber = product.fiber
-
-                if len(str(product.iron)) > 0:
-                    iron = re.findall(r'\d+', str(product.iron))[0]
+                    
+                iron_re = re.findall(r'\d+', str(product.iron))
+                if len(iron_re) > 0:
+                    iron = iron_re[0]
                 else:
                     iron = product.iron
+                
                 product_details = {
                     'id': product.id,
                     'name': product.name,
@@ -193,35 +200,43 @@ class ProductTemplateInherit(models.Model):
                     product_name = product.fr_name
                 else:
                     product_name = product.en_name
-                if len(str(product.calories)) > 0:
-                    calories = re.findall(r'\d+', str(product.calories))[0]
+                
+                calories_re = re.findall(r'\d+', str(product.calories))
+                if len(calories_re) > 0:
+                    calories = calories_re[0]
                 else:
                     calories = product.calories
-                    
-                if len(str(product.carbs)) > 0:
-                    carbs = re.findall(r'\d+', str(product.carbs))[0]
+
+                carbs_re = re.findall(r'\d+', str(product.carbs))
+                if len(carbs_re) > 0:
+                    carbs = carbs_re[0]
                 else:
                     carbs = product.carbs
-                    
-                if len(str(product.protein)) > 0:
-                    protein = re.findall(r'\d+', str(product.protein))[0]
+
+                protein_re = re.findall(r'\d+', str(product.protein))
+                if len(protein_re) > 0:
+                    protein = protein_re[0]
                 else:
                     protein = product.protein
                     
-                if len(str(product.fat)) > 0:
-                    fat = re.findall(r'\d+', str(product.fat))[0]
+                fat_re = re.findall(r'\d+', str(product.fat))
+                if len(fat_re) > 0:
+                    fat = fat_re[0]
                 else:
                     fat = product.fat
-                    
-                if len(str(product.fiber)) > 0:
-                    fiber = re.findall(r'\d+', str(product.fiber))[0]
+
+                fiber_re = re.findall(r'\d+', str(product.fiber))
+                if len(fiber_re) > 0:
+                    fiber = fiber_re[0]
                 else:
                     fiber = product.fiber
-
-                if len(str(product.iron)) > 0:
-                    iron = re.findall(r'\d+', str(product.iron))[0]
+                    
+                iron_re = re.findall(r'\d+', str(product.iron))
+                if len(iron_re) > 0:
+                    iron = iron_re[0]
                 else:
                     iron = product.iron
+                
                 self.env.cr.execute(f"""select name from product_template where id = {product.id}""")
                 name = self.env.cr.fetchone()
                 _logger.info('---------------------------------- sql name ---------------------------------------')
