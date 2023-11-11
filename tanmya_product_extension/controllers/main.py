@@ -77,6 +77,7 @@ class MobileApiController(http.Controller):
         _logger.info(data['delivery_period'])
         extra_charge = 0
         shipping_method_service = request.env['delivery.carrier'].sudo().search([('id', '=', data['shipping_method_id'])]).product_id
+        order.add_to_cart(shipping_method_service.id, 1)
         _logger.info(' ----------------------- shipping method -------------------------- ')
         _logger.info(shipping_method_service)
         # if data['delivery_area'] == 'out_of_area':
