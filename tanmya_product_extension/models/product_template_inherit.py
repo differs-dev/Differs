@@ -6,7 +6,7 @@ _logger = logging.getLogger(__name__)
 
 
 class ProductTemplateInherit(models.Model):
-    _inherit = "product.template",
+    _inherit = "product.template"
 
     description = fields.Char('Description', translate=True)
     mobile_description = fields.Char('Description for the mobile', sanitize_attributes=False,
