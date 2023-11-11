@@ -192,7 +192,7 @@ class ProductTemplateInherit(models.Model):
                 # _logger.info(product.en_name)
                 # _logger.info(product.fr_name)
                 self._cr.execute(f"select * from ir_translation WHERE type IN ('model', 'model_terms') AND res_id = {product.id} AND name = 'product.template,name'")
-                _logger.info(product.fr_name) = self._cr.fetchall()
+                names = self._cr.fetchall()
                 _logger.info('|||||||||||||||||||||||||||||||||||||||||||||| names ||||||||||||||||||||||||||||||||||||')
                 _logger.info(names)
                 if product.calories:
