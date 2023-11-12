@@ -115,7 +115,7 @@ class SaleOrderInerit(models.Model):
 
         if user_sale_order and product_id:
             product = self.env['product.product'].sudo().search([('id', '=', product_id)])
-            price = product.product_tmpl_id.compute_price_from_pricelist(product_id)
+            price = product.product_tmpl_id.compute_price_from_pricelist(product.product_tmpl_id.id)
             _logger.info('price in add to cart')
             _logger.info(price)
             sale_order_line_vals = {
