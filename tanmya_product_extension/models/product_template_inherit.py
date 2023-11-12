@@ -41,11 +41,11 @@ class ProductTemplateInherit(models.Model):
             _logger.info(rec.en_name)
             _logger.info(rec.fr_name)
 
-    def compute_price_from_pricelist(self):
+    def compute_price_from_pricelist(self, product_id):
         price_list = self.env['product.pricelist'].with_context(lang='en_US').sudo().search([('name', 'like', 'X1.5')])
         _logger.info('product id issssssssssssssssssss')
         _logger.info(self.id)
-        product = self.env['product.product'].sudo().search([('product_tmpl_id', '=', self.id)])
+        product = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product_id)])
         _logger.info(product)
         # variants = self.get_products_variants_details(self.id)
         # _logger.info('variants ; ;')
@@ -211,7 +211,7 @@ class ProductTemplateInherit(models.Model):
             products_details = []
             for product in products:
                 _logger.info('product price ::::::::::::::::::::::::::::::::::::::::::::::::::::')
-                price1 = self.compute_price_from_pricelist()
+                price1 = self.compute_price_from_pricelist(product.id)
                 _logger.info(price1)
                 prod_id = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product.id)], limit=1)
                 prod_name = self.env['product.template'].sudo().search_read([('id', '=', product.id)], limit=1)[0]['name']
