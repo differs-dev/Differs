@@ -226,7 +226,8 @@ class ProductTemplateInherit(models.Model):
                     calories = self.convert_list_to_string(calories_re)
                 else:
                     calories = product.calories
-
+                _logger.info('calories_re ')
+                _logger.info(calories_re)
                 carbs_re = re.findall(r'\d+', str(product.carbs))
                 if len(carbs_re) > 0:
                     carbs = self.convert_list_to_string(carbs_re)
