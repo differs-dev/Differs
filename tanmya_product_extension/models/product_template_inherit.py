@@ -53,8 +53,13 @@ class ProductTemplateInherit(models.Model):
 
     def convert_list_to_string(self, nut_list):
         result = ''
+        i = 0
         for char in nut_list:
-            result += char
+            if i > 0: 
+                result += ',' + char
+            else:
+                result += char
+            i += 1
         return result
 
     def get_preference_state(self, variant_template, product_id):
