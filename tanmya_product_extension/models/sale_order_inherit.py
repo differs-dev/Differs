@@ -83,7 +83,7 @@ class SaleOrderInerit(models.Model):
                                                                    order='date_order desc', limit=1).order_line
             if user_sale_order:
                 _logger.info('orders length')
-                _logger.info(len(user_sale_order))
+                _logger.info(len(user_sale_order.filtered(lambda r: r.product_id.detailed_type != 'service'))
                 return len(user_sale_order)
             else:
                 return '0'
