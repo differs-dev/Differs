@@ -139,7 +139,7 @@ class ProductTemplateInherit(models.Model):
             products_details = []
             for product in products:
                 prod_id = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product.id)], limit=1)
-
+                price1 = self.compute_price_from_pricelist(product.id)
                 calories_re = re.findall(r'\d+', str(product.calories))
                 if len(calories_re) > 0:
                     calories = calories_re[0]
@@ -180,7 +180,8 @@ class ProductTemplateInherit(models.Model):
                     'id': product.id,
                     'name': product.name,
                     'image_128': product.image_1920,
-                    'list_price': product.list_price,
+                    # 'list_price': product.list_price,
+                    'list_price': price1,
                     'uom': product.uom_id.name,
                     'calories': calories,
                     'carbs': carbs,
@@ -280,7 +281,8 @@ class ProductTemplateInherit(models.Model):
                     'id': product.id,
                     'name': product.name,
                     'image_128': product.image_1920,
-                    'list_price': product.list_price,
+                    # 'list_price': product.list_price,
+                    'list_price': price1,
                     'uom': product.uom_id.name,
                     'calories': calories,
                     'carbs': carbs,
