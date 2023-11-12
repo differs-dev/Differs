@@ -62,7 +62,13 @@ class SaleOrderInerit(models.Model):
             user_sale_order = self.env['sale.order'].sudo().search([('partner_id', '=', user.partner_id.id),
                                                                     ('state', '=', 'draft')],
                                                                    order='date_order desc', limit=1)
-            if user_sale_order:
+            total_service_lines = 0
+            order_lines = self.env['sale.order.line'].sudo().search([('order_id', '=', user_sale_order.id)])
+            for line in order_lines:
+                if line.product_id.detailed_type == 'service':
+                    total_service_lines += 1
+            
+            if user_sale_order and total_service_lines != len(order_lines):
                 return user_sale_order
             else:
                 return self.init_new_cart()
