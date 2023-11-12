@@ -43,23 +43,19 @@ class ProductTemplateInherit(models.Model):
 
     def compute_price_from_pricelist(self, product_id):
         price_list = self.env['product.pricelist'].with_context(lang='en_US').sudo().search([('name', 'like', 'X1.5')])
-        _logger.info('product id issssssssssssssssssss')
-        _logger.info(self.id)
         product = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product_id)])
         _logger.info(product)
-        # variants = self.get_products_variants_details(self.id)
-        # _logger.info('variants ; ;')
-        # _logger.info(variants)
-        # product = self.env['product.product']
-        # if len(variants) > 0:
-        #     product = variants[0]
-        # _logger.info('---------------- targeted prod -----------------------------')
-        # _logger.info(product)
         if product :
             price = price_list.get_product_price(product.product_variant_ids[0], 1, False)
             return price
         else:
             return 0
+
+    def convert_list_to_string(self, nut_list):
+        result = ''
+        for char in nut_list:
+            result += char
+        return result
 
     def get_preference_state(self, variant_template, product_id):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
@@ -227,37 +223,37 @@ class ProductTemplateInherit(models.Model):
                 
                 calories_re = re.findall(r'\d+', str(product.calories))
                 if len(calories_re) > 0:
-                    calories = str(calories_re[0:])
+                    calories = self.convert_list_to_string(calories_re)
                 else:
                     calories = product.calories
 
                 carbs_re = re.findall(r'\d+', str(product.carbs))
                 if len(carbs_re) > 0:
-                    carbs = str(carbs_re[0:])
+                    carbs = self.convert_list_to_string(carbs_re)
                 else:
                     carbs = product.carbs
 
                 protein_re = re.findall(r'\d+', str(product.protein))
                 if len(protein_re) > 0:
-                    protein = str(protein_re[0:])
+                    protein = self.convert_list_to_string(protein_re)
                 else:
                     protein = product.protein
                     
                 fat_re = re.findall(r'\d+', str(product.fat))
                 if len(fat_re) > 0:
-                    fat = str(fat_re[0:])
+                    fat = self.convert_list_to_string(fat_re)
                 else:
                     fat = product.fat
 
                 fiber_re = re.findall(r'\d+', str(product.fiber))
                 if len(fiber_re) > 0:
-                    fiber = str(fiber_re[0:])
+                    fiber = self.convert_list_to_string(fiber_re)
                 else:
                     fiber = product.fiber
                     
                 iron_re = re.findall(r'\d+', str(product.iron))
                 if len(iron_re) > 0:
-                    iron = str(iron_re[0:])
+                    iron = self.convert_list_to_string(iron_re)
                 else:
                     iron = product.iron
                 
