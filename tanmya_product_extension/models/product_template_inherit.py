@@ -227,37 +227,37 @@ class ProductTemplateInherit(models.Model):
                 
                 calories_re = re.findall(r'\d+', str(product.calories))
                 if len(calories_re) > 0:
-                    calories = calories_re[0]
+                    calories = calories_re[0:]
                 else:
                     calories = product.calories
 
                 carbs_re = re.findall(r'\d+', str(product.carbs))
                 if len(carbs_re) > 0:
-                    carbs = carbs_re[0]
+                    carbs = carbs_re[0:]
                 else:
                     carbs = product.carbs
 
                 protein_re = re.findall(r'\d+', str(product.protein))
                 if len(protein_re) > 0:
-                    protein = protein_re[0]
+                    protein = protein_re[0:]
                 else:
                     protein = product.protein
                     
                 fat_re = re.findall(r'\d+', str(product.fat))
                 if len(fat_re) > 0:
-                    fat = fat_re[0]
+                    fat = fat_re[0:]
                 else:
                     fat = product.fat
 
                 fiber_re = re.findall(r'\d+', str(product.fiber))
                 if len(fiber_re) > 0:
-                    fiber = fiber_re[0]
+                    fiber = fiber_re[0:]
                 else:
                     fiber = product.fiber
                     
                 iron_re = re.findall(r'\d+', str(product.iron))
                 if len(iron_re) > 0:
-                    iron = iron_re[0]
+                    iron = iron_re[0:]
                 else:
                     iron = product.iron
                 
