@@ -115,10 +115,12 @@ class SaleOrderInerit(models.Model):
 
         if user_sale_order and product_id:
             product = self.env['product.product'].sudo().search([('id', '=', product_id)])
+            price = product.product_tmpl_id.compute_price_from_pricelist(product.id)
             sale_order_line_vals = {
                 'order_id': user_sale_order.id,
                 'name': product.product_tmpl_id.name,
-                'price_unit': product.lst_price,
+                # 'price_unit': product.lst_price,
+                'price_unit': price,
                 'product_id': product_id,
                 'product_uom_qty': float(product_qty) or 1.0,
                 'product_uom': product.uom_id.id,
