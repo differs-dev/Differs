@@ -175,24 +175,25 @@ class SaleOrderInerit(models.Model):
                     continue
                 if i > offset:
                     break
-                line_details = {
-                    'id': line.id,
-                    'product': {
-                        'kit_template': line.product_id.kit_template.id,
-                        'name': line.product_id.name,
-                        # this line was changed from this :  line.product_id.image_1920 to this ''.
-                        'image': line.product_id.image_1920 or '',
-                        'product_attributes': self.get_variant_attributes(line.product_id.id)},
-                    'price': line.price_unit,
-                    'quantity': line.product_uom_qty,
-                    'uom': line.product_uom.name,
-                    'currency': line.currency_id.name,
-                    'price_total': line.price_total,
-                }
-                if line.price_unit < 0:
-                    coupon_discount += line.price_unit * line.product_uom_qty
-                order_line.append(line_details)
-                i += 1
+                if line.product_id.detailed_type != 'service':
+                    line_details = {
+                        'id': line.id,
+                        'product': {
+                            'kit_template': line.product_id.kit_template.id,
+                            'name': line.product_id.name,
+                            # this line was changed from this :  line.product_id.image_1920 to this ''.
+                            'image': line.product_id.image_1920 or '',
+                            'product_attributes': self.get_variant_attributes(line.product_id.id)},
+                        'price': line.price_unit,
+                        'quantity': line.product_uom_qty,
+                        'uom': line.product_uom.name,
+                        'currency': line.currency_id.name,
+                        'price_total': line.price_total,
+                    }
+                    if line.price_unit < 0:
+                        coupon_discount += line.price_unit * line.product_uom_qty
+                    order_line.append(line_details)
+                    i += 1
             sale_order_details = {
                 'id': user_sale_order.id,
                 'amount_total': user_sale_order.amount_total,
