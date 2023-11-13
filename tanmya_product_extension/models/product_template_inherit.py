@@ -55,11 +55,12 @@ class ProductTemplateInherit(models.Model):
         result = ''
         i = 0
         for char in nut_list:
-            if i > 0: 
-                result += ',' + char
-            else:
-                result += char
-            i += 1
+            if len(result) < 3:
+                if i > 0: 
+                    result += ',' + char
+                else:
+                    result += char
+                i += 1
         return result
 
     def get_preference_state(self, variant_template, product_id):
@@ -143,37 +144,38 @@ class ProductTemplateInherit(models.Model):
                 price1 = self.compute_price_from_pricelist(product.id)
                 calories_re = re.findall(r'\d+', str(product.calories))
                 if len(calories_re) > 0:
-                    calories = calories_re[0:]
+                    calories = self.convert_list_to_string(calories_re)
                 else:
                     calories = product.calories
-
+                _logger.info('calories_re ')
+                _logger.info(calories_re)
                 carbs_re = re.findall(r'\d+', str(product.carbs))
                 if len(carbs_re) > 0:
-                    carbs = carbs_re[0:]
+                    carbs = self.convert_list_to_string(carbs_re)
                 else:
                     carbs = product.carbs
 
                 protein_re = re.findall(r'\d+', str(product.protein))
                 if len(protein_re) > 0:
-                    protein = protein_re[0:]
+                    protein = self.convert_list_to_string(protein_re)
                 else:
                     protein = product.protein
                     
                 fat_re = re.findall(r'\d+', str(product.fat))
                 if len(fat_re) > 0:
-                    fat = fat_re[0:]
+                    fat = self.convert_list_to_string(fat_re)
                 else:
                     fat = product.fat
 
                 fiber_re = re.findall(r'\d+', str(product.fiber))
                 if len(fiber_re) > 0:
-                    fiber = fiber_re[0:]
+                    fiber = self.convert_list_to_string(fiber_re)
                 else:
                     fiber = product.fiber
                     
                 iron_re = re.findall(r'\d+', str(product.iron))
                 if len(iron_re) > 0:
-                    iron = iron_re[0:]
+                    iron = self.convert_list_to_string(iron_re)
                 else:
                     iron = product.iron
                 
