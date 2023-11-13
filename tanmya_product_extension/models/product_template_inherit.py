@@ -42,7 +42,7 @@ class ProductTemplateInherit(models.Model):
             _logger.info(rec.fr_name)
 
     @api.depends('website_description')
-    def compute_mobile_desc(self)
+    def compute_mobile_desc(self):
         for rec in self:
             rec.mobile_description = str(rec.website_description)
 
