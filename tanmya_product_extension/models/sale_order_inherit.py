@@ -59,7 +59,11 @@ class SaleOrderInerit(models.Model):
         user_id = self.env.uid
         if user_id:
             user = self.env['res.users'].sudo().search([('id', '=', user_id)])
-            user_sale_order = self.env['sale.order'].sudo().search([('partner_id', '=', user.partner_id.id),
+            if self.env.user.preferred_language == 'fr':
+                user_lang = 'fr_FR'
+            else:
+                user_lang = 'en_US'
+            user_sale_order = self.env['sale.order'].with_context(lang=user_lang).sudo().search([('partner_id', '=', user.partner_id.id),
                                                                     ('state', '=', 'draft')],
                                                                    order='date_order desc', limit=1)
             total_service_lines = 0
