@@ -10,7 +10,7 @@ class ProductTemplateInherit(models.Model):
 
     description = fields.Char('Description', translate=True)
     mobile_description = fields.Char('Description for the mobile', sanitize_attributes=False,
-                                     translate=True, sanitize_form=False)
+                                     translate=True, sanitize_form=False, compute='compute_mobile_desc')
     #     website_description = fields.Char('Description for the website', sanitize_attributes=False,
     #                                       translate=True, sanitize_form=False)
 
@@ -40,6 +40,11 @@ class ProductTemplateInherit(models.Model):
             rec.fr_name = name_translated.filtered(lambda l: l.lang == 'fr_FR').value
             _logger.info(rec.en_name)
             _logger.info(rec.fr_name)
+
+    @api.depends('website_description')
+    def compute_mobile_desc(self)
+        for rec in self:
+            rec.mobile_description = str(rec.website_description)
 
     def compute_price_from_pricelist(self, product_id):
         price_list = self.env['product.pricelist'].with_context(lang='en_US').sudo().search([('name', 'like', 'X1.5')])
