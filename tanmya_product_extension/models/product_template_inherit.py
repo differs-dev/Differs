@@ -1,6 +1,7 @@
 from odoo import api, fields, models, _
 import logging
 import re
+from bs4 import BeautifulSoup
 
 _logger = logging.getLogger(__name__)
 
@@ -44,7 +45,9 @@ class ProductTemplateInherit(models.Model):
     @api.depends('website_description')
     def compute_mobile_desc(self):
         for rec in self:
-            rec.mobile_description = str(rec.website_description)
+            soup = BeautifulSoup(str(rec.website_description), 'html.parser')
+            # Extract text
+            rec.mobile_description = soup.get_text()
 
     def compute_price_from_pricelist(self, product_id):
         price_list = self.env['product.pricelist'].with_context(lang='en_US').sudo().search([('name', 'like', 'X1.5')])
