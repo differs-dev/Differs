@@ -113,9 +113,9 @@ class SaleOrderInerit(models.Model):
             order_lines = self.env['sale.order.line'].sudo().search([('order_id', '=', user_sale_order.id)])
             for line in order_lines:
                 if line.product_id.id == product_id:
-                    return true
-        return false
-
+                    return True
+        return False
+ 
     
     # Add new product(recipe or ingredient) to cart
     @api.model
