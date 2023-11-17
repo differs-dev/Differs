@@ -155,8 +155,6 @@ class ProductTemplateInherit(models.Model):
                     calories = self.convert_list_to_string(calories_re)
                 else:
                     calories = product.calories
-                _logger.info('calories_re ')
-                _logger.info(calories_re)
                 carbs_re = re.findall(r'\d+', str(product.carbs))
                 if len(carbs_re) > 0:
                     carbs = self.convert_list_to_string(carbs_re)
@@ -222,15 +220,10 @@ class ProductTemplateInherit(models.Model):
                                                                   order=order_by)
             products_details = []
             for product in products:
-                _logger.info('product price ::::::::::::::::::::::::::::::::::::::::::::::::::::')
-                price1 = self.compute_price_from_pricelist(product.id)
-                _logger.info(price1)
                 prod_id = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product.id)], limit=1)
                 prod_name = self.env['product.template'].sudo().search_read([('id', '=', product.id)], limit=1)[0]['name']
                 self._cr.execute(f"select src, lang, value from ir_translation WHERE type IN ('model', 'model_terms') AND res_id = {product.id} AND name = 'product.template,name'")
                 names = self._cr.fetchall()
-                _logger.info('|||||||||||||||||||||||||||||||||||||||||||||| names ||||||||||||||||||||||||||||||||||||')
-                _logger.info(names)
                 if self.env.user.preferred_language == 'fr':
                     product_name = product.fr_name
                 else:
@@ -241,8 +234,6 @@ class ProductTemplateInherit(models.Model):
                     calories = self.convert_list_to_string(calories_re)
                 else:
                     calories = product.calories
-                _logger.info('calories_re ')
-                _logger.info(calories_re)
                 carbs_re = re.findall(r'\d+', str(product.carbs))
                 if len(carbs_re) > 0:
                     carbs = self.convert_list_to_string(carbs_re)
@@ -275,8 +266,6 @@ class ProductTemplateInherit(models.Model):
                 
                 self.env.cr.execute(f"""select name from product_template where id = {product.id}""")
                 name = self.env.cr.fetchone()
-                _logger.info('---------------------------------- sql name ---------------------------------------')
-                _logger.info(name)
                 
                 # calories = re.findall(r'\d+', str(product.calories))
                 # carbs = re.findall(r'\d+', str(product.carbs))
@@ -284,11 +273,6 @@ class ProductTemplateInherit(models.Model):
                 # fat = re.findall(r'\d+', str(product.fat))
                 # fiber = re.findall(r'\d+', str(product.fiber))
                 # iron = re.findall(r'\d+', str(product.iron))
-                _logger.info('product data')
-                _logger.info(product.id)
-                _logger.info(product.name)
-                _logger.info(prod_name)
-                _logger.info(name)
                 product_details = {
                     'id': product.id,
                     'name': product.name,
