@@ -66,7 +66,7 @@ class ProductTemplateInherit(models.Model):
         product = self.env['product.product'].sudo().search([('id', '=', product_id)])
         _logger.info(product)
         if product :
-            price = price_list.get_product_price(product.id, 1, False)
+            price = price_list.get_product_price(product, 1, False)
             return price
         else:
             return 0
