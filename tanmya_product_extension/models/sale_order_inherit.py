@@ -130,10 +130,10 @@ class SaleOrderInerit(models.Model):
 
         if user_sale_order and product_id:
             product = self.env['product.product'].sudo().search([('id', '=', product_id)])
-            # if product.kit_template == None:
-            price = product.product_tmpl_id.compute_variant_price_from_pricelist(product.id)
-            # else:
-            #     price = product.lst_price
+            if product.recipe_status == 'public':
+                price = product.lst_price
+            else:
+                price = product.product_tmpl_id.compute_variant_price_from_pricelist(product.id)
             _logger.info('price in add to cart')
             _logger.info(price)
             sale_order_line_vals = {
