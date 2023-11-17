@@ -221,6 +221,7 @@ class ProductTemplateInherit(models.Model):
             products_details = []
             for product in products:
                 prod_id = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product.id)], limit=1)
+                price1 = self.compute_price_from_pricelist(product.id)
                 prod_name = self.env['product.template'].sudo().search_read([('id', '=', product.id)], limit=1)[0]['name']
                 self._cr.execute(f"select src, lang, value from ir_translation WHERE type IN ('model', 'model_terms') AND res_id = {product.id} AND name = 'product.template,name'")
                 names = self._cr.fetchall()
