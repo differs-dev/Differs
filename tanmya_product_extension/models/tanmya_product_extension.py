@@ -860,9 +860,9 @@ class TanmyaProducExt(models.Model):
                         notification.send()
 
     @api.model
-    def get_recipe_reviews(self, reviews_ids=None, limit=None, offset=0):
+    def get_recipe_reviews(self, reviews_ids=None, recipe_id = None, limit=None, offset=0):
         if reviews_ids:
-            reviews = self.env['tanmya.review'].sudo().search([('id', 'in', reviews_ids)],
+            reviews = self.env['tanmya.review'].sudo().search(['|', ('id', 'in', reviews_ids), ('recipe_id', '=', recipe_id)],
                                                               limit=limit,
                                                               offset=offset,
                                                               order='review_date desc')
