@@ -204,11 +204,14 @@ class SaleOrderInerit(models.Model):
                 if i > offset:
                     break
                 if line.product_id.detailed_type != 'service':
-                    product = self.env['product.product'].sudo().search([('product_tmpl_id', '=', line.product_id.id)])
-                    if product.recipe_status == 'public':
-                        price = product.lst_price
-                    else:
-                        price = product.product_tmpl_id.compute_variant_price_from_pricelist(product.id)
+                    # product = self.env['product.product'].sudo().search([('product_tmpl_id', '=', line.product_id.id)])
+                    # if product.recipe_status == 'public':
+                    #     price = product.lst_price
+                    # else:
+                    #     price = product.product_tmpl_id.compute_variant_price_from_pricelist(product.id)
+                    _logger.info('price of the product in the cart is ')
+                    _logger.info(line.product_id.name)
+                    _logger.info(line.price_unit)
                     line_details = {
                         'id': line.id,
                         'product': {
@@ -217,8 +220,8 @@ class SaleOrderInerit(models.Model):
                             # this line was changed from this :  line.product_id.image_1920 to this ''.
                             'image': line.product_id.image_1920 or '',
                             'product_attributes': self.get_variant_attributes(line.product_id.id)},
-                        # 'price': line.price_unit,
-                        'price': price,
+                        'price': line.price_unit,
+                        # 'price': price,
                         'quantity': line.product_uom_qty,
                         'uom': line.product_uom.name,
                         'currency': line.currency_id.name,
