@@ -149,6 +149,9 @@ class ProductTemplateInherit(models.Model):
             user_lang = 'en_US'
         _logger.info('------------------------------=== user lang ===----------------------------------------')
         _logger.info(user_lang)
+        _logger.info('search')
+        _logger.info(search_word)
+        _logger.info(category_id)
         if category_id > 0:
             products = self.env['product.template'].with_context(lang=user_lang).sudo().search(['|', '|', '|',
                                                                    ('name', 'like', search_word),
@@ -160,6 +163,7 @@ class ProductTemplateInherit(models.Model):
                                                                   limit=limit,
                                                                   offset=offset,
                                                                   order=order_by)
+            _logger.info(products)
             products_details = []
             for product in products:
                 prod_id = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product.id)], limit=1)
