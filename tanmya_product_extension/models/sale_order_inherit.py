@@ -130,7 +130,7 @@ class SaleOrderInerit(models.Model):
 
         if user_sale_order and product_id:
             product = self.env['product.product'].sudo().search([('id', '=', product_id)])
-            if product.recipe_status == 'public':
+            if product.recipe_status == 'public' or product.product_tmpl_id.detailed_type == 'service':
                 price = product.lst_price
             else:
                 price = product.product_tmpl_id.compute_variant_price_from_pricelist(product.id)
