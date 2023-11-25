@@ -157,12 +157,14 @@ class ResUsers(models.Model):
         products_variants_details = []
         if product_variants:
             for product in product_variants:
+                price = self.compute_variant_price_from_pricelist(product.id)
                 product_variant_details = {
                     'id': product.id,
                     'name': product.name,
                     #                     'image_128': product.image_1920,
                     'image_128': '',
-                    'list_price': product.lst_price,
+                    # 'list_price': product.lst_price,
+                    'list_price': price,
                     'uom': product.uom_id.name,
                     'calories': product.calories,
                     'carbs': product.carbs,
