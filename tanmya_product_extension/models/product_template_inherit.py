@@ -59,7 +59,7 @@ class ProductTemplateInherit(models.Model):
             _logger.info(price)
             return price
         else:
-            return 0
+            return 0.0
             
     def compute_variant_price_from_pricelist(self, product_id):
         price_list = self.env['product.pricelist'].with_context(lang='en_US').sudo().search([('name', 'like', 'X1.5')])
@@ -69,7 +69,7 @@ class ProductTemplateInherit(models.Model):
             price = price_list.get_product_price(product, 1, False)
             return price
         else:
-            return 0
+            return 0.0
 
     def convert_list_to_string(self, nut_list):
         result = ''
