@@ -157,7 +157,7 @@ class ResUsers(models.Model):
         products_variants_details = []
         if product_variants:
             for product in product_variants:
-                price = self.product.product_tmpl_id.compute_variant_price_from_pricelist(product.id)
+                price = product.product_tmpl_id.compute_variant_price_from_pricelist(product.id)
                 product_variant_details = {
                     'id': product.id,
                     'name': product.name,
