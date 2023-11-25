@@ -251,6 +251,7 @@ class ResUsers(models.Model):
                     _logger.info('product_id : ')
                     _logger.info(product_preference.product_id.id)
                     _logger.info(product_preference.template_id.id)
+                    _logger.info(price)
                     _logger.info('variants')
                     _logger.info(self.get_products_variants_details(product_preference.id))
                     _logger.info(self.get_products_variants_details(product_preference.product_id.id))
