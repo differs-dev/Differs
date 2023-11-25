@@ -247,7 +247,7 @@ class ResUsers(models.Model):
                 _logger.info('products_preferences are :')
                 _logger.info(products_preferences)
                 for product_preference in products_preferences:
-                    price = product_preference.template_id.compute_variant_price_from_pricelist(product_preference.product_id.id)
+                    price = product_preference.template_id.compute_price_from_pricelist(product_preference.template_id.id)
                     _logger.info('product_id : ')
                     _logger.info(product_preference.product_id.id)
                     _logger.info(product_preference.template_id.id)
