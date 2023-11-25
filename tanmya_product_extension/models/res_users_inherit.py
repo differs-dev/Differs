@@ -185,12 +185,16 @@ class ResUsers(models.Model):
     def get_user_preferences(self, products_type: int, limit=None, offset=0):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         user_preferences = []
+        if self.env.user.preferred_language == 'fr':
+            user_lang = 'fr_FR'
+        else:
+            user_lang = 'en_US'
         _logger.info('user prefs')
         _logger.info(user.products_preferences_ids.ids)
         if user:
             products_preferences = []
             if products_type == 2:
-                products_preferences = self.env['products.preferences'].sudo().search(
+                products_preferences = self.env['products.preferences'].with_context(lang=user_lang).sudo().search(
                     [('id', 'in', user.products_preferences_ids.ids),
                      ('product_id', '!=', False),
                      ('product_id.kit_template', '!=', None)],
@@ -234,7 +238,7 @@ class ResUsers(models.Model):
                     _logger.info('user_preferences of recipes are ::')
                     _logger.info(user_preferences)
             else:
-                products_preferences = self.env['products.preferences'].sudo().search(
+                products_preferences = self.env['products.preferences'].with_context(lang=user_lang).sudo().search(
                     [('id', 'in', user.products_preferences_ids.ids),
                      ('template_id', '!=', False),
                     ('product_id', '=', False)
