@@ -247,6 +247,7 @@ class ResUsers(models.Model):
                 _logger.info('products_preferences are :')
                 _logger.info(products_preferences)
                 for product_preference in products_preferences:
+                    price = product_preference.product_id.product_tmpl_id.compute_price_from_pricelist(product_preference.product_id.id)
                     _logger.info('product_id : ')
                     _logger.info(product_preference.product_id.id)
                     _logger.info(product_preference.template_id.id)
@@ -258,7 +259,8 @@ class ResUsers(models.Model):
                         'image_128': product_preference.template_id.image_1920,
                         'image_1920': product_preference.template_id.image_1920,
                         'name': product_preference.template_id.name,
-                        'list_price': product_preference.template_id.list_price,
+                        # 'list_price': product_preference.template_id.list_price,
+                        'list_price': price,
                         'uom': product_preference.template_id.uom_id.name,
                         'preference_state': product_preference.status,
                         'calories': product_preference.template_id.calories,
