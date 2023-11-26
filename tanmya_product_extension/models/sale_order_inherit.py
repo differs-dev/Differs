@@ -488,11 +488,12 @@ class SaleOrderInerit(models.Model):
         old_order = self.env['sale.order'].sudo().search([('id', '=', order_id)])
         user_order = self.get_user_cart()
         for line in old_order.order_line:
-            # new_line = line.copy()
-            line_vals = line.copy_data()[0]
-            line_vals['order_id'] = user_order.id
-            new_line = self.env['sale.order.line'].sudo().create(line_vals)
-            user_order.order_line = [(4, new_line.id)]
+            if line.product_id.detailed_type != 'service':
+                # new_line = line.copy()
+                line_vals = line.copy_data()[0]
+                line_vals['order_id'] = user_order.id
+                new_line = self.env['sale.order.line'].sudo().create(line_vals)
+                user_order.order_line = [(4, new_line.id)]
 
     @api.model
     def apply_coupon_automation(self, cuopon_code):
