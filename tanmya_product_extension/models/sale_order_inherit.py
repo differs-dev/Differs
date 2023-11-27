@@ -571,6 +571,9 @@ class ImmediateStockPicking(models.TransientModel):
                                         'title': 'Order delivered',
                                         'content': f'Order #{order.name} was successfully delivered to you.'
                                                    'Click here to place a new order',
+                                        'fr_title': 'commande livrée',
+                                        'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
+                                                   'Click here to place a new order',
                                         'payload': 'order_delivered',
                                         'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                                         'notification_date': datetime.now(),
@@ -578,6 +581,9 @@ class ImmediateStockPicking(models.TransientModel):
                                     }
                                 else:
                                     notification_vals = {
+                                        'title': 'Order delivered',
+                                        'content': f'Order #{order.name} was successfully delivered to you.'
+                                                   'Click here to place a new order',
                                         'fr_title': 'commande livrée',
                                         'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
                                                    'Click here to place a new order',
@@ -601,6 +607,8 @@ class ImmediateStockPicking(models.TransientModel):
                                     notification_vals = {
                                         'title': 'Order on its way',
                                         'content': 'Your order is on its way to you.',
+                                        'fr_title': 'Commande en cours',
+                                        'fr_content': 'Votre commande est en route vers vous.',
                                         'payload': 'order_on_its_way',
                                         'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                                         'notification_date': datetime.now(),
@@ -608,6 +616,8 @@ class ImmediateStockPicking(models.TransientModel):
                                     }
                                 else:
                                     notification_vals = {
+                                        'title': 'Order on its way',
+                                        'content': 'Your order is on its way to you.',
                                         'fr_title': 'Commande en cours',
                                         'fr_content': 'Votre commande est en route vers vous.',
                                         'payload': 'order_on_its_way',
