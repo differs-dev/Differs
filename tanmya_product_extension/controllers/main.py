@@ -82,9 +82,9 @@ class MobileApiController(http.Controller):
         order.add_to_cart(shipping_method_service.id, 1)
         _logger.info(' ----------------------- shipping method -------------------------- ')
         _logger.info(shipping_method_service)
-        if data['delivery_area'] == 'out_of_area':
-            shipping_method_delivery_service = request.env['product.product'].sudo().search([('name', '=', 'Delivery Out Of Area.')])
-            order.add_to_cart(shipping_method_delivery_service.id, 1)
+        # if data['delivery_area'] == 'out_of_area':
+        #     shipping_method_delivery_service = request.env['product.product'].sudo().search([('name', '=', 'Delivery Out Of Area.')])
+        #     order.add_to_cart(shipping_method_delivery_service.id, 1)
 
         #     order.amount_total += 200
         # order.amount_total += data['method_cost']
