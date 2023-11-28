@@ -519,6 +519,18 @@ class StockPicking(models.Model):
 
     check_notification = fields.Boolean(string='Check Notification', default=False)
 
+    @api.depends('move_lines.state', 'move_lines.date', 'move_type')
+    def _compute_scheduled_date(self):
+        for picking in self:
+            if self.sale_id.delivery_date:
+                picking.scheduled_date = self.sale_id.delivery_date
+            else:
+                moves_dates = picking.move_lines.filtered(lambda move: move.state not in ('done', 'cancel')).mapped('date')
+                if picking.move_type == 'direct':
+                    picking.scheduled_date = min(moves_dates, default=picking.scheduled_date or fields.Datetime.now())
+                else:
+                    picking.scheduled_date = max(moves_dates, default=picking.scheduled_date or fields.Datetime.now())
+
 
 class ImmediateStockPicking(models.TransientModel):
     _inherit = "stock.immediate.transfer"
