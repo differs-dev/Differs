@@ -474,8 +474,8 @@ class TanmyaProducExt(models.Model):
 
     @api.model
     def publish_recipe(self, recipe_vals: dict):
-        if recipe_vals.get('recipeID'):
-            recipe_id = recipe_vals.get('recipeID')
+        if recipe_vals.get('owner_id') and recipe_vals.get('recipe_name'):
+            recipe_id = self.env['product.product'].sudo().search([('name', '=', recipe_vals.get('recipe_name')), ('owner_id', '=', recipe_vals.get('owner_id')], limit=1).id
         else:
             recipe_id = self.add_recipe(recipe_vals)
         _logger.info(f"recipe added with this value: {recipe_vals} and we get this recipe {recipe_id}")
