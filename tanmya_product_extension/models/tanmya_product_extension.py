@@ -474,8 +474,8 @@ class TanmyaProducExt(models.Model):
 
     @api.model
     def publish_recipe(self, recipe_vals: dict):
-        if vals.get('recipeID'):
-            recipe_id = vals.get('recipeID')
+        if recipe_vals.get('recipeID'):
+            recipe_id = recipe_vals.get('recipeID')
         else:
             recipe_id = self.add_recipe(recipe_vals)
         _logger.info(f"recipe added with this value: {recipe_vals} and we get this recipe {recipe_id}")
