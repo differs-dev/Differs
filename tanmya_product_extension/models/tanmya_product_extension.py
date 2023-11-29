@@ -738,6 +738,7 @@ class TanmyaProducExt(models.Model):
         ingredients_details = []
         for line in sale_order.sale_order_template_line_ids:
             ingredient_details = {
+                'id': line.id,
                 'name': line.name,
                 'product_qty': line.product_uom_qty,
                 'product_uom': line.product_uom_id.name,
