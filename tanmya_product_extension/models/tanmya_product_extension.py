@@ -474,7 +474,10 @@ class TanmyaProducExt(models.Model):
 
     @api.model
     def publish_recipe(self, recipe_vals: dict):
-        recipe_id = self.add_recipe(recipe_vals)
+        if vals.get('recipeID'):
+            recipe_id = vals.get('recipeID')
+        else:
+            recipe_id = self.add_recipe(recipe_vals)
         _logger.info(f"recipe added with this value: {recipe_vals} and we get this recipe {recipe_id}")
         if recipe_id:
             appr_category_id = self.env['approval.category'].sudo().search(
