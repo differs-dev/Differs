@@ -24,7 +24,7 @@ class ProductTemplateInherit(models.Model):
     iron = fields.Char(string='Iron')
     en_name = fields.Char('English Name', compute='compute_name')
     fr_name = fields.Char('Frensh Name', compute='compute_name')
-    price_based_on_price_list = fields.Float('Price list price', compute='compute_price_from_pricelist', store=true)
+    price_based_on_price_list = fields.Float('Price list price', compute='compute_price_from_pricelist', store=True)
 
     def compute_name(self):
         for rec in self:
