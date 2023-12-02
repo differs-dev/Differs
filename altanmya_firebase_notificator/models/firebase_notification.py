@@ -152,6 +152,9 @@ class FirebaseNotification(models.Model):
     def send(self):
         tokens = self.user_ids.mapped('firebase_account_id').mapped('token')
         firebase_app = self.get_firebase_app()
+        _logger.info('notification user')
+        _logger.info(self.user_ids.name)
+        _logger.info(self.user_ids.preferred_language)
         if len(self.user_ids) == 1:
             if self.user_ids.preferred_language == 'en':
                 title = self.title
