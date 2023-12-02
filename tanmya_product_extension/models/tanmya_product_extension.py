@@ -826,6 +826,8 @@ class TanmyaProducExt(models.Model):
                         notification_vals = {
                             'title': 'Recipe reviewed',
                             'content': f'{review.user_id.name} just reviewed your recipe. Click here to see details.',
+                            'fr_title': 'Recette revue',
+                            'fr_content': f'{review.user_id.name} viens de revoir ta recette. Cliquez ici pour voir les détails.',
                             'title': 'Recipe reviewed',
                             'content': f'{review.user_id.name} just reviewed your recipe. Click here to see details.',
                             'payload': 'recipe_reviewed',
@@ -836,6 +838,8 @@ class TanmyaProducExt(models.Model):
                         }
                     elif recipe.owner_id.preferred_language == 'fr':
                         notification_vals = {
+                            'title': 'Recipe reviewed',
+                            'content': f'{review.user_id.name} just reviewed your recipe. Click here to see details.',
                             'fr_title': 'Recette revue',
                             'fr_content': f'{review.user_id.name} viens de revoir ta recette. Cliquez ici pour voir les détails.',
                             'title': 'Recipe reviewed',
