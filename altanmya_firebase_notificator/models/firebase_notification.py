@@ -194,6 +194,8 @@ class FirebaseNotification(models.Model):
                             )))),
                         token=tokens[0],
                     )]
+                _logger.info('AndroidNotification 1 ---------------------------')
+                _logger.info(title)
                 response = messaging.send_all(messages=messages, app=firebase_app, dry_run=False)
                 odoo_notification_title = ''
                 odoo_notification_message = ''
@@ -254,6 +256,8 @@ class FirebaseNotification(models.Model):
                                                                                                   )))),
                         tokens=tokens,
                     )
+                    _logger.info('AndroidNotification 2 ---------------------------')
+                    _logger.info(title)
                     response = messaging.send_multicast(message, app=firebase_app)
                     responses.append(response)
                     if response.success_count > 0:
