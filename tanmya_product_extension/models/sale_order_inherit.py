@@ -267,6 +267,9 @@ class SaleOrderInerit(models.Model):
                     total_without_charges += line.price_total
                 elif line.product_id.detailed_type == 'service':
                     delivery_charge += line.price_total
+                    _logger.info('delivery product')
+                    _logger.info(line.product_id.name)
+                    _logger.info(line.price_total)
                 order_line.append(line_details)
             _logger.info('delivery_area: ------------------------------------')
             _logger.info(sale_order.delivery_area)
