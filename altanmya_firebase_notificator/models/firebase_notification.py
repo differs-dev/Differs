@@ -40,6 +40,9 @@ class FirebaseNotification(models.Model):
             'Authorization': f'key={key}',
         }
         url = 'https://fcm.googleapis.com/fcm/send'
+        _logger.info('notification user ')
+        _logger.info(self.user_ids)
+        _logger.info(self.user_ids.preferred_language)
         if len(tokens) > 1:
             data = {
                 "notification": {
