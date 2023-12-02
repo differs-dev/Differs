@@ -438,7 +438,7 @@ class TanmyaProducExt(models.Model):
             _logger.info('recipe values before !!!!')
             _logger.info(vals)
             recipe_vals = {
-                'owner_id': vals.get('owner_id'),
+                'owner_id': vals.get('owner_id') if vals.get('owner_id') else self.env.uid,
                 'image_1920': vals.get('recipe_image'),
                 'image_1920_1': vals.get('recipe_image1'),
                 'image_1920_2': vals.get('recipe_image2'),
