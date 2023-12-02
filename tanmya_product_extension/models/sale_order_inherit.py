@@ -266,7 +266,9 @@ class SaleOrderInerit(models.Model):
                 if line.product_id.detailed_type != 'service':
                     total_without_charges += line.price_total
                 elif line.product_id.detailed_type == 'service':
-                    delivery_charge += line.price_total
+                    related_delivery_method = self.env['delivery.carrier'].sudo().search([('product_id', '=', line.product_id.id)])
+                    if related_delivery_method:
+                        delivery_charge += line.price_total
                     _logger.info('delivery product')
                     _logger.info(line.product_id.name)
                     _logger.info(line.price_total)
