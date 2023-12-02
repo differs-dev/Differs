@@ -249,6 +249,7 @@ class SaleOrderInerit(models.Model):
         if sale_order:
             order_line = []
             total_without_charges = 0
+            delivery_charge = 0
             for line in sale_order.order_line:
                 line_details = {
                     'id': line.id,
@@ -264,13 +265,15 @@ class SaleOrderInerit(models.Model):
                 }
                 if line.product_id.detailed_type != 'service':
                     total_without_charges += line.price_total
+                elif line.product_id.detailed_type == 'service':
+                    delivery_charge += line.price_total
                 order_line.append(line_details)
             _logger.info('delivery_area: ------------------------------------')
             _logger.info(sale_order.delivery_area)
             _logger.info(total_without_charges)
-            delivery_charge = 0
             # if sale_order.delivery_area == 'out_of_area':
-            delivery_charge = (sale_order.amount_total - total_without_charges)
+            # delivery_charge = (sale_order.amount_total - total_without_charges)
+            
             sale_order_details = {
                 'id': sale_order.id,
                 'amount_total': sale_order.amount_total,
