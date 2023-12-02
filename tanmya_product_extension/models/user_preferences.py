@@ -92,6 +92,8 @@ class ApprovalRequestExt(models.Model):
                     notification_vals = {
                         'title': 'Recipe approved',
                         'content': f'Your recipe was approved. Click here to see details.',
+                        'fr_title': 'Recette approuvée',
+                        'fr_content': f'Votre recette a été approuvée. Cliquez ici pour voir les détails.',
                         'payload': 'recipe_approved',
                         'target_action': 'recipe_approved',
                         'notification_date': datetime.now(),
@@ -103,8 +105,10 @@ class ApprovalRequestExt(models.Model):
                         notification.send()
                 elif line.product_id.owner_id.preferred_language == 'fr':
                     notification_vals = {
-                        'title': 'Recette approuvée',
-                        'content': f'Votre recette a été approuvée. Cliquez ici pour voir les détails.',
+                        'title': 'Recipe approved',
+                        'content': f'Your recipe was approved. Click here to see details.',
+                        'fr_title': 'Recette approuvée',
+                        'fr_content': f'Votre recette a été approuvée. Cliquez ici pour voir les détails.',
                         'payload': 'recipe_approved',
                         'target_action': 'recipe_approved',
                         'notification_date': datetime.now(),
@@ -130,6 +134,8 @@ class ApprovalRequestExt(models.Model):
                     notification_vals = {
                         'title': 'Recipe refused',
                         'content': f'Your recipe was refused. Click here to see details.',
+                        'fr_title': 'Recette refusée',
+                        'fr_content': f'Votre recette a été refusée. Cliquez ici pour voir les détails.',
                         'payload': 'recipe_refused',
                         'target_action': 'recipe_refused',
                         'notification_date': datetime.now(),
@@ -141,8 +147,10 @@ class ApprovalRequestExt(models.Model):
                         notification.send()
                 elif line.product_id.owner_id.preferred_language == 'fr':
                     notification_vals = {
-                        'title': 'Recette refusée',
-                        'content': f'Votre recette a été refusée. Cliquez ici pour voir les détails.',
+                        'title': 'Recipe refused',
+                        'content': f'Your recipe was refused. Click here to see details.',
+                        'fr_title': 'Recette refusée',
+                        'fr_content': f'Votre recette a été refusée. Cliquez ici pour voir les détails.',
                         'payload': 'recipe_refused',
                         'target_action': 'recipe_refused',
                         'notification_date': datetime.now(),
