@@ -507,10 +507,14 @@ class SaleOrderInerit(models.Model):
                 try:
                     error_status = sale_coupon_wizard.differs_process_coupon()
                     error_status['old_total_price'] = old_total_price
+                    _logger.info('------------- error status ---------------------')
+                    _logger.info(error_status)
                     return error_status
                 except UserError as e:
                     print(e)
                     error_status['old_total_price'] = old_total_price
+                    _logger.info('------------- error status ---------------------')
+                    _logger.info(error_status)
                     return error_status
 
 
