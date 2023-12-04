@@ -307,6 +307,22 @@ class SaleOrderInerit(models.Model):
         return []
 
     @api.model
+    def get_user_carts_history_length(self):
+        user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
+        if user:
+            user_sale_orders = self.env['sale.order'].sudo().search([('partner_id', '=', user.partner_id.id),
+                                                                     ('state', '=', 'sale')],
+                                                                    order='date_order desc')
+            if user_sale_orders:
+                user_carts = []
+                for sale_order in user_sale_orders:
+                    if sale_order.picking_ids:
+                        if sale_order.picking_ids[0].state == 'done':
+                            user_carts.append(self.get_sale_order_details(sale_order))
+                return user_carts
+        return []
+
+    @api.model
     def get_user_carts_ongoing(self):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         if user:
@@ -325,7 +341,7 @@ class SaleOrderInerit(models.Model):
                     if sale_order.picking_ids:
                         if sale_order.picking_ids[0].state != 'done':
                             user_carts.append(self.get_sale_order_details(sale_order))
-                return user_carts
+                return len(user_carts)
         return []
 
     @api.model
