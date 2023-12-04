@@ -319,8 +319,8 @@ class SaleOrderInerit(models.Model):
                     if sale_order.picking_ids:
                         if sale_order.picking_ids[0].state == 'done':
                             user_carts.append(self.get_sale_order_details(sale_order))
-                return user_carts
-        return []
+                return len(user_carts)
+        return 0
 
     @api.model
     def get_user_carts_ongoing(self):
@@ -341,9 +341,31 @@ class SaleOrderInerit(models.Model):
                     if sale_order.picking_ids:
                         if sale_order.picking_ids[0].state != 'done':
                             user_carts.append(self.get_sale_order_details(sale_order))
+                return user_carts
+        return []
+
+    @api.model
+    def get_user_carts_ongoing_length(self):
+        user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
+        if user:
+            user_sale_orders = self.env['sale.order'].sudo().search([('partner_id', '=', user.partner_id.id),
+                                                                     ('state', '=', 'sale'),
+                                                                     ('invoice_ids.payment_state', '=', 'paid')],
+                                                                    order='date_order desc')
+            if user_sale_orders:
+                user_carts = []
+                for sale_order in user_sale_orders:
+                    _logger.info('sale order info are : -------------')
+                    _logger.info(sale_order.amount_total)
+                    _logger.info(sale_order.delivery_area)
+                    # if sale_order.delivery_area == 'out_of_area':
+                    #     sale_order.amount_total += 200
+                    if sale_order.picking_ids:
+                        if sale_order.picking_ids[0].state != 'done':
+                            user_carts.append(self.get_sale_order_details(sale_order))
                 return len(user_carts)
         return 0
-
+    
     @api.model
     def create_cash_statement(self, invoice_name, payaction):
         last_payment = self.env['account.payment'].sudo().browse(payaction['res_id'])
