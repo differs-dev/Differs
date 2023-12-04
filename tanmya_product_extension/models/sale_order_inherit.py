@@ -342,7 +342,7 @@ class SaleOrderInerit(models.Model):
                         if sale_order.picking_ids[0].state != 'done':
                             user_carts.append(self.get_sale_order_details(sale_order))
                 return len(user_carts)
-        return []
+        return 0
 
     @api.model
     def create_cash_statement(self, invoice_name, payaction):
