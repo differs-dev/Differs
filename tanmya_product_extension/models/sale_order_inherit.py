@@ -530,6 +530,7 @@ class SaleOrderInerit(models.Model):
                 return [sale_order_review]
         return []
 
+    @api.model
     def check_if_order_is_bought_again(self, order_id):
         order = self.env['sale.order'].sudo().search([('id', '=', order_id)])
         if order.is_order_bought_again:
