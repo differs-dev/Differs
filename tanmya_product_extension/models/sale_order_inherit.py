@@ -533,10 +533,13 @@ class SaleOrderInerit(models.Model):
     @api.model
     def check_if_order_is_bought_again(self, order_id):
         order = self.env['sale.order'].sudo().search([('id', '=', order_id)])
+        _logger.info('is_order_bought_again ? ')
+        _logger.info(order.is_order_bought_again)
         if order.is_order_bought_again:
             return True
+        
         else:
-            False
+            return False
 
     @api.model
     def buy_order_again(self, order_id):
