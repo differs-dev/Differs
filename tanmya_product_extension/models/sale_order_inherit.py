@@ -14,6 +14,7 @@ class SaleOrderInerit(models.Model):
 
     cart_products_qty = fields.Integer(string='Cart Quantity', compute='_compute_cart_qty')
     order_review = fields.Many2one('tanmya.review', string='Order Review')
+    is_order_bought_again = fields.Boolean(string='Is Order Bought Again')
 
     #################################
     delivery_address = fields.Many2one('additional.address', compute='_compute_delivery_address')
