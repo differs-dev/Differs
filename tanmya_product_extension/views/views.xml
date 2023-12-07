@@ -129,6 +129,7 @@
                             <field name="name"/>
                             <field name="image" widget="image"/>
                             <field name="type"/>
+                            <field name="mobile_color"/>
                         </group>
                     </sheet>
                 </form>
