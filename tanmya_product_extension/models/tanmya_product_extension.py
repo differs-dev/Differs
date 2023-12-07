@@ -18,6 +18,7 @@ class Tanmyaprodcategory(models.Model):
                              ('by_cuisine', 'By Cuisine')],
                             string='Category Type',
                             default='by_ingredients')
+    mobile_color = fields.Char(string='Color to use in mobile')
 
     @api.model
     def get_categories_by_ingredients(self, search_word='', limit=None, offset=0):
