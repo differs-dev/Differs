@@ -173,6 +173,32 @@ class Tanmyaprodcategory(models.Model):
         return categories_details
 
     @api.model
+    def get_main_product_categories_details(self, search_word='', limit=None, offset=0):
+        categories = False
+        if search_word == '':
+            categories = self.env['product.category'].sudo().search([], limit=limit, offset=offset)
+        else:
+            categories = self.env['product.category'].sudo().search(['|', ('parent_id', '=', None), ('parent_id.parent_id', '=', None)
+                                                                     '|', '|', '|',
+                                                                     ('name', 'like', search_word),
+                                                                     ('name', 'like', search_word.capitalize()),
+                                                                     ('name', 'like', search_word.upper()),
+                                                                     ('name', 'like', search_word.lower())],
+                                                                    limit=limit,
+                                                                    offset=offset)
+        categories_details = []
+        if categories:
+            for category in categories:
+                category_details = {
+                    'id': category.id,
+                    'name': category.name,
+                    'image': category.image
+                }
+                categories_details.append(category_details)
+
+        return categories_details
+
+    @api.model
     def get_recipe_categories(self, categories_ids: list):
         if categories_ids:
             categories = self.env['tanmya.product.category'].sudo().search([('id', 'in', categories_ids)])
