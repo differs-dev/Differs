@@ -10,3 +10,10 @@ class ProductCategory(models.Model):
     _inherit = "product.category"
 
     image = fields.Image(string='Image')
+
+    def does_category_has_childs(self):
+        if len(self.child_id.ids) > 0:
+            return True
+        else:
+            return False
+
