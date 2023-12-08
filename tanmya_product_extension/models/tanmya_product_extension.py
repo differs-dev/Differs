@@ -178,7 +178,7 @@ class Tanmyaprodcategory(models.Model):
         if search_word == '':
             categories = self.env['product.category'].sudo().search([], limit=limit, offset=offset)
         else:
-            categories = self.env['product.category'].sudo().search(['|', ('parent_id', '=', None), ('parent_id.parent_id', '=', None)
+            categories = self.env['product.category'].sudo().search(['|', ('parent_id', '=', None), ('parent_id.parent_id', '=', None),
                                                                      '|', '|', '|',
                                                                      ('name', 'like', search_word),
                                                                      ('name', 'like', search_word.capitalize()),
