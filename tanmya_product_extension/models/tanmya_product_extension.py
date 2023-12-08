@@ -173,10 +173,14 @@ class Tanmyaprodcategory(models.Model):
         return categories_details
 
     @api.model
-    def get_main_product_categories_details(self, search_word='', limit=None, offset=0):
+    def get_main_product_categories_details(self, search_word='', parent = -1, limit=None, offset=0):
         categories = False
         if search_word == '':
-            categories = self.env['product.category'].sudo().search(['|', ('parent_id', '=', None), ('parent_id.parent_id', '=', None)],
+            if parent != -1:
+                categories = self.env['product.category'].sudo().search([('parent_id', '=', parent)],
+                                                                    limit=limit, offset=offset)
+            else:
+                categories = self.env['product.category'].sudo().search(['|', ('parent_id', '=', None), ('parent_id.parent_id', '=', None)],
                                                                     limit=limit, offset=offset)
         else:
             categories = self.env['product.category'].sudo().search(['|', ('parent_id', '=', None), ('parent_id.parent_id', '=', None),
