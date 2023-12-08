@@ -176,7 +176,8 @@ class Tanmyaprodcategory(models.Model):
     def get_main_product_categories_details(self, search_word='', limit=None, offset=0):
         categories = False
         if search_word == '':
-            categories = self.env['product.category'].sudo().search([], limit=limit, offset=offset)
+            categories = self.env['product.category'].sudo().search(['|', ('parent_id', '=', None), ('parent_id.parent_id', '=', None)],
+                                                                    limit=limit, offset=offset)
         else:
             categories = self.env['product.category'].sudo().search(['|', ('parent_id', '=', None), ('parent_id.parent_id', '=', None),
                                                                      '|', '|', '|',
