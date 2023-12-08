@@ -324,12 +324,14 @@ class SaleOrderInerit(models.Model):
         return 0
 
     @api.model
-    def get_user_carts_ongoing(self):
+    def get_user_carts_ongoing(self, limit=None, offset=0,):
         user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
         if user:
             user_sale_orders = self.env['sale.order'].sudo().search([('partner_id', '=', user.partner_id.id),
                                                                      ('state', '=', 'sale'),
                                                                      ('invoice_ids.payment_state', '=', 'paid')],
+                                                                    limit=limit,
+                                                                    offset=offset,
                                                                     order='date_order desc')
             if user_sale_orders:
                 user_carts = []
