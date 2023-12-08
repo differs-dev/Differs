@@ -11,7 +11,8 @@ class ProductCategory(models.Model):
 
     image = fields.Image(string='Image')
 
-    def does_category_has_childs(self, category_id):
+    @api.model
+    def does_category_has_childs(self, category_id: int):
         category = self.env['product.category'].sudo().search([('id', '=', category_id)])
         if len(category.child_id.ids) > 0:
             return True
