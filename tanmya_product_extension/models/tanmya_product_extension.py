@@ -183,7 +183,17 @@ class Tanmyaprodcategory(models.Model):
                 categories = self.env['product.category'].sudo().search(['|', ('parent_id', '=', None), ('parent_id.parent_id', '=', None)],
                                                                     limit=limit, offset=offset)
         else:
-            categories = self.env['product.category'].sudo().search(['|', ('parent_id', '=', None), ('parent_id.parent_id', '=', None),
+            if parent != -1:
+                categories = self.env['product.category'].sudo().search([('parent_id', '=', parent),
+                                                                     '|', '|', '|',
+                                                                     ('name', 'like', search_word),
+                                                                     ('name', 'like', search_word.capitalize()),
+                                                                     ('name', 'like', search_word.upper()),
+                                                                     ('name', 'like', search_word.lower())],
+                                                                    limit=limit,
+                                                                    offset=offset)
+            else:
+                categories = self.env['product.category'].sudo().search(['|', ('parent_id', '=', None), ('parent_id.parent_id', '=', None),
                                                                      '|', '|', '|',
                                                                      ('name', 'like', search_word),
                                                                      ('name', 'like', search_word.capitalize()),
