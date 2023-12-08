@@ -948,10 +948,17 @@ class TanmyaProducExt(models.Model):
                     return 0.0
 
     @api.model
-    def get_recipes_details(self, state='public', owner_id=-1, limit=None, offset=0):
+    def get_recipes_details(self, state='public', owner_id=-1, limit=None, offset=0, order_by='name'):
         recipes = False
         if owner_id == -1 or not owner_id:
-            recipes = self.env['product.product'].sudo().search([('kit_template', '!=', None),
+            if order_by != 'name':
+                recipes = self.env['product.product'].sudo().search([('kit_template', '!=', None),
+                                                                 ('recipe_status', '=', state)],
+                                                                limit=limit,
+                                                                offset=offset,
+                                                                order=order_by)
+            else:
+                recipes = self.env['product.product'].sudo().search([('kit_template', '!=', None),
                                                                  ('recipe_status', '=', state)],
                                                                 limit=limit,
                                                                 offset=offset)
