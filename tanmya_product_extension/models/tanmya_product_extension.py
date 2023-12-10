@@ -141,7 +141,8 @@ class Tanmyaprodcategory(models.Model):
                 category_details = {
                     'id': category.id,
                     'name': category.name,
-                    'image': category.image
+                    'image': category.image,
+                    'color': category.mobile_color
                 }
                 categories_details.append(category_details)
 
@@ -167,7 +168,6 @@ class Tanmyaprodcategory(models.Model):
                     'id': category.id,
                     'name': category.name,
                     'image': category.image,
-                    'color': category.mobile_color
                 }
                 categories_details.append(category_details)
 
