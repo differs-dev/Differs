@@ -300,7 +300,7 @@ class TanmyaProducExt(models.Model):
         category_id = self.env['tanmya.product.category'].sudo().search([('name', '=', category_name)],
                                                                 order=order_by,
                                                                 limit=1,
-                                                                offset=offset).id
+                                                                offset=0).id
         recipes = self.env['product.product'].sudo().search([('prod_category', 'in', category_id)], limit=limit, offset=offset)
         recipes_details = []
         for recipe in recipes:
