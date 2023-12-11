@@ -182,6 +182,108 @@ class ResUsers(models.Model):
                 }
                 products_variants_details.append(product_variant_details)
         return products_variants_details
+
+    @api.model
+    def get_user_preferences_length(self, products_type: int, limit=None, offset=0):
+        user = self.env['res.users'].sudo().search([('id', '=', self.env.uid)])
+        user_preferences = []
+        if self.env.user.preferred_language == 'fr':
+            user_lang = 'fr_FR'
+        else:
+            user_lang = 'en_US'
+        _logger.info('user prefs')
+        _logger.info(user.products_preferences_ids.ids)
+        if user:
+            products_preferences = []
+            if products_type == 2:
+                products_preferences = self.env['products.preferences'].with_context(lang=user_lang).sudo().search(
+                    [('id', 'in', user.products_preferences_ids.ids),
+                     ('product_id', '!=', False),
+                     ('product_id.kit_template', '!=', None)],
+                    limit=limit, offset=offset)
+                _logger.info('recipes_preferences are :')
+                _logger.info(products_preferences)
+                for product_preference in products_preferences:
+                    user_preference = {
+                        'id': product_preference.product_id.id,
+                        # 'image_128': product_preference.product_id.image_1920,
+                        'image_1920': product_preference.product_id.image_1920,
+                        'image_1920_1': product_preference.product_id.image_1920_1,
+                        'image_1920_2': product_preference.product_id.image_1920_2,
+                        'name': product_preference.product_id.name,
+                        'list_price': product_preference.product_id.list_price,
+
+                        'hours_preparation_time': product_preference.product_id.hours_preparation_time,
+                        'minutes_preparation_time': product_preference.product_id.minutes_preparation_time,
+                        'difficulty_level': product_preference.product_id.difficulty_level,
+                        'instructions': product_preference.product_id.instructions,
+                        'description': product_preference.product_id.description,
+                        'servings': product_preference.product_id.servings,
+                        'calories': product_preference.product_id.calories,
+                        'protein': product_preference.product_id.protein,
+                        'carbs': product_preference.product_id.carbs,
+                        'fat': product_preference.product_id.fat,
+                        'fiber': product_preference.product_id.fiber,
+                        'iron': product_preference.product_id.iron,
+                        'prod_category': product_preference.product_id.prod_category.ids,
+                        'reviews_ids': product_preference.product_id.reviews_ids.ids,
+                        'owner_id': [product_preference.product_id.owner_id.id, product_preference.product_id.owner_id.name],
+                        'total_rates': self.get_recipe_total_rates(product_preference.product_id.id),
+                        
+                        'uom': product_preference.product_id.uom_id.name,
+                        'kit_template': product_preference.product_id.kit_template.id,
+                        # 'hours_preparation_time': product_preference.product_id.hours_preparation_time,
+                        # 'minutes_preparation_time': product_preference.product_id.minutes_preparation_time,
+                        'recipe_status': product_preference.status,
+                    }
+                    user_preferences.append(user_preference)
+                    _logger.info('user_preferences of recipes are ::')
+                    _logger.info(user_preferences)
+            else:
+                products_preferences = self.env['products.preferences'].with_context(lang=user_lang).sudo().search(
+                    [('id', 'in', user.products_preferences_ids.ids),
+                     ('template_id', '!=', False),
+                    ('product_id', '=', False)
+                    ],
+                    limit=limit, offset=offset)
+                _logger.info('products_preferences are :')
+                _logger.info(products_preferences)
+                for product_preference in products_preferences:
+                    price = product_preference.template_id.compute_price_from_pricelist(product_preference.template_id.id)
+                    _logger.info('product_id : ')
+                    _logger.info(product_preference.product_id.id)
+                    _logger.info(product_preference.template_id.id)
+                    _logger.info(price)
+                    _logger.info('variants')
+                    _logger.info(self.get_products_variants_details(product_preference.id))
+                    _logger.info(self.get_products_variants_details(product_preference.product_id.id))
+                    user_preference = {
+                        'id': product_preference.template_id.id,
+                        'image_128': product_preference.template_id.image_1920,
+                        'image_1920': product_preference.template_id.image_1920,
+                        'name': product_preference.template_id.name,
+                        # 'list_price': product_preference.template_id.list_price,
+                        'list_price': price,
+                        'uom': product_preference.template_id.uom_id.name,
+                        'preference_state': product_preference.status,
+                        'calories': product_preference.template_id.calories,
+                        'carbs': product_preference.template_id.carbs,
+                        'protein': product_preference.template_id.protein,
+                        'fat': product_preference.template_id.fat,
+                        'fiber': product_preference.template_id.fiber,
+                        'iron': product_preference.template_id.iron,
+                        'description': product_preference.template_id.description,
+                        'product_variants': self.get_products_variants_details(product_preference.template_id.id),
+                        'additional_description': product_preference.template_id.mobile_description,
+                        'composition': product_preference.template_id.x_studio_composition,
+                        'conservation_et_utilisation': product_preference.template_id.x_studio_conservation_et_utilisation,
+                        'product_more_info': product_preference.template_id.x_studio_product_more_info,
+
+                    }
+                    user_preferences.append(user_preference)
+                    _logger.info('user prefs of products are :')
+                    _logger.info(user_preferences)
+        return len(user_preferences)
          
     @api.model
     def get_user_preferences(self, products_type: int, limit=None, offset=0):
