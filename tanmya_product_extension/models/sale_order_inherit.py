@@ -347,7 +347,7 @@ class SaleOrderInerit(models.Model):
                         if sale_order.picking_ids[0].state != 'done':
                             user_carts.append(self.get_sale_order_details(sale_order))
                 return user_carts
-        return []
+        return 0
 
     @api.model
     def get_user_carts_ongoing_length(self):
