@@ -42,6 +42,18 @@ class ResUsers(models.Model):
                                                string='Products Preferences')
     preferred_language = fields.Char(string='User Language', default='fr')
 
+    def save_user_family_data(self, adults=0, children=0, pets=0):
+        user = self.env.uid
+        try:
+            user.sudo().write({
+                'adults': adults,
+                'children': children,
+                'pets': pets
+            })
+            return {"message": "success"}
+        except:
+            return {"message": "failed"}
+
     def get_recipe_total_rates(self, recipe_id):
         if recipe_id:
             recipe = self.env['product.product'].sudo().search([('id', '=', recipe_id)])
