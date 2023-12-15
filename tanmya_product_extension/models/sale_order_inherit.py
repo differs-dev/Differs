@@ -77,7 +77,8 @@ class SaleOrderInerit(models.Model):
             for line in order_lines:
                 if line.product_id.detailed_type == 'service':
                     total_service_lines += 1
-            
+
+            _logger.info(f'reason is : {total_service_lines} != {len(order_lines)}')
             if user_sale_order and total_service_lines != len(order_lines):
                 return user_sale_order
             else:
