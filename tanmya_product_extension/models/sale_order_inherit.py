@@ -342,6 +342,8 @@ class SaleOrderInerit(models.Model):
                                                                     limit=limit,
                                                                     offset=offset,
                                                                     order='date_order desc')
+            _logger.info('user sale orders')
+            _logger.info(user_sale_orders)
             if user_sale_orders:
                 user_carts = []
                 for sale_order in user_sale_orders:
