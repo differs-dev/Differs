@@ -43,7 +43,7 @@ class ResUsers(models.Model):
     preferred_language = fields.Char(string='User Language', default='fr')
 
     def save_user_family_data(self, adults=0, children=0, pets=0):
-        user = self.env.uid
+        user = self.env.user
         try:
             user.sudo().write({
                 'adults': adults,
