@@ -79,7 +79,7 @@ class SaleOrderInerit(models.Model):
                     total_service_lines += 1
 
             _logger.info(f'reason is : {total_service_lines} != {len(order_lines)}')
-            if user_sale_order and total_service_lines != len(order_lines):
+            if user_sale_order and ((total_service_lines != len(order_lines)) or len(order_lines) == 0):
                 return user_sale_order
             else:
                 return self.init_new_cart()
