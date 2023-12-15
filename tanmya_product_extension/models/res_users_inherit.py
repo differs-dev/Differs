@@ -51,7 +51,8 @@ class ResUsers(models.Model):
                 'pets': pets
             })
             return {"message": "success"}
-        except:
+        except Exception as error:
+            _logger.info(f'save user family error : {error}')
             return {"message": "failed"}
 
     def get_recipe_total_rates(self, recipe_id):
