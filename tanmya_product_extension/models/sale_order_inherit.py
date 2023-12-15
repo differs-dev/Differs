@@ -67,6 +67,11 @@ class SaleOrderInerit(models.Model):
             user_sale_order = self.env['sale.order'].with_context(lang=user_lang).sudo().search([('partner_id', '=', user.partner_id.id),
                                                                     ('state', '=', 'draft')],
                                                                    order='date_order desc', limit=1)
+            _logger.info(f'user sale order : {user_sale_order)')
+            user_sale_order_not_localized = self.env['sale.order'].sudo().search([('partner_id', '=', user.partner_id.id),
+                                                                    ('state', '=', 'draft')],
+                                                                   order='date_order desc', limit=1)
+            _logger.info(f'user sale order not localized : {user_sale_order_not_localized)')
             total_service_lines = 0
             order_lines = self.env['sale.order.line'].sudo().search([('order_id', '=', user_sale_order.id)])
             for line in order_lines:
@@ -92,6 +97,7 @@ class SaleOrderInerit(models.Model):
             user_sale_order = self.env['sale.order'].sudo().search([('partner_id', '=', user.partner_id.id),
                                                                     ('state', '=', 'draft')],
                                                                    order='date_order desc', limit=1).order_line
+            
             if user_sale_order:
                 _logger.info('orders length')
                 _logger.info(len(user_sale_order.filtered(lambda r: r.product_id.detailed_type != 'service')))
