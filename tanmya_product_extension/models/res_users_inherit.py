@@ -41,7 +41,8 @@ class ResUsers(models.Model):
                                                'customer_preferences_id',
                                                string='Products Preferences')
     preferred_language = fields.Char(string='User Language', default='fr')
-
+    
+    @api.model
     def save_user_family_data(self, adults=0, children=0, pets=0):
         user = self.env.user
         try:
@@ -54,7 +55,7 @@ class ResUsers(models.Model):
         except Exception as error:
             _logger.info(f'save user family error : {error}')
             return {"message": "failed"}
-
+    @api.model
     def save_user_prefs(self, gluten=False, dairy=False, pork=False, pescatarian=False, vegetarian=False, vegan=False):
         user = self.env.user
         try:
