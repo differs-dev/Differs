@@ -55,7 +55,7 @@ class ResUsers(models.Model):
             _logger.info(f'save user family error : {error}')
             return {"message": "failed"}
 
-    def save_user_prefs(self, gluten, dairy, pork, pescatarian, vegetarian, vegan):
+    def save_user_prefs(self, gluten=False, dairy=False, pork=False, pescatarian=False, vegetarian=False, vegan=False):
         user = self.env.user
         try:
             _logger.info('prefs data')
