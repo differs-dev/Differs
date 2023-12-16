@@ -58,6 +58,14 @@ class ResUsers(models.Model):
     def save_user_prefs(self, gluten, dairy, pork, pescatarian, vegetarian, vegan):
         user = self.env.user
         try:
+            _logger.info('prefs data')
+            _logger.info(gluten)
+            _logger.info(dairy)
+            _logger.info(pork)
+            _logger.info(pescatarian)
+            _logger.info(vegetarian)
+            _logger.info(vegan)
+
             user.sudo().write({
                 'gluten': gluten,
                 'dairy': dairy,
