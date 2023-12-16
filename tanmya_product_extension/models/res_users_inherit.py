@@ -89,6 +89,9 @@ class ResUsers(models.Model):
             user.sudo().write({
                 'disliked_products': [(6, 0, ids)],
             })
+            _logger.info('done')
+            _logger.info('disliked products are :')
+            _logger.info(ids)
             return {"message": "success"}
         except Exception as error:
             _logger.info(f'save user family error : {error}')
