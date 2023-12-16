@@ -36,7 +36,7 @@ class ResUsers(models.Model):
     pescatarian = fields.Boolean(string='Pescatarian')
     vegetarian = fields.Boolean(string='Vegetarian')
     vegan = fields.Boolean(string='Vegan')
-    disliked_products = fields.Many2many('product.template', string='Disliked Products')
+    disliked_products = fields.Many2many('product.product', string='Disliked Products')
 
     products_preferences_ids = fields.One2many('products.preferences',
                                                'customer_preferences_id',
