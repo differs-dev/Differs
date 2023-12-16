@@ -36,6 +36,7 @@ class ResUsers(models.Model):
     pescatarian = fields.Boolean(string='Pescatarian')
     vegetarian = fields.Boolean(string='Vegetarian')
     vegan = fields.Boolean(string='Vegan')
+    disliked_products = fields.Many2many('product.template', string='Disliked Products')
 
     products_preferences_ids = fields.One2many('products.preferences',
                                                'customer_preferences_id',
@@ -55,6 +56,7 @@ class ResUsers(models.Model):
         except Exception as error:
             _logger.info(f'save user family error : {error}')
             return {"message": "failed"}
+            
     @api.model
     def save_user_prefs(self, gluten=False, dairy=False, pork=False, pescatarian=False, vegetarian=False, vegan=False):
         user = self.env.user
@@ -79,6 +81,19 @@ class ResUsers(models.Model):
         except Exception as error:
             _logger.info(f'save user prefs error : {error}')
             return {"message": "failed"}
+
+    @api.model
+    def save_user_disliked_products(self, ids=[]):
+        user = self.env.user
+        try:
+            user.sudo().write({
+                'disliked_products': [(6, 0, ids)],
+            })
+            return {"message": "success"}
+        except Exception as error:
+            _logger.info(f'save user family error : {error}')
+            return {"message": "failed"}
+            
 
     def get_recipe_total_rates(self, recipe_id):
         if recipe_id:
