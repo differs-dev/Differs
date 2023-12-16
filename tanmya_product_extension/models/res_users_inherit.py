@@ -55,6 +55,22 @@ class ResUsers(models.Model):
             _logger.info(f'save user family error : {error}')
             return {"message": "failed"}
 
+    def save_user_prefs(self, gluten, dairy, pork, pescatarian, vegetarian, vegan):
+        user = self.env.user
+        try:
+            user.sudo().write({
+                'gluten': gluten,
+                'dairy': dairy,
+                'pork': pork,
+                'pescatarian': pescatarian,
+                'vegetarian': vegetarian,
+                'vegan': vegan
+            })
+            return {"message": "success"}
+        except Exception as error:
+            _logger.info(f'save user prefs error : {error}')
+            return {"message": "failed"}
+
     def get_recipe_total_rates(self, recipe_id):
         if recipe_id:
             recipe = self.env['product.product'].sudo().search([('id', '=', recipe_id)])
