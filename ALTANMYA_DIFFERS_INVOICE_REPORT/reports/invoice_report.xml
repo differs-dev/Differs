@@ -61,7 +61,7 @@
                                     <div style="text-align:center; font-size: 10pt; padding-right:50px; margin-bottom:-10px; ">
                                         <span style="background-color: #ffffff;">Client</span>
                                     </div>
-                                    <div style="border-radius: 8px;                border: 1px solid black;                            padding: 20px;                               width: 400px;                               height: 170px;">
+                                    <div style="border-radius: 8px;                border: 1px solid black;                            padding: 20px;                               width: 400px;                               height: 190px;">
                                         <div style="text-align:left; ">
                                             <span t-esc="o.partner_id.name"/>
                                         </div>
@@ -128,8 +128,7 @@
 
                                             <t t-if="delivery.picking_type_code == 'outgoing'">
                                                 <tr class="text-left">
-                                                    <td style="background-color: #dddddd; font-weight: bold;"
-                                                        colspan="10">
+                                                    <td style="background-color: #dddddd; font-weight: bold ; border: 1px solid black !important" colspan="10">
                                                         <span style="padding-right: 20px; padding-left:  50px;">Notre
                                                             BL
 
@@ -163,10 +162,9 @@
                                                                 <span t-esc="delivery_line.tax_ids.name"/>
                                                             </td>
                                                             <td style="border: 1px solid black !important;">
-                                                                <span t-esc="delivery_line.price_unit * delivery_line.quantity"/>
+                                                                <span t-esc="delivery_line.price_total"/>
                                                             </td>
-                                                            <t t-set="total_sum"
-                                                               t-value="total_sum + (delivery_line.price_unit * delivery_line.quantity)"/>
+                                                            <t t-set="total_sum" t-value="total_sum + (delivery_line.price_unit * delivery_line.quantity)"/>
                                                         </tr>
 
                                                     </t>
@@ -179,11 +177,9 @@
 
 
                                         <tr>
-                                            <td colspan="8"
-                                                style="border: 1px solid black !important; text-align: right; padding-right: 23px">
+                                            <td colspan="8" style="border: 1px solid black !important; text-align: right; padding-right: 23px">
                                                 <span>Sous-total:</span>
-                                                <span style="margin-left:4px"
-                                                      t-esc="'{0:,.2f}'.format(float(total_sum))"/>
+                                                <span style="margin-left:4px" t-esc="'{0:,.2f}'.format(float(total_sum))"/>
                                             </td>
                                         </tr>
                                     </t>
@@ -219,9 +215,8 @@
                                         <t t-set="counter" t-value="1"/>
 
                                         <t t-set="subtotal_to_show" t-value="subtotal['name']"/>
-                                        <t t-foreach="tax_totals['groups_by_subtotal'][subtotal_to_show]"
-                                           t-as="amount_by_group">
-                                            <t t-if="len(tax_totals['groups_by_subtotal'][subtotal_to_show]) > 1">
+                                        <t t-foreach="tax_totals['groups_by_subtotal'][subtotal_to_show]" t-as="amount_by_group">
+                                            <t t-if="len(tax_totals['groups_by_subtotal'][subtotal_to_show]) >= 1">
 
                                                 <tr class="text-center">
                                                     <td style="border: 1px solid black !important; ">
@@ -231,7 +226,7 @@
                                                         <span t-esc="o.amount_untaxed"/>
                                                     </td>
                                                     <td style="border: 1px solid black !important;">
-                                                        <span t-esc="o.amount_tax"/>
+                                                        <span t-esc="amount_by_group['tax_group_name']"/>
                                                     </td>
                                                     <td style="border: 1px solid black !important;">
                                                         <span t-esc="amount_by_group['formatted_tax_group_amount']"/>
@@ -243,8 +238,7 @@
                                                 <t t-set="counter" t-value="counter + 1"/>
                                             </t>
                                             <t t-else="">
-                                                <span class="text-right"
-                                                      t-esc="amount_by_group['formatted_tax_group_amount']"/>
+                                                <span class="text-right" t-esc="amount_by_group['formatted_tax_group_amount']"/>
                                             </t>
                                         </t>
                                     </t>
@@ -260,8 +254,7 @@
                                 </div>
                                 <div class="col-6">
                                     <div style="margin-left:225px ;border-radius: 8px;                          border: 3px solid black;                               padding: 20px;                               width: 180px;                               height: 60px;">
-                                        <div class="row"
-                                             style="text-align:center; margin-top:-18px; font-weight: bold;">
+                                        <div class="row" style="text-align:center; margin-top:-18px; font-weight: bold;">
                                             <span style="padding-left: 25px">Net à Payer</span>
                                         </div>
                                         <div style="text-align:center; margin-top: -3px; font-weight: bold;">
