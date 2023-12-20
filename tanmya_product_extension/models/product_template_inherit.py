@@ -52,35 +52,38 @@ class ProductTemplateInherit(models.Model):
 
     def compute_price_field_from_pricelist(self):
         price_list = self.env['product.pricelist'].with_context(lang='en_US').sudo().search([('is_mobile_list', '=', True)])
-        for rec in self:
-            product = self.env['product.product'].sudo().search([('product_tmpl_id', '=', rec.id)])
-            if product :
-                price = price_list.get_product_price(product.product_variant_ids[0], 1, False)
-                rec.price_based_on_price_list = price
-            else:
-                rec.price_based_on_price_list = 0.0
+        if price_list:
+            for rec in self:
+                product = self.env['product.product'].sudo().search([('product_tmpl_id', '=', rec.id)])
+                if product :
+                    price = price_list.get_product_price(product.product_variant_ids[0], 1, False)
+                    rec.price_based_on_price_list = price
+                else:
+                    rec.price_based_on_price_list = 0.0
 
     def compute_price_from_pricelist(self, product_id):
         price_list = self.env['product.pricelist'].with_context(lang='en_US').sudo().search([('is_mobile_list', '=', True)])
         product = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product_id)])
         _logger.info(product)
-        if product :
-            price = price_list.get_product_price(product.product_variant_ids[0], 1, False)
-            _logger.info('variant price')
-            _logger.info(price)
-            return price
-        else:
-            return 0.0
+        if price_list:
+            if product :
+                price = price_list.get_product_price(product.product_variant_ids[0], 1, False)
+                _logger.info('variant price')
+                _logger.info(price)
+                return price
+            else:
+                return 0.0
             
     def compute_variant_price_from_pricelist(self, product_id):
         price_list = self.env['product.pricelist'].with_context(lang='en_US').sudo().search([('is_mobile_list', '=', True)])
         product = self.env['product.product'].sudo().search([('id', '=', product_id)])
         _logger.info(product)
-        if product :
-            price = price_list.get_product_price(product, 1, False)
-            return price
-        else:
-            return 0.0
+        if price_list:
+                if product :
+                    price = price_list.get_product_price(product, 1, False)
+                    return price
+                else:
+                    return 0.0
 
     def convert_list_to_string(self, nut_list):
         result = ''
