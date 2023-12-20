@@ -14,6 +14,7 @@
              'views/templates.xml',
              'views/product_category.xml',
              'views/sale_order_inherit.xml',
+             'views/product_pricelist_views.xml'
             ],
     'installable': True,
     'auto_install': False,
