@@ -11,5 +11,4 @@ class ProductPricelist(models.Model):
         lists = self.env['product.pricelist'].sudo().search([])
         for list in lists:
             if list.is_mobile_list and list.id != self.id:
-                raise ValidationError("Another price list is a mobile pricelist,
-                please deactivate 'Use this list in mobile app?' if you want to use this list ")
+                raise ValidationError("Another price list is a mobile pricelist, please deactivate 'Use this list in mobile app?' if you want to use this list ")
