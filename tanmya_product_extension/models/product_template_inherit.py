@@ -51,7 +51,7 @@ class ProductTemplateInherit(models.Model):
             rec.mobile_description = soup.get_text()
 
     def compute_price_field_from_pricelist(self):
-        price_list = self.env['product.pricelist'].with_context(lang='en_US').sudo().search([('name', 'like', 'X1.5')])
+        price_list = self.env['product.pricelist'].with_context(lang='en_US').sudo().search([('is_mobile_list', '=', True)])
         for rec in self:
             product = self.env['product.product'].sudo().search([('product_tmpl_id', '=', rec.id)])
             if product :
@@ -61,7 +61,7 @@ class ProductTemplateInherit(models.Model):
                 rec.price_based_on_price_list = 0.0
 
     def compute_price_from_pricelist(self, product_id):
-        price_list = self.env['product.pricelist'].with_context(lang='en_US').sudo().search([('name', 'like', 'X1.5')])
+        price_list = self.env['product.pricelist'].with_context(lang='en_US').sudo().search([('is_mobile_list', '=', True)])
         product = self.env['product.product'].sudo().search([('product_tmpl_id', '=', product_id)])
         _logger.info(product)
         if product :
@@ -73,7 +73,7 @@ class ProductTemplateInherit(models.Model):
             return 0.0
             
     def compute_variant_price_from_pricelist(self, product_id):
-        price_list = self.env['product.pricelist'].with_context(lang='en_US').sudo().search([('name', 'like', 'X1.5')])
+        price_list = self.env['product.pricelist'].with_context(lang='en_US').sudo().search([('is_mobile_list', '=', True)])
         product = self.env['product.product'].sudo().search([('id', '=', product_id)])
         _logger.info(product)
         if product :
