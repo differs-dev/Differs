@@ -302,7 +302,7 @@ class TanmyaProducExt(models.Model):
                                                                 order=order_by,
                                                                 limit=1,
                                                                 offset=0).id
-        recipes = self.env['product.product'].sudo().search([('prod_category', 'in', category_id)], limit=limit, offset=offset)
+        recipes = self.env['product.product'].sudo().search([('prod_category', 'in', category_id), ('recipe_status', '=', 'public')], limit=limit, offset=offset)
         recipes_details = []
         for recipe in recipes:
             recipe_details = {
