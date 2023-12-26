@@ -786,6 +786,7 @@ class TanmyaProducExt(models.Model):
                 'product_qty': line.product_uom_qty,
                 'product_uom': line.product_uom_id.name,
                 'product_id': line.product_id.id,
+                'template_id': line.product_id.product_tmpl_id.id,
                 'list_price': line.product_id.product_tmpl_id.list_price
             }
             ingredients_details.append(ingredient_details)
