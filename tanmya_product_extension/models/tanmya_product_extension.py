@@ -777,7 +777,7 @@ class TanmyaProducExt(models.Model):
 
     @api.model
     def get_ingredients_details(self, recipe_id: int):
-        sale_order = self.env['product.product'].sudo().search([('id', '=', recipe_id)]).kit_template
+        sale_order = self.env['product.product'].with_context(lang=self.env.user.preferred_language).sudo().search([('id', '=', recipe_id)]).kit_template
         ingredients_details = []
         for line in sale_order.sale_order_template_line_ids:
             ingredient_details = {
