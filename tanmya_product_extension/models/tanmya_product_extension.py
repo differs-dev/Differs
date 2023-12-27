@@ -781,6 +781,7 @@ class TanmyaProducExt(models.Model):
             user_lang = 'fr_FR'
         else:
             user_lang = 'en_US'
+        _logger.info(f'user lang: {user_lang}')
         sale_order = self.env['product.product'].with_context(lang=user_lang).sudo().search([('id', '=', recipe_id)]).kit_template
         ingredients_details = []
         
