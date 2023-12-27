@@ -182,7 +182,7 @@ class SaleOrderInerit(models.Model):
                     'name': product.product_tmpl_id.name,
                     # 'price_unit': product.lst_price,
                     'price_unit': price,
-                    'product_id': prod,
+                    'product_id': int(prod),
                     'product_uom_qty': float(products_qty[i]) or 1.0,
                     # 'product_uom': product.uom_id.id,
                     'product_uom': 1,
