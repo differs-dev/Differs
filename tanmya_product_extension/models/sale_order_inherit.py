@@ -164,7 +164,7 @@ class SaleOrderInerit(models.Model):
         user_sale_order = self.get_user_cart()
         if not user_sale_order:
             user_sale_order = self.init_new_cart()
-
+        i = 0
         if user_sale_order and products_ids:
             for prod in products_ids:
                 product = self.env['product.product'].sudo().search([('id', '=', prod)])
@@ -180,10 +180,11 @@ class SaleOrderInerit(models.Model):
                     # 'price_unit': product.lst_price,
                     'price_unit': price,
                     'product_id': prod,
-                    'product_uom_qty': float(product_qty) or 1.0,
+                    'product_uom_qty': float(products_qty[i]) or 1.0,
                     'product_uom': product.uom_id.id,
                     'order_partner_id': user_sale_order.partner_id.id,
                     'customer_lead': 0}
+                i += 1
                 new_sale_order_line = self.env['sale.order.line'].sudo().create(sale_order_line_vals)
                 if new_sale_order_line:
                     return True
