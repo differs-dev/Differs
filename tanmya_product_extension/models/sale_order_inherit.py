@@ -184,8 +184,8 @@ class SaleOrderInerit(models.Model):
                     'price_unit': price,
                     'product_id': int(prod),
                     'product_uom_qty': float(products_qty[i]) or 1.0,
-                    # 'product_uom': product.uom_id.id,
-                    'product_uom': 1,
+                    'product_uom': product.uom_id.id,
+                    # 'product_uom': 1,
                     'order_partner_id': user_sale_order.partner_id.id,
                     'customer_lead': 0})
                 i += 1
