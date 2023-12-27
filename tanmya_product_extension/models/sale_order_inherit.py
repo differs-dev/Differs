@@ -177,7 +177,7 @@ class SaleOrderInerit(models.Model):
                 _logger.info(price)
                 _logger.info(products_qty[i])
                 _logger.info(float(products_qty[i]))
-                sale_order_line_vals += {
+                sale_order_line_vals.append({
                     'order_id': user_sale_order.id,
                     'name': product.product_tmpl_id.name,
                     # 'price_unit': product.lst_price,
@@ -187,7 +187,7 @@ class SaleOrderInerit(models.Model):
                     # 'product_uom': product.uom_id.id,
                     'product_uom': 1,
                     'order_partner_id': user_sale_order.partner_id.id,
-                    'customer_lead': 0}
+                    'customer_lead': 0})
                 i += 1
             _logger.info('vals ::::::::::::::::::')
             _logger.info(sale_order_line_vals)
