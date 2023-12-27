@@ -159,6 +159,36 @@ class SaleOrderInerit(models.Model):
                 return True
 
         return False
+    @api.model
+    def add_mass_to_cart(self, products_ids, products_qty):
+        user_sale_order = self.get_user_cart()
+        if not user_sale_order:
+            user_sale_order = self.init_new_cart()
+
+        if user_sale_order and products_ids:
+            for prod in products_ids
+                product = self.env['product.product'].sudo().search([('id', '=', prod)])
+                if product.recipe_status == 'public' or product.product_tmpl_id.detailed_type == 'service':
+                    price = product.lst_price
+                else:
+                    price = product.product_tmpl_id.compute_variant_price_from_pricelist(product.id)
+                _logger.info('price in add to cart')
+                _logger.info(price)
+                sale_order_line_vals = {
+                    'order_id': user_sale_order.id,
+                    'name': product.product_tmpl_id.name,
+                    # 'price_unit': product.lst_price,
+                    'price_unit': price,
+                    'product_id': prod,
+                    'product_uom_qty': float(product_qty) or 1.0,
+                    'product_uom': product.uom_id.id,
+                    'order_partner_id': user_sale_order.partner_id.id,
+                    'customer_lead': 0}
+                new_sale_order_line = self.env['sale.order.line'].sudo().create(sale_order_line_vals)
+                if new_sale_order_line:
+                    return True
+
+        return False
 
     # Delete product from cart
     @api.model
