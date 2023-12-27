@@ -187,8 +187,8 @@ class SaleOrderInerit(models.Model):
                     'customer_lead': 0}
                 i += 1
                 new_sale_order_line = self.env['sale.order.line'].sudo().create(sale_order_line_vals)
-                if new_sale_order_line:
-                    return True
+                # if new_sale_order_line:
+            return True
 
         return False
 
