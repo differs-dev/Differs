@@ -169,25 +169,26 @@ class SaleOrderInerit(models.Model):
             sale_order_line_vals = []
             for prod in products_ids:
                 product = self.env['product.product'].sudo().search([('id', '=', prod)])
-                if product.recipe_status == 'public' or product.product_tmpl_id.detailed_type == 'service':
-                    price = product.lst_price
-                else:
-                    price = product.product_tmpl_id.compute_variant_price_from_pricelist(product.id)
-                _logger.info('price in add to cart')
-                _logger.info(price)
-                _logger.info(products_qty[i])
-                _logger.info(float(products_qty[i]))
-                sale_order_line_vals.append({
-                    'order_id': user_sale_order.id,
-                    'name': product.product_tmpl_id.name,
-                    # 'price_unit': product.lst_price,
-                    'price_unit': price,
-                    'product_id': int(prod),
-                    'product_uom_qty': float(products_qty[i]) or 1.0,
-                    'product_uom': product.uom_id.id,
-                    # 'product_uom': 1,
-                    'order_partner_id': user_sale_order.partner_id.id,
-                    'customer_lead': 0})
+                if not self.check_product_in_cart(prod):
+                    if product.recipe_status == 'public' or product.product_tmpl_id.detailed_type == 'service':
+                        price = product.lst_price
+                    else:
+                        price = product.product_tmpl_id.compute_variant_price_from_pricelist(product.id)
+                    _logger.info('price in add to cart')
+                    _logger.info(price)
+                    _logger.info(products_qty[i])
+                    _logger.info(float(products_qty[i]))
+                    sale_order_line_vals.append({
+                        'order_id': user_sale_order.id,
+                        'name': product.product_tmpl_id.name,
+                        # 'price_unit': product.lst_price,
+                        'price_unit': price,
+                        'product_id': int(prod),
+                        'product_uom_qty': float(products_qty[i]) or 1.0,
+                        'product_uom': product.uom_id.id,
+                        # 'product_uom': 1,
+                        'order_partner_id': user_sale_order.partner_id.id,
+                        'customer_lead': 0})
                 i += 1
             _logger.info('vals ::::::::::::::::::')
             _logger.info(sale_order_line_vals)
