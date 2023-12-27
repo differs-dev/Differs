@@ -166,6 +166,7 @@ class SaleOrderInerit(models.Model):
             user_sale_order = self.init_new_cart()
         i = 0
         if user_sale_order and products_ids:
+            sale_order_line_vals = []
             for prod in products_ids:
                 product = self.env['product.product'].sudo().search([('id', '=', prod)])
                 if product.recipe_status == 'public' or product.product_tmpl_id.detailed_type == 'service':
@@ -174,7 +175,9 @@ class SaleOrderInerit(models.Model):
                     price = product.product_tmpl_id.compute_variant_price_from_pricelist(product.id)
                 _logger.info('price in add to cart')
                 _logger.info(price)
-                sale_order_line_vals = {
+                _logger.info(products_qty[i])
+                _logger.info(float(products_qty[i]))
+                sale_order_line_vals += {
                     'order_id': user_sale_order.id,
                     'name': product.product_tmpl_id.name,
                     # 'price_unit': product.lst_price,
@@ -186,7 +189,7 @@ class SaleOrderInerit(models.Model):
                     'order_partner_id': user_sale_order.partner_id.id,
                     'customer_lead': 0}
                 i += 1
-                new_sale_order_line = self.env['sale.order.line'].sudo().create(sale_order_line_vals)
+            new_sale_order_line = self.env['sale.order.line'].sudo().create(sale_order_line_vals)
                 # if new_sale_order_line:
             return True
 
