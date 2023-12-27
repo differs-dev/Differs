@@ -189,6 +189,8 @@ class SaleOrderInerit(models.Model):
                     'order_partner_id': user_sale_order.partner_id.id,
                     'customer_lead': 0}
                 i += 1
+            _logger.info('vals ::::::::::::::::::')
+            _logger.info(sale_order_line_vals)
             new_sale_order_line = self.env['sale.order.line'].sudo().create(sale_order_line_vals)
                 # if new_sale_order_line:
             return True
