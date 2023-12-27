@@ -787,9 +787,10 @@ class TanmyaProducExt(models.Model):
         
         for line in sale_order.sale_order_template_line_ids:
             _logger.info(f'ing name : {line.name}')
+            _logger.info(f'ing id : {line.id}')
             ingredient_details = {
                 'id': line.id,
-                'name': line.name,
+                'name': line.product_id.name,
                 'product_qty': line.product_uom_qty,
                 'product_uom': line.product_uom_id.name,
                 'product_id': line.product_id.id,
