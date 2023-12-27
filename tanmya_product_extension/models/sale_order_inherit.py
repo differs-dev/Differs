@@ -166,7 +166,7 @@ class SaleOrderInerit(models.Model):
             user_sale_order = self.init_new_cart()
 
         if user_sale_order and products_ids:
-            for prod in products_ids
+            for prod in products_ids:
                 product = self.env['product.product'].sudo().search([('id', '=', prod)])
                 if product.recipe_status == 'public' or product.product_tmpl_id.detailed_type == 'service':
                     price = product.lst_price
