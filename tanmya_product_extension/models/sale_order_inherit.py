@@ -169,7 +169,7 @@ class SaleOrderInerit(models.Model):
             sale_order_line_vals = []
             for prod in products_ids:
                 product = self.env['product.product'].sudo().search([('id', '=', prod)])
-                if not self.check_product_in_cart(prod):
+                if not self.check_product_in_cart(int(prod)):
                     if product.recipe_status == 'public' or product.product_tmpl_id.detailed_type == 'service':
                         price = product.lst_price
                     else:
