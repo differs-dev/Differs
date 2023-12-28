@@ -848,11 +848,12 @@ class StockBackOrderConfirmation1(models.TransientModel):
             if len(pickings_to_validate) > 0:
                 pick = self.env['stock.picking'].sudo().browse(pickings_to_validate[0])
                 if not isinstance(pickings_to_validate[0], int):
-                    pick = pickings_to_validate[0].id
+                    origin = pickings_to_validate[0].origin
+                else:
+                    origin = pick.origin
                 _logger.info(f'pick 1 : {pickings_to_validate[0]}')
                 if pick:
                     _logger.info(f'pick : {pick}')
-                    _logger.info(f'origin : {pick.origin}')
                     order = self.env['sale.order'].sudo().search([('name', '=', pick.origin)])
                     if order:
                         order_user = self.env['res.users'].sudo().search([('partner_id', '=', order.partner_id.id)])
