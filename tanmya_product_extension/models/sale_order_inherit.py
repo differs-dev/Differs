@@ -847,8 +847,8 @@ class StockBackOrderConfirmation1(models.TransientModel):
 
             if len(pickings_to_validate) > 0:
                 pick = self.env['stock.picking'].sudo().browse(pickings_to_validate[0])
-                if not isinstance(pickings_to_validate[i], int):
-                    pick = pickings_to_validate[i].id
+                if not isinstance(pickings_to_validate[0], int):
+                    pick = pickings_to_validate[0].id
                 _logger.info(f'pick 1 : {pickings_to_validate[0]}')
                 if pick:
                     _logger.info(f'pick : {pick}')
