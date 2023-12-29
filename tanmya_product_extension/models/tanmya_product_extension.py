@@ -700,6 +700,10 @@ class TanmyaProducExt(models.Model):
         search_word1 = search_word.capitalize()
         search_word2 = search_word.lower()
         search_word3 = search_word.upper()
+        if self.env.user.preferred_language == 'fr':
+            user_lang = 'fr_FR'
+        else:
+            user_lang = 'en_US'
         _logger.info(category_id)
         _logger.info('got here by accident!!')
         if category_id > 0:
