@@ -98,7 +98,6 @@ class MobileApiController(http.Controller):
             )
             _logger.info(reference)
             _logger.info(order.amount_total)
-    
             # Create the transaction
             tx_sudo = request.env['payment.transaction'].sudo().create({
                 'acquirer_id': ogone_acquirer.id,
@@ -139,7 +138,9 @@ class MobileApiController(http.Controller):
                 'last_state_change': tx_sudo.last_state_change,
                 'order': tx_sudo.sale_order_ids
             })
-
+            _logger.info('message :::::::::::::::::')
+            _logger.info(message)
+            _logger.info(tx_sudo.state)
             order.write({
                'delivery_period1': data['delivery_period'],
                'delivery_area': data['delivery_area'],
