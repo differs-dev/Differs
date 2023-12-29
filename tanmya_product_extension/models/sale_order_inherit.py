@@ -673,7 +673,7 @@ class StockPicking(models.Model):
                                        'Click here to place a new order',
                             'fr_title': 'commande livrée',
                             'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
-                                       'Click here to place a new order',
+                                       ' Cliquez ici pour passer une nouvelle commande',
                             'payload': 'order_delivered',
                             'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                             'notification_date': datetime.now(),
@@ -686,7 +686,7 @@ class StockPicking(models.Model):
                                        'Click here to place a new order',
                             'fr_title': 'commande livrée',
                             'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
-                                       'Click here to place a new order',
+                                       ' Cliquez ici pour passer une nouvelle commande',
                             'payload': 'order_delivered',
                             'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                             'notification_date': datetime.now(),
@@ -754,7 +754,7 @@ class ImmediateStockPicking(models.TransientModel):
                                                    'Click here to place a new order',
                                         'fr_title': 'commande livrée',
                                         'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
-                                                   'Click here to place a new order',
+                                                   ' Cliquez ici pour passer une nouvelle commande',
                                         'payload': 'order_delivered',
                                         'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                                         'notification_date': datetime.now(),
@@ -767,7 +767,7 @@ class ImmediateStockPicking(models.TransientModel):
                                                    'Click here to place a new order',
                                         'fr_title': 'commande livrée',
                                         'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
-                                                   'Click here to place a new order',
+                                                   ' Cliquez ici pour passer une nouvelle commande',
                                         'payload': 'order_delivered',
                                         'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                                         'notification_date': datetime.now(),
@@ -891,7 +891,7 @@ class StockBackOrderConfirmation1(models.TransientModel):
                                                    'Click here to place a new order',
                                         'fr_title': 'commande livrée',
                                         'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
-                                                   'Cliquez ici pour passer une nouvelle commande',
+                                                   ' Cliquez ici pour passer une nouvelle commande',
                                         'notification_date': datetime.now(),
                                         'payload': 'order_delivered',
                                         'target_action': 'FLUTTER_NOTIFICATION_CLICK',
