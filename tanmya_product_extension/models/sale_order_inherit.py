@@ -213,7 +213,7 @@ class SaleOrderInerit(models.Model):
         if line_id:
             line = self.env['sale.order.line'].sudo().search([('id', '=', line_id)])
             line.product_uom_qty += add_qty
-            if line.product_uom_qty == 0:
+            if line.product_uom_qty <= 0:
                 line.unlink()
             return self.get_cart_details(5)
 
