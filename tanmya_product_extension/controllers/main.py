@@ -141,22 +141,23 @@ class MobileApiController(http.Controller):
             _logger.info('message :::::::::::::::::')
             _logger.info(message)
             _logger.info(tx_sudo.state)
-            order.write({
-               'delivery_period1': data['delivery_period'],
-               'delivery_area': data['delivery_area'],
-               'delivery_date': data['delivery_date'],
-            })
-            _logger.info('------------------- delivery data -------------------------')
-            _logger.info(data['delivery_area'])
-            _logger.info(data['delivery_date'])
-            _logger.info(data['delivery_period'])
-            extra_charge = 0
-            _logger.info('------------------ amount_total without delivery charges -------------------------')
-            _logger.info(order.amount_total)
-            shipping_method_service = request.env['delivery.carrier'].sudo().search([('id', '=', data['shipping_method_id'])]).product_id
-            order.add_to_cart(shipping_method_service.id, 1)
-            _logger.info(' ----------------------- shipping method -------------------------- ')
-            _logger.info(shipping_method_service)
+            if tx_sudo.state != 'error':
+                order.write({
+                   'delivery_period1': data['delivery_period'],
+                   'delivery_area': data['delivery_area'],
+                   'delivery_date': data['delivery_date'],
+                })
+                _logger.info('------------------- delivery data -------------------------')
+                _logger.info(data['delivery_area'])
+                _logger.info(data['delivery_date'])
+                _logger.info(data['delivery_period'])
+                extra_charge = 0
+                _logger.info('------------------ amount_total without delivery charges -------------------------')
+                _logger.info(order.amount_total)
+                shipping_method_service = request.env['delivery.carrier'].sudo().search([('id', '=', data['shipping_method_id'])]).product_id
+                order.add_to_cart(shipping_method_service.id, 1)
+                _logger.info(' ----------------------- shipping method -------------------------- ')
+                _logger.info(shipping_method_service)
             
             _logger.info(
                 "transaction state is:\n%s" % tx_sudo.state_message
