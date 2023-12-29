@@ -57,107 +57,110 @@ class MobileApiController(http.Controller):
 
     @http.route('/mobile/payment/pay', type='json', auth='public')
     def mobilePay(self, **data):
-        print("mobile pay")
-        # get user sale order
-        order = request.env['sale.order'].sudo().get_user_cart()
-        if not order:
-            return {
-                'state': 'error',
-                'state_message': "Cannot Find Client Order!",
-            }
-        
-        order.write({
-           'delivery_period1': data['delivery_period'],
-           'delivery_area': data['delivery_area'],
-           'delivery_date': data['delivery_date'],
-        })
-        _logger.info('------------------- delivery data -------------------------')
-        _logger.info(data['delivery_area'])
-        _logger.info(data['delivery_date'])
-        _logger.info(data['delivery_period'])
-        extra_charge = 0
-        _logger.info('------------------ amount_total without delivery charges -------------------------')
-        _logger.info(order.amount_total)
-        shipping_method_service = request.env['delivery.carrier'].sudo().search([('id', '=', data['shipping_method_id'])]).product_id
-        order.add_to_cart(shipping_method_service.id, 1)
-        _logger.info(' ----------------------- shipping method -------------------------- ')
-        _logger.info(shipping_method_service)
-        # if data['delivery_area'] == 'out_of_area':
-        #     shipping_method_delivery_service = request.env['product.product'].sudo().search([('name', '=', 'Delivery Out Of Area.')])
-        #     order.add_to_cart(shipping_method_delivery_service.id, 1)
-
-        #     order.amount_total += 200
-        # order.amount_total += data['method_cost']
-        _logger.info('------------------ amount_total with delivery charges -------------------------')
-        _logger.info(order.amount_total)
-        ogone_acquirer = request.env['payment.acquirer'].sudo().search([('provider', '=', 'ogone')], limit=1)
-        if not ogone_acquirer:
-            return {
-                'state': 'error',
-                'state_message': "Ogone acquirer not set on this server",
-            }
-
-        logged_in = not request.env.user._is_public()
-
-        if not logged_in:
-            return {
-                'state': 'error',
-                'state_message': "Access Denied!",
-            }
-        _logger.info('------ computing payment reference -------')
-        reference = request.env['payment.transaction']._compute_reference(
-            ogone_acquirer.provider,
-            prefix=None,
-            **{},
-            **{'sale_order_ids': [Command.set([order.id])]}
-        )
-        _logger.info(reference)
-        _logger.info(order.amount_total)
-
-        # Create the transaction
-        tx_sudo = request.env['payment.transaction'].sudo().create({
-            'acquirer_id': ogone_acquirer.id,
-            'reference': reference,
-            'amount': order.amount_total,
-            'currency_id': order.currency_id.id,
-            'partner_id': order.partner_id.id,
-            'token_id': None,
-            'operation': f'online_direct',
-            'tokenize': False,
-            'landing_route': '/mobile/payment/validate',
-            'sale_order_ids': [Command.set([order.id])],
-        })
-
-        tx_sudo = tx_sudo._send_payment_mobile_request(data)
-        _logger.info('------- payment request was send ------')
-        
-        # Monitor the transaction to make it available in the portal
-        PaymentPostProcessing.monitor_transactions(tx_sudo)
-        values = tx_sudo._get_processing_values()
-        message = ''
-        if tx_sudo.state_message:
-            message = tx_sudo.state_message
-        elif tx_sudo.state == 'pending':
-            message = tx_sudo.acquirer_id.pending_msg
-        elif tx_sudo.state == 'done':
-            order.with_context(send_email=True).action_confirm()
-            order.payment_automation()
-            message = tx_sudo.acquirer_id.done_msg
-        elif tx_sudo.state == 'cancel':
-            message = tx_sudo.acquirer_id.cancel_msg
-        else:
-            message = "Unkown Transaction State"
-
-        values.update({
-            'state': tx_sudo.state,
-            'state_message': message,
-            'last_state_change': tx_sudo.last_state_change,
-            'order': tx_sudo.sale_order_ids
-        })
-        _logger.info(
-            "transaction state is:\n%s" % tx_sudo.state_message
-        )  # Log the payment request data without the password
-        return values
+        try:
+            print("mobile pay")
+            # get user sale order
+            order = request.env['sale.order'].sudo().get_user_cart()
+            if not order:
+                return {
+                    'state': 'error',
+                    'state_message': "Cannot Find Client Order!",
+                }
+            
+            order.write({
+               'delivery_period1': data['delivery_period'],
+               'delivery_area': data['delivery_area'],
+               'delivery_date': data['delivery_date'],
+            })
+            _logger.info('------------------- delivery data -------------------------')
+            _logger.info(data['delivery_area'])
+            _logger.info(data['delivery_date'])
+            _logger.info(data['delivery_period'])
+            extra_charge = 0
+            _logger.info('------------------ amount_total without delivery charges -------------------------')
+            _logger.info(order.amount_total)
+            shipping_method_service = request.env['delivery.carrier'].sudo().search([('id', '=', data['shipping_method_id'])]).product_id
+            order.add_to_cart(shipping_method_service.id, 1)
+            _logger.info(' ----------------------- shipping method -------------------------- ')
+            _logger.info(shipping_method_service)
+            # if data['delivery_area'] == 'out_of_area':
+            #     shipping_method_delivery_service = request.env['product.product'].sudo().search([('name', '=', 'Delivery Out Of Area.')])
+            #     order.add_to_cart(shipping_method_delivery_service.id, 1)
+    
+            #     order.amount_total += 200
+            # order.amount_total += data['method_cost']
+            _logger.info('------------------ amount_total with delivery charges -------------------------')
+            _logger.info(order.amount_total)
+            ogone_acquirer = request.env['payment.acquirer'].sudo().search([('provider', '=', 'ogone')], limit=1)
+            if not ogone_acquirer:
+                return {
+                    'state': 'error',
+                    'state_message': "Ogone acquirer not set on this server",
+                }
+    
+            logged_in = not request.env.user._is_public()
+    
+            if not logged_in:
+                return {
+                    'state': 'error',
+                    'state_message': "Access Denied!",
+                }
+            _logger.info('------ computing payment reference -------')
+            reference = request.env['payment.transaction']._compute_reference(
+                ogone_acquirer.provider,
+                prefix=None,
+                **{},
+                **{'sale_order_ids': [Command.set([order.id])]}
+            )
+            _logger.info(reference)
+            _logger.info(order.amount_total)
+    
+            # Create the transaction
+            tx_sudo = request.env['payment.transaction'].sudo().create({
+                'acquirer_id': ogone_acquirer.id,
+                'reference': reference,
+                'amount': order.amount_total,
+                'currency_id': order.currency_id.id,
+                'partner_id': order.partner_id.id,
+                'token_id': None,
+                'operation': f'online_direct',
+                'tokenize': False,
+                'landing_route': '/mobile/payment/validate',
+                'sale_order_ids': [Command.set([order.id])],
+            })
+    
+            tx_sudo = tx_sudo._send_payment_mobile_request(data)
+            _logger.info('------- payment request was send ------')
+            
+            # Monitor the transaction to make it available in the portal
+            PaymentPostProcessing.monitor_transactions(tx_sudo)
+            values = tx_sudo._get_processing_values()
+            message = ''
+            if tx_sudo.state_message:
+                message = tx_sudo.state_message
+            elif tx_sudo.state == 'pending':
+                message = tx_sudo.acquirer_id.pending_msg
+            elif tx_sudo.state == 'done':
+                order.with_context(send_email=True).action_confirm()
+                order.payment_automation()
+                message = tx_sudo.acquirer_id.done_msg
+            elif tx_sudo.state == 'cancel':
+                message = tx_sudo.acquirer_id.cancel_msg
+            else:
+                message = "Unkown Transaction State"
+    
+            values.update({
+                'state': tx_sudo.state,
+                'state_message': message,
+                'last_state_change': tx_sudo.last_state_change,
+                'order': tx_sudo.sale_order_ids
+            })
+            _logger.info(
+                "transaction state is:\n%s" % tx_sudo.state_message
+            )  # Log the payment request data without the password
+            return values
+        except e:
+            request.env.cr.rollback()
 
     @http.route('/mobile/payment/validate', type='http', auth="public", website=True, sitemap=False)
     def shop_payment_validate(self, transaction_id=None, sale_order_id=None, **post):
