@@ -707,7 +707,7 @@ class TanmyaProducExt(models.Model):
         _logger.info(category_id)
         _logger.info('got here by accident!!')
         if category_id > 0:
-            products = self.env['product.template'].sudo().search(['|', '|', '|',
+            products = self.env['product.template'].with_context(lang=user_lang).sudo().search(['|', '|', '|',
                                                                    ('name', 'like', search_word),
                                                                    ('name', 'like', search_word1),
                                                                    ('name', 'like', search_word2),
@@ -743,7 +743,7 @@ class TanmyaProducExt(models.Model):
                 products_details.append(product_details)
 
         else:
-            products = self.env['product.product'].sudo().search(['|', '|', '|',
+            products = self.env['product.product'].with_context(lang=user_lang).sudo().search(['|', '|', '|',
                                                                   ('name', 'like', search_word),
                                                                   ('name', 'like', search_word1),
                                                                   ('name', 'like', search_word2),
