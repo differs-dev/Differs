@@ -67,22 +67,6 @@ class MobileApiController(http.Controller):
                     'state_message': "Cannot Find Client Order!",
                 }
             
-            order.write({
-               'delivery_period1': data['delivery_period'],
-               'delivery_area': data['delivery_area'],
-               'delivery_date': data['delivery_date'],
-            })
-            _logger.info('------------------- delivery data -------------------------')
-            _logger.info(data['delivery_area'])
-            _logger.info(data['delivery_date'])
-            _logger.info(data['delivery_period'])
-            extra_charge = 0
-            _logger.info('------------------ amount_total without delivery charges -------------------------')
-            _logger.info(order.amount_total)
-            shipping_method_service = request.env['delivery.carrier'].sudo().search([('id', '=', data['shipping_method_id'])]).product_id
-            order.add_to_cart(shipping_method_service.id, 1)
-            _logger.info(' ----------------------- shipping method -------------------------- ')
-            _logger.info(shipping_method_service)
             # if data['delivery_area'] == 'out_of_area':
             #     shipping_method_delivery_service = request.env['product.product'].sudo().search([('name', '=', 'Delivery Out Of Area.')])
             #     order.add_to_cart(shipping_method_delivery_service.id, 1)
@@ -155,6 +139,24 @@ class MobileApiController(http.Controller):
                 'last_state_change': tx_sudo.last_state_change,
                 'order': tx_sudo.sale_order_ids
             })
+
+            order.write({
+               'delivery_period1': data['delivery_period'],
+               'delivery_area': data['delivery_area'],
+               'delivery_date': data['delivery_date'],
+            })
+            _logger.info('------------------- delivery data -------------------------')
+            _logger.info(data['delivery_area'])
+            _logger.info(data['delivery_date'])
+            _logger.info(data['delivery_period'])
+            extra_charge = 0
+            _logger.info('------------------ amount_total without delivery charges -------------------------')
+            _logger.info(order.amount_total)
+            shipping_method_service = request.env['delivery.carrier'].sudo().search([('id', '=', data['shipping_method_id'])]).product_id
+            order.add_to_cart(shipping_method_service.id, 1)
+            _logger.info(' ----------------------- shipping method -------------------------- ')
+            _logger.info(shipping_method_service)
+            
             _logger.info(
                 "transaction state is:\n%s" % tx_sudo.state_message
             )  # Log the payment request data without the password
