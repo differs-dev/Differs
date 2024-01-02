@@ -119,8 +119,6 @@ class MobileApiController(http.Controller):
             PaymentPostProcessing.monitor_transactions(tx_sudo)
             values = tx_sudo._get_processing_values()
             
-            _logger.info('message :::::::::::::::::')
-            _logger.info(message)
             _logger.info(tx_sudo.state)
             if tx_sudo.state != 'error':
                 order.write({
