@@ -737,7 +737,8 @@ class ImmediateStockPicking(models.TransientModel):
                             first_pick = self.env['stock.picking'].sudo().search(
                                 [('id', 'in', order_picking_ids.ids),
                                  ('location_dest_id', '=', 5),
-                                 ('state', '!=', 'cancel')])
+                                 ('state', '!=', 'cancel'),
+                                 ('backorder_id', '=', False)])
                             if first_pick and len(first_pick) == 1 and \
                                     first_pick.state == 'done' and not first_pick.check_notification:
                                 # Send notification when order is delivered
@@ -774,7 +775,8 @@ class ImmediateStockPicking(models.TransientModel):
                             second_pick = self.env['stock.picking'].sudo().search(
                                 [('id', 'in', order_picking_ids.ids),
                                  ('location_dest_id', '=', 11),
-                                 ('state', '!=', 'cancel')])
+                                 ('state', '!=', 'cancel'),
+                                 ('backorder_id', '=', False)])
                             if second_pick and len(second_pick) == 1 and \
                                     second_pick.state == 'done' and not second_pick.check_notification:
                                 # Send notification when order is on its way to customer
