@@ -660,9 +660,6 @@ class StockPicking(models.Model):
                     [('id', 'in', order_picking_ids.ids),
                      ('location_dest_id', '=', 5),
                      ('state', '!=', 'cancel')])
-                _logger.info('---------- first pick is --------------')
-                _logger.info(first_pick)
-                _logger.info(first_pick.state)
                 if first_pick and len(first_pick) == 1 and \
                         first_pick.state == 'done' and not first_pick.check_notification:
                     # Send notification when order is delivered
