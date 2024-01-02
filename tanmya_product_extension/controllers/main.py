@@ -118,26 +118,7 @@ class MobileApiController(http.Controller):
             # Monitor the transaction to make it available in the portal
             PaymentPostProcessing.monitor_transactions(tx_sudo)
             values = tx_sudo._get_processing_values()
-            message = ''
-            if tx_sudo.state_message:
-                message = tx_sudo.state_message
-            elif tx_sudo.state == 'pending':
-                message = tx_sudo.acquirer_id.pending_msg
-            elif tx_sudo.state == 'done':
-                order.with_context(send_email=True).action_confirm()
-                order.payment_automation()
-                message = tx_sudo.acquirer_id.done_msg
-            elif tx_sudo.state == 'cancel':
-                message = tx_sudo.acquirer_id.cancel_msg
-            else:
-                message = "Unkown Transaction State"
-    
-            values.update({
-                'state': tx_sudo.state,
-                'state_message': message,
-                'last_state_change': tx_sudo.last_state_change,
-                'order': tx_sudo.sale_order_ids
-            })
+            
             _logger.info('message :::::::::::::::::')
             _logger.info(message)
             _logger.info(tx_sudo.state)
@@ -158,7 +139,27 @@ class MobileApiController(http.Controller):
                 order.add_to_cart(shipping_method_service.id, 1)
                 _logger.info(' ----------------------- shipping method -------------------------- ')
                 _logger.info(shipping_method_service)
-            
+                
+            message = ''
+            if tx_sudo.state_message:
+                message = tx_sudo.state_message
+            elif tx_sudo.state == 'pending':
+                message = tx_sudo.acquirer_id.pending_msg
+            elif tx_sudo.state == 'done':
+                order.with_context(send_email=True).action_confirm()
+                order.payment_automation()
+                message = tx_sudo.acquirer_id.done_msg
+            elif tx_sudo.state == 'cancel':
+                message = tx_sudo.acquirer_id.cancel_msg
+            else:
+                message = "Unkown Transaction State"
+    
+            values.update({
+                'state': tx_sudo.state,
+                'state_message': message,
+                'last_state_change': tx_sudo.last_state_change,
+                'order': tx_sudo.sale_order_ids
+            })
             _logger.info(
                 "transaction state is:\n%s" % tx_sudo.state_message
             )  # Log the payment request data without the password
