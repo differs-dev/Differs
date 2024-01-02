@@ -863,6 +863,8 @@ class StockBackOrderConfirmation1(models.TransientModel):
                             if first_pick and len(first_pick) == 1 and \
                                     first_pick.state == 'done' and not first_pick.check_notification:
                                 # Send notification when order is delivered
+                                _logger.info(f'first pick state : {first_pick.state}')
+                                _logger.info(first_pick.check_notification)
                                 if order_user.preferred_language == 'en':
                                     notification_vals = {
                                         'title': 'Order delivered',
@@ -901,6 +903,8 @@ class StockBackOrderConfirmation1(models.TransientModel):
                             if second_pick and len(second_pick) == 1 and \
                                     second_pick.state == 'done' and not second_pick.check_notification:
                                 # Send notification when order is on its way to customer
+                                _logger.info(f'second pick state : {second_pick.state}')
+                                _logger.info(second_pick.check_notification)
                                 if order_user.preferred_language == 'en':
                                     notification_vals = {
                                         'title': 'Order on its way',
