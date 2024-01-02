@@ -738,9 +738,6 @@ class ImmediateStockPicking(models.TransientModel):
                                 [('id', 'in', order_picking_ids.ids),
                                  ('location_dest_id', '=', 5),
                                  ('state', '!=', 'cancel')])
-                            _logger.info('---------- first pick is --------------')
-                            _logger.info(first_pick)
-                            _logger.info(first_pick.state)
                             if first_pick and len(first_pick) == 1 and \
                                     first_pick.state == 'done' and not first_pick.check_notification:
                                 # Send notification when order is delivered
@@ -862,6 +859,7 @@ class StockBackOrderConfirmation1(models.TransientModel):
                                 [('id', 'in', order_picking_ids.ids),
                                  ('location_dest_id', '=', 5),
                                  ('state', '!=', 'cancel')])
+                            _logger.info(f'first pick : {first_pick}')
                             if first_pick and len(first_pick) == 1 and \
                                     first_pick.state == 'done' and not first_pick.check_notification:
                                 # Send notification when order is delivered
@@ -899,6 +897,7 @@ class StockBackOrderConfirmation1(models.TransientModel):
                                 [('id', 'in', order_picking_ids.ids),
                                  ('location_dest_id', '=', 11),
                                  ('state', '!=', 'cancel')])
+                            _logger.info(f'second pick : {second_pick}')
                             if second_pick and len(second_pick) == 1 and \
                                     second_pick.state == 'done' and not second_pick.check_notification:
                                 # Send notification when order is on its way to customer
