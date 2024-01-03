@@ -245,6 +245,17 @@ class SaleOrderInerit(models.Model):
                                          product.product_template_attribute_value_ids[0].product_attribute_value_id.name
         return product_attributes
 
+    @api.model
+    def get_cart_total(self):
+        user_sale_order = self.get_user_cart()
+        if user_sale_order:
+            sale_order_details = {
+                'id': user_sale_order.id,
+                'amount_total': user_sale_order.amount_total,
+            }
+            return sale_order_details
+        return False
+    
     # Get details of user cart
     @api.model
     def get_cart_details(self, offset):
