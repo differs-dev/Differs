@@ -219,6 +219,17 @@ class SaleOrderInerit(models.Model):
 
         return False
 
+    @api.model
+    def cart_update_no_details(self, line_id=0, add_qty=0):
+        if line_id:
+            line = self.env['sale.order.line'].sudo().search([('id', '=', line_id)])
+            line.product_uom_qty += add_qty
+            if line.product_uom_qty <= 0:
+                line.unlink()
+            return True
+
+        return False
+        
     @api.depends('order_line.product_uom_qty', 'order_line.product_id')
     def _compute_cart_qty(self):
         for order in self:
