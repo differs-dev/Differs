@@ -721,11 +721,13 @@ class TanmyaProducExt(models.Model):
 
             products_details = []
             for product in products:
+                price1 = self.compute_price_from_pricelist(product.id)
                 product_details = {
                     'id': product.id,
                     'name': product.name,
                     'image_128': product.image_1920,
-                    'list_price': product.list_price,
+                    # 'list_price': product.list_price,
+                    'list_price': price1,
                     'calories': product.calories,
                     'carbs': product.carbs,
                     'protein': product.protein,
@@ -757,11 +759,13 @@ class TanmyaProducExt(models.Model):
 
             products_details = []
             for product in products:
+                price1 = self.compute_price_from_pricelist(product.id)
                 product_details = {
                     'id': product.id,
                     'name': product.name,
                     'image_128': product.image_1920,
-                    'list_price': product.list_price,
+                    # 'list_price': product.list_price,
+                    'list_price': price1,
                     'uom': product.uom_id.name,
                     'calories': product.calories,
                     'carbs': product.carbs,
