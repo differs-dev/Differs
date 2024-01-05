@@ -759,7 +759,7 @@ class TanmyaProducExt(models.Model):
 
             products_details = []
             for product in products:
-                price1 = self.product_tmpl_id.compute_price_from_pricelist(self.product_tmpl_id.id)
+                price1 = product.product_tmpl_id.compute_price_from_pricelist(product.product_tmpl_id.id)
                 product_details = {
                     'id': product.id,
                     'name': product.name,
