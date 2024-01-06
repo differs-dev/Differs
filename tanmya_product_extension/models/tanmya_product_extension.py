@@ -796,7 +796,7 @@ class TanmyaProducExt(models.Model):
         for line in sale_order.sale_order_template_line_ids:
             _logger.info(f'ing name : {line.name}')
             _logger.info(f'ing id : {line.id}')
-            price = line.product_id.product_tmpl_id.compute_price_from_pricelist(line.product_id.id)
+            price = line.product_id.product_tmpl_id.compute_price_from_pricelist(line.product_id.product_tmpl_id.id)
             ingredient_details = {
                 'id': line.id,
                 'name': line.product_id.name,
