@@ -172,6 +172,9 @@ class ProductTemplateInherit(models.Model):
         _logger.info(user_lang)
         _logger.info('search')
         _logger.info(search_word)
+        _logger.info(search_word1)
+        _logger.info(search_word2)
+        _logger.info(search_word3)
         _logger.info(category_id)
         if category_id > 0:
             products = self.env['product.template'].with_context(lang=user_lang).sudo().search(['|', '|', '|',
