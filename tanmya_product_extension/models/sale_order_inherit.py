@@ -672,6 +672,7 @@ class StockPicking(models.Model):
         res = super(StockPicking, self).button_validate()
         _logger.info('validate button triggered !!!!!!!!!!!!!!!!!!!!!!!!!!!')
         order = self.env['sale.order'].sudo().search([('name', '=', self.origin)])
+        _logger.info(f'order name {order.name}')
         if order:
             order_user = self.env['res.users'].sudo().search([('partner_id', '=', order.partner_id.id)])
             if not order_user:
