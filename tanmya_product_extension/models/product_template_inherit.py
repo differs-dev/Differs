@@ -178,10 +178,10 @@ class ProductTemplateInherit(models.Model):
         _logger.info(category_id)
         if category_id > 0:
             products = self.env['product.template'].with_context(lang=user_lang).sudo().search(['|', '|', '|',
-                                                                   ('name', 'like', search_word),
-                                                                   ('name', 'like', search_word1),
-                                                                   ('name', 'like', search_word2),
-                                                                   ('name', 'like', search_word3),
+                                                                   ('name', 'ilike', search_word),
+                                                                   ('name', 'ilike', search_word1),
+                                                                   ('name', 'ilike', search_word2),
+                                                                   ('name', 'ilike', search_word3),
                                                                    ('categ_id', 'like', category_id),
                                                                    ('is_published', '=', is_publish)],
                                                                   limit=limit,
@@ -252,10 +252,10 @@ class ProductTemplateInherit(models.Model):
 
         else:
             products = self.env['product.template'].with_context(lang=user_lang).sudo().search(['|', '|', '|',
-                                                                   ('name', 'like', search_word),
-                                                                   ('name', 'like', search_word1),
-                                                                   ('name', 'like', search_word2),
-                                                                   ('name', 'like', search_word3),
+                                                                   ('name', 'ilike', search_word),
+                                                                   ('name', 'ilike', search_word1),
+                                                                   ('name', 'ilike', search_word2),
+                                                                   ('name', 'ilike', search_word3),
                                                                    ('is_published', '=', is_publish)],
                                                                   limit=limit,
                                                                   offset=offset,
