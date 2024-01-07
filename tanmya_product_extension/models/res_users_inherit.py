@@ -369,7 +369,7 @@ class ResUsers(models.Model):
                     recipe_price = 0
                     for line in sale_order.sale_order_template_line_ids:
                         price = line.product_id.product_tmpl_id.compute_price_from_pricelist(line.product_id.product_tmpl_id.id)
-                        recipe_price += price * line.product_uom_qty * recipe.servings
+                        recipe_price += price * line.product_uom_qty * product_preference.product_id.servings
                     user_preference = {
                         'id': product_preference.product_id.id,
                         # 'image_128': product_preference.product_id.image_1920,
