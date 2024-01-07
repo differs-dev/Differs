@@ -1008,7 +1008,7 @@ class TanmyaProducExt(models.Model):
                 recipe_price = 0
                 for line in sale_order.sale_order_template_line_ids:
                     price = line.product_id.product_tmpl_id.compute_price_from_pricelist(line.product_id.product_tmpl_id.id)
-                    recipe_price += price
+                    recipe_price += price * line.product_uom_qty
                 recipe_details = {
                     'id': recipe.id,
                     'name': recipe.product_tmpl_id.name,
