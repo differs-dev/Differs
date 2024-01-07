@@ -659,8 +659,11 @@ class StockPicking(models.Model):
     def write(self, data):
         res = super(StockPicking, self).write(data)
         _logger.info(f'picking data 1 : {data}')
+        _logger.info('context ::::')
+        _logger.info(self.env.context)
         if data.get('state') == 'done':
             _logger.info(f'picking data : {data}')
+            
         return res
         
     @api.onchange('state')
