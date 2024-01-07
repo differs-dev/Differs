@@ -313,20 +313,6 @@ class ResUsers(models.Model):
                     _logger.info('variants')
                     _logger.info(self.get_products_variants_details(product_preference.id))
                     _logger.info(self.get_products_variants_details(product_preference.product_id.id))
-
-                    if self.env.user.preferred_language == 'fr':
-                        user_lang = 'fr_FR'
-                    else:
-                        user_lang = 'en_US'
-                    for recipe in recipes:
-                        
-                        sale_order = self.env['product.product'].with_context(lang=user_lang).sudo().search([('id', '=', recipe.id)]).kit_template
-                        ingredients_details = []
-        
-                        recipe_price = 0
-                        for line in sale_order.sale_order_template_line_ids:
-                            price = line.product_id.product_tmpl_id.compute_price_from_pricelist(line.product_id.product_tmpl_id.id)
-                            recipe_price += price * line.product_uom_qty * recipe.servings
                     user_preference = {
                         'id': product_preference.template_id.id,
                         'image_128': product_preference.template_id.image_1920,
@@ -376,7 +362,14 @@ class ResUsers(models.Model):
                     limit=limit, offset=offset)
                 _logger.info('recipes_preferences are :')
                 _logger.info(products_preferences)
-                for product_preference in products_preferences:
+                for product_preference in products_preferences:                        
+                    sale_order = self.env['product.product'].with_context(lang=user_lang).sudo().search([('id', '=', product_preference.product_id.id)]).kit_template
+                    ingredients_details = []
+    
+                    recipe_price = 0
+                    for line in sale_order.sale_order_template_line_ids:
+                        price = line.product_id.product_tmpl_id.compute_price_from_pricelist(line.product_id.product_tmpl_id.id)
+                        recipe_price += price * line.product_uom_qty * recipe.servings
                     user_preference = {
                         'id': product_preference.product_id.id,
                         # 'image_128': product_preference.product_id.image_1920,
@@ -384,8 +377,8 @@ class ResUsers(models.Model):
                         'image_1920_1': product_preference.product_id.image_1920_1,
                         'image_1920_2': product_preference.product_id.image_1920_2,
                         'name': product_preference.product_id.name,
-                        'list_price': product_preference.product_id.list_price,
-
+                        # 'list_price': product_preference.product_id.list_price,
+                        'list_price': recipe_price,
                         'hours_preparation_time': product_preference.product_id.hours_preparation_time,
                         'minutes_preparation_time': product_preference.product_id.minutes_preparation_time,
                         'difficulty_level': product_preference.product_id.difficulty_level,
