@@ -996,7 +996,12 @@ class TanmyaProducExt(models.Model):
             
         recipes_details = []
         if recipes:
+            if self.env.user.preferred_language == 'fr':
+                user_lang = 'fr_FR'
+            else:
+                user_lang = 'en_US'
             for recipe in recipes:
+                
                 sale_order = self.env['product.product'].with_context(lang=user_lang).sudo().search([('id', '=', recipe.id)]).kit_template
                 ingredients_details = []
 
