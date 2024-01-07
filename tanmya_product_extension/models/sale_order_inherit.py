@@ -656,6 +656,12 @@ class StockPicking(models.Model):
 
     check_notification = fields.Boolean(string='Check Notification', default=False)
 
+    def write(self, data):
+        res = super(StockPicking, self).write(data)
+        if data.get('state') == 'done':
+            _logger.info(f'picking data : {data}')
+        return res
+    
     @api.depends('move_lines.state', 'move_lines.date', 'move_type')
     def _compute_scheduled_date(self):
         for picking in self:
