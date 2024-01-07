@@ -658,6 +658,7 @@ class StockPicking(models.Model):
 
     def write(self, data):
         res = super(StockPicking, self).write(data)
+        _logger.info(f'picking data 1 : {data}')
         if data.get('state') == 'done':
             _logger.info(f'picking data : {data}')
         return res
