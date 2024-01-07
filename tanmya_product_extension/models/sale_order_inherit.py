@@ -662,6 +662,10 @@ class StockPicking(models.Model):
         if data.get('state') == 'done':
             _logger.info(f'picking data : {data}')
         return res
+        
+    @api.onchange('state')
+    def state_change(self):
+        _logger.info('triggred------------------')
     
     @api.depends('move_lines.state', 'move_lines.date', 'move_type')
     def _compute_scheduled_date(self):
