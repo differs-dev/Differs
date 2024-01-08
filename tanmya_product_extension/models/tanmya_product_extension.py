@@ -631,7 +631,7 @@ class TanmyaProducExt(models.Model):
 
                 if len(vals.get('categories')) > 0:
                     new_recipe_vals['prod_category'] = [(6, 0, vals.get('categories'))]
-
+                _logger.info(f'categories : {vals.get('categories')}')
                 if vals.get('calories') != '':
                     new_recipe_vals['calories'] = vals.get('calories')
                 if vals.get('carbs') != '':
