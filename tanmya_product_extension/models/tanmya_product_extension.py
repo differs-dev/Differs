@@ -1118,6 +1118,11 @@ class TanmyaProducExt(models.Model):
     def get_recipe_details(self, recipe_id: int):
         if recipe_id:
             recipe = self.env['product.product'].sudo().browse(recipe_id)
+            sale_order = recipe.kit_template
+            recipe_price = 0
+            for line in sale_order.sale_order_template_line_ids:
+                price = line.product_id.product_tmpl_id.compute_price_from_pricelist(line.product_id.product_tmpl_id.id)
+                recipe_price += price * line.product_uom_qty
             if recipe:
                 recipe_details = {
                     'id': recipe.id,
@@ -1126,7 +1131,8 @@ class TanmyaProducExt(models.Model):
                     'image_1920_1': recipe.image_1920_1,
                     'image_1920_2': recipe.image_1920_2,
                     'kit_template': [recipe.kit_template.id, recipe.kit_template.name],
-                    'list_price': recipe.product_tmpl_id.list_price,
+                    # 'list_price': recipe.product_tmpl_id.list_price,
+                    'list_price': recipe_price,
                     'owner_id': [recipe.owner_id.id, recipe.owner_id.name],
                     'hours_preparation_time': recipe.hours_preparation_time,
                     'minutes_preparation_time': recipe.minutes_preparation_time,
