@@ -1005,7 +1005,8 @@ class TanmyaProducExt(models.Model):
                 sale_order = self.env['product.product'].with_context(lang=user_lang).sudo().search([('id', '=', recipe.id)]).kit_template
                 ingredients_details = []
 
-                recipe_price = 0
+                recipe_price = self._compute_kit_price(recipe.kit_template.id,0)
+                # recipe_price=0
                 for line in sale_order.sale_order_template_line_ids:
                     price = line.product_id.product_tmpl_id.compute_price_from_pricelist(line.product_id.product_tmpl_id.id)
                     recipe_price += price * line.product_uom_qty * recipe.servings
