@@ -558,7 +558,7 @@ class TanmyaProducExt(models.Model):
         check = False
         try:
             recipe = self.env['product.product'].sudo().search([('id', '=', recipe_id)])
-
+            _logger.info(f'recipe to edit : {recipe}')
             if recipe:
                 sale_order_template = None
                 # update sale order template fields
