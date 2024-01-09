@@ -733,9 +733,9 @@ class StockPicking(models.Model):
             
         return res
         
-    @api.onchange('state')
-    def state_change(self):
-        _logger.info('triggred------------------')
+    # @api.onchange('state')
+    # def state_change(self):
+    #     _logger.info('triggred------------------')
     
     @api.depends('move_lines.state', 'move_lines.date', 'move_type')
     def _compute_scheduled_date(self):
@@ -749,55 +749,55 @@ class StockPicking(models.Model):
                 else:
                     picking.scheduled_date = max(moves_dates, default=picking.scheduled_date or fields.Datetime.now())
 
-    def button_validate(self):
-        res = super(StockPicking, self).button_validate()
-        _logger.info('validate button triggered !!!!!!!!!!!!!!!!!!!!!!!!!!!')
-        order = self.env['sale.order'].sudo().search([('name', '=', self.origin)])
-        _logger.info(f'order name {order.name}')
-        if order:
-            order_user = self.env['res.users'].sudo().search([('partner_id', '=', order.partner_id.id)])
-            if not order_user:
-                return temp
-            order_picking_ids = order.picking_ids
-            if order_picking_ids and len(order_picking_ids) > 1:
-                first_pick = self.env['stock.picking'].sudo().search(
-                    [('id', 'in', order_picking_ids.ids),
-                     ('location_dest_id', '=', 5),
-                     ('state', '!=', 'cancel')])
-                if first_pick and len(first_pick) == 1 and \
-                        first_pick.state == 'done' and not first_pick.check_notification:
-                    # Send notification when order is delivered
-                    if order_user.preferred_language == 'en':
-                        notification_vals = {
-                            'title': 'Order delivered',
-                            'content': f'Order #{order.name} was successfully delivered to you.'
-                                       'Click here to place a new order',
-                            'fr_title': 'commande livrée',
-                            'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
-                                       ' Cliquez ici pour passer une nouvelle commande',
-                            'payload': 'order_delivered',
-                            'target_action': 'FLUTTER_NOTIFICATION_CLICK',
-                            'notification_date': datetime.now(),
-                            'user_ids': [(6, 0, [order_user.id])],
-                        }
-                    else:
-                        notification_vals = {
-                            'title': 'Order delivered',
-                            'content': f'Order #{order.name} was successfully delivered to you.'
-                                       'Click here to place a new order',
-                            'fr_title': 'commande livrée',
-                            'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
-                                       ' Cliquez ici pour passer une nouvelle commande',
-                            'payload': 'order_delivered',
-                            'target_action': 'FLUTTER_NOTIFICATION_CLICK',
-                            'notification_date': datetime.now(),
-                            'user_ids': [(6, 0, [order_user.id])],
-                        }
-                    notification = self.env['firebase.notification'].sudo().create(notification_vals)
-                    if notification:
-                        notification.send()
-                        first_pick.check_notification = True
-        return res
+    # def button_validate(self):
+    #     res = super(StockPicking, self).button_validate()
+    #     _logger.info('validate button triggered !!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    #     order = self.env['sale.order'].sudo().search([('name', '=', self.origin)])
+    #     _logger.info(f'order name {order.name}')
+    #     if order:
+    #         order_user = self.env['res.users'].sudo().search([('partner_id', '=', order.partner_id.id)])
+    #         if not order_user:
+    #             return temp
+    #         order_picking_ids = order.picking_ids
+    #         if order_picking_ids and len(order_picking_ids) > 1:
+    #             first_pick = self.env['stock.picking'].sudo().search(
+    #                 [('id', 'in', order_picking_ids.ids),
+    #                  ('location_dest_id', '=', 5),
+    #                  ('state', '!=', 'cancel')])
+    #             if first_pick and len(first_pick) == 1 and \
+    #                     first_pick.state == 'done' and not first_pick.check_notification:
+    #                 # Send notification when order is delivered
+    #                 if order_user.preferred_language == 'en':
+    #                     notification_vals = {
+    #                         'title': 'Order delivered',
+    #                         'content': f'Order #{order.name} was successfully delivered to you.'
+    #                                    'Click here to place a new order',
+    #                         'fr_title': 'commande livrée',
+    #                         'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
+    #                                    ' Cliquez ici pour passer une nouvelle commande',
+    #                         'payload': 'order_delivered',
+    #                         'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+    #                         'notification_date': datetime.now(),
+    #                         'user_ids': [(6, 0, [order_user.id])],
+    #                     }
+    #                 else:
+    #                     notification_vals = {
+    #                         'title': 'Order delivered',
+    #                         'content': f'Order #{order.name} was successfully delivered to you.'
+    #                                    'Click here to place a new order',
+    #                         'fr_title': 'commande livrée',
+    #                         'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
+    #                                    ' Cliquez ici pour passer une nouvelle commande',
+    #                         'payload': 'order_delivered',
+    #                         'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+    #                         'notification_date': datetime.now(),
+    #                         'user_ids': [(6, 0, [order_user.id])],
+    #                     }
+    #                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
+    #                 if notification:
+    #                     notification.send()
+    #                     first_pick.check_notification = True
+    #     return res
 
 class ImmediateStockPicking(models.TransientModel):
     _inherit = "stock.immediate.transfer"
