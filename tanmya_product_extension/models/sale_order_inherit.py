@@ -677,7 +677,8 @@ class StockPicking(models.Model):
             _logger.info(picking.location_dest_id.id)
             _logger.info(picking.state)
             _logger.info(picking.check_notification)
-            if picking.location_dest_id.id == 11 and picking.state == 'done' and not picking.check_notification:
+            notification_sent = self.env['firebase.notification'].sudo().search([('picking_id', '=', picking.id)])
+            if picking.location_dest_id.id == 11 and picking.state == 'done' and not picking.check_notification and not notification_sent:
                 if order_user.preferred_language == 'en':
                     notification_vals = {
                                         'title': 'Order on its way',
@@ -688,6 +689,7 @@ class StockPicking(models.Model):
                                         'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                                         'notification_date': datetime.now(),
                                         'user_ids': [(6, 0, [order_user.id])],
+                                        'picking_id': picking.id
                                     }
                 else:
                     notification_vals = {
@@ -699,6 +701,7 @@ class StockPicking(models.Model):
                         'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                         'notification_date': datetime.now(),
                         'user_ids': [(6, 0, [order_user.id])],
+                        'picking_id': picking.id
                     }
                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
                 if notification:
@@ -707,7 +710,7 @@ class StockPicking(models.Model):
                     data['check_notification'] = True
                 return res
                     
-            elif picking.location_dest_id.id == 5 and picking.state == 'done' and not picking.check_notification:
+            elif picking.location_dest_id.id == 5 and picking.state == 'done' and not picking.check_notification and not notification_sent:
                 if order_user.preferred_language == 'en':
                     notification_vals = {
                         'title': 'Order delivered',
@@ -720,6 +723,7 @@ class StockPicking(models.Model):
                         'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                         'notification_date': datetime.now(),
                         'user_ids': [(6, 0, [order_user.id])],
+                        'picking_id': picking.id
                     }
                 else:
                     notification_vals = {
@@ -733,6 +737,7 @@ class StockPicking(models.Model):
                         'target_action': 'FLUTTER_NOTIFICATION_CLICK',
                         'notification_date': datetime.now(),
                         'user_ids': [(6, 0, [order_user.id])],
+                        'picking_id': picking.id
                     }
                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
                 if notification:
