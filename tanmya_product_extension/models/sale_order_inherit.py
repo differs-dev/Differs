@@ -694,6 +694,7 @@ class StockPicking(models.Model):
                     }
                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
                 if notification:
+                    _logger.info('source is write !!')
                     notification.send()
                     # data['check_notification'] = True
                 return res
@@ -727,6 +728,7 @@ class StockPicking(models.Model):
                     }
                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
                 if notification:
+                    _logger.info('source is write !!')
                     notification.send()
                     # data['check_notification'] = True
                 return res
@@ -873,6 +875,7 @@ class ImmediateStockPicking(models.TransientModel):
                                     }
                                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
                                 if notification:
+                                    _logger.info('source is immediate !!')
                                     notification.send()
                                     first_pick.check_notification = True
                             second_pick = self.env['stock.picking'].sudo().search(
@@ -906,6 +909,7 @@ class ImmediateStockPicking(models.TransientModel):
                                     }
                                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
                                 if notification:
+                                    _logger.info('source is immediate !!')
                                     notification.send()
                                     second_pick.check_notification = True
 
@@ -997,6 +1001,7 @@ class StockBackOrderConfirmation1(models.TransientModel):
                                     }
                                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
                                 if notification:
+                                    _logger.info('source is backorder confirmation !!')
                                     notification.send()
                                     first_pick.check_notification = True
                             second_pick = self.env['stock.picking'].sudo().search(
@@ -1033,6 +1038,7 @@ class StockBackOrderConfirmation1(models.TransientModel):
                                     }
                                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
                                 if notification:
+                                    _logger.info('source is backorder confirmation !!')
                                     notification.send()
                                     second_pick.check_notification = True
 
@@ -1092,6 +1098,7 @@ class StockBackOrderConfirmation1(models.TransientModel):
                                     }
                                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
                                 if notification:
+                                    _logger.info('source is backorder cancellation !!')
                                     notification.send()
                                     first_pick.check_notification = True
                             second_pick = self.env['stock.picking'].sudo().search(
@@ -1126,6 +1133,7 @@ class StockBackOrderConfirmation1(models.TransientModel):
                                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
                                 if notification:
                                     notification.send()
+                                    _logger.info('source is backorder cancellation !!')
                                     second_pick.check_notification = True
 
             return temp
