@@ -664,7 +664,7 @@ class StockPicking(models.Model):
         # if data.get('state') == 'done':
         #     _logger.info(f'picking data : {data}')
         picking_id = self.env.context.get('button_validate_picking_ids')
-        picking = self.env['stock.picking'].sudo().search([('id', '=', picking_id)])
+        picking = self.env['stock.picking'].sudo().search([('id', 'in', picking_id)])
         origin = self.env.context.get('default_origin')
         if origin:
             order = self.env['sale.order'].sudo().search([('name', '=', origin)])
