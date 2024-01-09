@@ -31,6 +31,7 @@ class FirebaseNotification(models.Model):
                                 domain=[('firebase_account_id', '!=', False)],
                                 string='Receivers')
     recipe_id = fields.Integer(string='Recipe ID')
+    picking_id = fields.Many2one('stock.picking')
 
     def send_notifications(self):
         tokens = self.user_ids.mapped('firebase_account_id').mapped('token')
