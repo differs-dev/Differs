@@ -666,7 +666,11 @@ class StockPicking(models.Model):
         picking_id = self.env.context.get('button_validate_picking_ids')
         picking = self.env['stock.picking'].sudo().search([('id', 'in', picking_id)])
         origin = self.env.context.get('default_origin')
-        if origin:
+        id = self.env.context.get('active_id') 
+        order = self.env['sale.order'].sudo().search([('name', '=', origin)])
+        if not order:
+            order = self.env['sale.order'].sudo().search([('id', '=', id)])
+        if order:
             order = self.env['sale.order'].sudo().search([('name', '=', origin)])
             order_user = self.env['res.users'].sudo().search([('partner_id', '=', order.partner_id.id)])
             _logger.info('condition data: ')
