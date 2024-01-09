@@ -660,9 +660,74 @@ class StockPicking(models.Model):
         res = super(StockPicking, self).write(data)
         _logger.info(f'picking data 1 : {data}')
         _logger.info('context ::::')
-        _logger.info(self.env.context)
-        if data.get('state') == 'done':
-            _logger.info(f'picking data : {data}')
+        # _logger.info(self.env.context)
+        # if data.get('state') == 'done':
+        #     _logger.info(f'picking data : {data}')
+        picking_id = self.env.context.get('button_validate_picking_ids')
+        picking = self.env['stock.picking'].sudo().search([('id', '=', picking_id)])
+        origin = self.env.context.get('default_origin')
+        if origin:
+            order = self.env['sale.order'].sudo().search([('name', '=', origin)])
+            order_user = self.env['res.users'].sudo().search([('partner_id', '=', order.partner_id.id)])
+            if picking.location_dest_id.id == 11 and picking.state == 'done':
+                if order_user.preferred_language == 'en':
+                    notification_vals = {
+                                        'title': 'Order on its way',
+                                        'content': 'Your order is on its way to you.',
+                                        'fr_title': 'Commande en cours',
+                                        'fr_content': 'Votre commande est en route vers vous.',
+                                        'payload': 'order_on_its_way',
+                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                                        'notification_date': datetime.now(),
+                                        'user_ids': [(6, 0, [order_user.id])],
+                                    }
+                else:
+                    notification_vals = {
+                        'title': 'Order on its way',
+                        'content': 'Your order is on its way to you.',
+                        'fr_title': 'Commande en cours',
+                        'fr_content': 'Votre commande est en route vers vous.',
+                        'payload': 'order_on_its_way',
+                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                        'notification_date': datetime.now(),
+                        'user_ids': [(6, 0, [order_user.id])],
+                    }
+                notification = self.env['firebase.notification'].sudo().create(notification_vals)
+                if notification:
+                    notification.send()
+                    picking.check_notification = True
+                    
+            elif picking.location_dest_id == 5 and picking.state == 'done':
+                if order_user.preferred_language == 'en':
+                    notification_vals = {
+                        'title': 'Order delivered',
+                        'content': f'Order #{order.name} was successfully delivered to you.'
+                                   'Click here to place a new order',
+                        'fr_title': 'commande livrée',
+                        'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
+                                   ' Cliquez ici pour passer une nouvelle commande',
+                        'payload': 'order_delivered',
+                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                        'notification_date': datetime.now(),
+                        'user_ids': [(6, 0, [order_user.id])],
+                    }
+                else:
+                    notification_vals = {
+                        'title': 'Order delivered',
+                        'content': f'Order #{order.name} was successfully delivered to you.'
+                                   'Click here to place a new order',
+                        'fr_title': 'commande livrée',
+                        'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
+                                   ' Cliquez ici pour passer une nouvelle commande',
+                        'payload': 'order_delivered',
+                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+                        'notification_date': datetime.now(),
+                        'user_ids': [(6, 0, [order_user.id])],
+                    }
+                notification = self.env['firebase.notification'].sudo().create(notification_vals)
+                if notification:
+                    notification.send()
+                    picking.check_notification = True
             
         return res
         
