@@ -695,7 +695,7 @@ class StockPicking(models.Model):
                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
                 if notification:
                     notification.send()
-                    data['check_notification'] = True
+                    # data['check_notification'] = True
                 return res
                     
             elif picking.location_dest_id == 5 and picking.state == 'done':
@@ -728,7 +728,7 @@ class StockPicking(models.Model):
                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
                 if notification:
                     notification.send()
-                    data['check_notification'] = True
+                    # data['check_notification'] = True
                 return res
             
         return res
