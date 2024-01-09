@@ -660,7 +660,7 @@ class StockPicking(models.Model):
         res = super(StockPicking, self).write(data)
         _logger.info(f'picking data 1 : {data}')
         _logger.info('context ::::')
-        # _logger.info(self.env.context)
+        _logger.info(self.env.context)
         # if data.get('state') == 'done':
         #     _logger.info(f'picking data : {data}')
         picking_id = self.env.context.get('button_validate_picking_ids')
@@ -696,6 +696,7 @@ class StockPicking(models.Model):
                 if notification:
                     notification.send()
                     # picking.check_notification = True
+                return res
                     
             elif picking.location_dest_id == 5 and picking.state == 'done':
                 if order_user.preferred_language == 'en':
@@ -728,6 +729,7 @@ class StockPicking(models.Model):
                 if notification:
                     notification.send()
                     # picking.check_notification = True
+                return res
             
         return res
         
