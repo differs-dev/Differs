@@ -7,7 +7,7 @@
     'author': 'ALTANMYA - TECHNOLOGY SOLUTIONS',
     'company': 'ALTANMYA - TECHNOLOGY SOLUTIONS Part of ALTANMYA GROUP',
     'website': "http://tech.altanmya.net",
-    'depends': ['base', 'web', 'mail'],
+    'depends': ['base', 'web', 'mail', 'stock'],
     'data': [
             'security/ir.model.access.csv',
             'views/notification_views.xml',
