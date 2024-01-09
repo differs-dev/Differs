@@ -672,7 +672,7 @@ class StockPicking(models.Model):
             _logger.info('condition data: ')
             _logger.info(picking.location_dest_id.id)
             _logger.info(picking.state)
-            _logger.info(picking.check_notification:)
+            _logger.info(picking.check_notification)
             if picking.location_dest_id.id == 11 and picking.state == 'done' and not picking.check_notification:
                 if order_user.preferred_language == 'en':
                     notification_vals = {
