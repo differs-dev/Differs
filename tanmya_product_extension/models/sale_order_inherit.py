@@ -703,7 +703,7 @@ class StockPicking(models.Model):
                     data['check_notification'] = True
                 return res
                     
-            elif picking.location_dest_id == 5 and picking.state == 'done' and not picking.check_notification:
+            elif picking.location_dest_id.id == 5 and picking.state == 'done' and not picking.check_notification:
                 if order_user.preferred_language == 'en':
                     notification_vals = {
                         'title': 'Order delivered',
