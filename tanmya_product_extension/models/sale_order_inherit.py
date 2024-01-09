@@ -804,337 +804,337 @@ class StockPicking(models.Model):
 class ImmediateStockPicking(models.TransientModel):
     _inherit = "stock.immediate.transfer"
 
-    def process(self):
-        pickings_to_do = self.env['stock.picking']
-        pickings_not_to_do = self.env['stock.picking']
-        for line in self.immediate_transfer_line_ids:
-            if line.to_immediate is True:
-                pickings_to_do |= line.picking_id
-            else:
-                pickings_not_to_do |= line.picking_id
+    # def process(self):
+    #     pickings_to_do = self.env['stock.picking']
+    #     pickings_not_to_do = self.env['stock.picking']
+    #     for line in self.immediate_transfer_line_ids:
+    #         if line.to_immediate is True:
+    #             pickings_to_do |= line.picking_id
+    #         else:
+    #             pickings_not_to_do |= line.picking_id
 
-        for picking in pickings_to_do:
-            # If still in draft => confirm and assign
-            if picking.state == 'draft':
-                picking.action_confirm()
-                if picking.state != 'assigned':
-                    picking.action_assign()
-                    if picking.state != 'assigned':
-                        raise UserError(
-                            _("Could not reserve all requested products. Please use the \'Mark as Todo\' button to handle the reservation manually."))
-            picking.move_lines._set_quantities_to_reservation()
+    #     for picking in pickings_to_do:
+    #         # If still in draft => confirm and assign
+    #         if picking.state == 'draft':
+    #             picking.action_confirm()
+    #             if picking.state != 'assigned':
+    #                 picking.action_assign()
+    #                 if picking.state != 'assigned':
+    #                     raise UserError(
+    #                         _("Could not reserve all requested products. Please use the \'Mark as Todo\' button to handle the reservation manually."))
+    #         picking.move_lines._set_quantities_to_reservation()
 
-        pickings_to_validate = self.env.context.get('button_validate_picking_ids')
-        if pickings_to_validate:
-            pickings_to_validate = self.env['stock.picking'].browse(pickings_to_validate)
-            pickings_to_validate = pickings_to_validate - pickings_not_to_do
-            temp = pickings_to_validate.with_context(skip_immediate=True).button_validate()
+    #     pickings_to_validate = self.env.context.get('button_validate_picking_ids')
+    #     if pickings_to_validate:
+    #         pickings_to_validate = self.env['stock.picking'].browse(pickings_to_validate)
+    #         pickings_to_validate = pickings_to_validate - pickings_not_to_do
+    #         temp = pickings_to_validate.with_context(skip_immediate=True).button_validate()
 
-            if len(pickings_to_validate) > 0:
-                pick = pickings_to_validate[0]
-                if pick:
-                    order = self.env['sale.order'].sudo().search([('name', '=', pick.origin)])
-                    if order:
-                        order_user = self.env['res.users'].sudo().search([('partner_id', '=', order.partner_id.id)])
-                        if not order_user:
-                            return temp
-                        order_picking_ids = order.picking_ids
-                        if order_picking_ids and len(order_picking_ids) > 1:
-                            first_pick = self.env['stock.picking'].sudo().search(
-                                [('id', 'in', order_picking_ids.ids),
-                                 ('location_dest_id', '=', 5),
-                                 ('state', '!=', 'cancel')])
-                            if first_pick and len(first_pick) == 1 and \
-                                    first_pick.state == 'done' and not first_pick.check_notification:
-                                # Send notification when order is delivered
-                                if order_user.preferred_language == 'en':
-                                    notification_vals = {
-                                        'title': 'Order delivered',
-                                        'content': f'Order #{order.name} was successfully delivered to you.'
-                                                   'Click here to place a new order',
-                                        'fr_title': 'commande livrée',
-                                        'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
-                                                   ' Cliquez ici pour passer une nouvelle commande',
-                                        'payload': 'order_delivered',
-                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
-                                        'notification_date': datetime.now(),
-                                        'user_ids': [(6, 0, [order_user.id])],
-                                    }
-                                else:
-                                    notification_vals = {
-                                        'title': 'Order delivered',
-                                        'content': f'Order #{order.name} was successfully delivered to you.'
-                                                   'Click here to place a new order',
-                                        'fr_title': 'commande livrée',
-                                        'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
-                                                   ' Cliquez ici pour passer une nouvelle commande',
-                                        'payload': 'order_delivered',
-                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
-                                        'notification_date': datetime.now(),
-                                        'user_ids': [(6, 0, [order_user.id])],
-                                    }
-                                notification = self.env['firebase.notification'].sudo().create(notification_vals)
-                                if notification:
-                                    _logger.info('source is immediate !!')
-                                    notification.send()
-                                    first_pick.check_notification = True
-                            second_pick = self.env['stock.picking'].sudo().search(
-                                [('id', 'in', order_picking_ids.ids),
-                                 ('location_dest_id', '=', 11),
-                                 ('state', '!=', 'cancel')])
-                            if second_pick and len(second_pick) == 1 and \
-                                    second_pick.state == 'done' and not second_pick.check_notification:
-                                # Send notification when order is on its way to customer
-                                if order_user.preferred_language == 'en':
-                                    notification_vals = {
-                                        'title': 'Order on its way',
-                                        'content': 'Your order is on its way to you.',
-                                        'fr_title': 'Commande en cours',
-                                        'fr_content': 'Votre commande est en route vers vous.',
-                                        'payload': 'order_on_its_way',
-                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
-                                        'notification_date': datetime.now(),
-                                        'user_ids': [(6, 0, [order_user.id])],
-                                    }
-                                else:
-                                    notification_vals = {
-                                        'title': 'Order on its way',
-                                        'content': 'Your order is on its way to you.',
-                                        'fr_title': 'Commande en cours',
-                                        'fr_content': 'Votre commande est en route vers vous.',
-                                        'payload': 'order_on_its_way',
-                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
-                                        'notification_date': datetime.now(),
-                                        'user_ids': [(6, 0, [order_user.id])],
-                                    }
-                                notification = self.env['firebase.notification'].sudo().create(notification_vals)
-                                if notification:
-                                    _logger.info('source is immediate !!')
-                                    notification.send()
-                                    second_pick.check_notification = True
+    #         if len(pickings_to_validate) > 0:
+    #             pick = pickings_to_validate[0]
+    #             if pick:
+    #                 order = self.env['sale.order'].sudo().search([('name', '=', pick.origin)])
+    #                 if order:
+    #                     order_user = self.env['res.users'].sudo().search([('partner_id', '=', order.partner_id.id)])
+    #                     if not order_user:
+    #                         return temp
+    #                     order_picking_ids = order.picking_ids
+    #                     if order_picking_ids and len(order_picking_ids) > 1:
+    #                         first_pick = self.env['stock.picking'].sudo().search(
+    #                             [('id', 'in', order_picking_ids.ids),
+    #                              ('location_dest_id', '=', 5),
+    #                              ('state', '!=', 'cancel')])
+    #                         if first_pick and len(first_pick) == 1 and \
+    #                                 first_pick.state == 'done' and not first_pick.check_notification:
+    #                             # Send notification when order is delivered
+    #                             if order_user.preferred_language == 'en':
+    #                                 notification_vals = {
+    #                                     'title': 'Order delivered',
+    #                                     'content': f'Order #{order.name} was successfully delivered to you.'
+    #                                                'Click here to place a new order',
+    #                                     'fr_title': 'commande livrée',
+    #                                     'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
+    #                                                ' Cliquez ici pour passer une nouvelle commande',
+    #                                     'payload': 'order_delivered',
+    #                                     'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+    #                                     'notification_date': datetime.now(),
+    #                                     'user_ids': [(6, 0, [order_user.id])],
+    #                                 }
+    #                             else:
+    #                                 notification_vals = {
+    #                                     'title': 'Order delivered',
+    #                                     'content': f'Order #{order.name} was successfully delivered to you.'
+    #                                                'Click here to place a new order',
+    #                                     'fr_title': 'commande livrée',
+    #                                     'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
+    #                                                ' Cliquez ici pour passer une nouvelle commande',
+    #                                     'payload': 'order_delivered',
+    #                                     'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+    #                                     'notification_date': datetime.now(),
+    #                                     'user_ids': [(6, 0, [order_user.id])],
+    #                                 }
+    #                             notification = self.env['firebase.notification'].sudo().create(notification_vals)
+    #                             if notification:
+    #                                 _logger.info('source is immediate !!')
+    #                                 notification.send()
+    #                                 first_pick.check_notification = True
+    #                         second_pick = self.env['stock.picking'].sudo().search(
+    #                             [('id', 'in', order_picking_ids.ids),
+    #                              ('location_dest_id', '=', 11),
+    #                              ('state', '!=', 'cancel')])
+    #                         if second_pick and len(second_pick) == 1 and \
+    #                                 second_pick.state == 'done' and not second_pick.check_notification:
+    #                             # Send notification when order is on its way to customer
+    #                             if order_user.preferred_language == 'en':
+    #                                 notification_vals = {
+    #                                     'title': 'Order on its way',
+    #                                     'content': 'Your order is on its way to you.',
+    #                                     'fr_title': 'Commande en cours',
+    #                                     'fr_content': 'Votre commande est en route vers vous.',
+    #                                     'payload': 'order_on_its_way',
+    #                                     'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+    #                                     'notification_date': datetime.now(),
+    #                                     'user_ids': [(6, 0, [order_user.id])],
+    #                                 }
+    #                             else:
+    #                                 notification_vals = {
+    #                                     'title': 'Order on its way',
+    #                                     'content': 'Your order is on its way to you.',
+    #                                     'fr_title': 'Commande en cours',
+    #                                     'fr_content': 'Votre commande est en route vers vous.',
+    #                                     'payload': 'order_on_its_way',
+    #                                     'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+    #                                     'notification_date': datetime.now(),
+    #                                     'user_ids': [(6, 0, [order_user.id])],
+    #                                 }
+    #                             notification = self.env['firebase.notification'].sudo().create(notification_vals)
+    #                             if notification:
+    #                                 _logger.info('source is immediate !!')
+    #                                 notification.send()
+    #                                 second_pick.check_notification = True
 
-            return temp
-        return True
+    #         return temp
+    #     return True
 
 
 class StockBackOrderConfirmation1(models.TransientModel):
     _inherit = "stock.backorder.confirmation"
 
-    def process(self):
-        pickings_to_do = self.env['stock.picking']
-        pickings_not_to_do = self.env['stock.picking']
-        for line in self.backorder_confirmation_line_ids:
-            if line.to_backorder is True:
-                pickings_to_do |= line.picking_id
-            else:
-                pickings_not_to_do |= line.picking_id
+    # def process(self):
+    #     pickings_to_do = self.env['stock.picking']
+    #     pickings_not_to_do = self.env['stock.picking']
+    #     for line in self.backorder_confirmation_line_ids:
+    #         if line.to_backorder is True:
+    #             pickings_to_do |= line.picking_id
+    #         else:
+    #             pickings_not_to_do |= line.picking_id
 
-        for pick_id in pickings_not_to_do:
-            moves_to_log = {}
-            for move in pick_id.move_lines:
-                if float_compare(move.product_uom_qty,
-                                 move.quantity_done,
-                                 precision_rounding=move.product_uom.rounding) > 0:
-                    moves_to_log[move] = (move.quantity_done, move.product_uom_qty)
-            pick_id._log_less_quantities_than_expected(moves_to_log)
+    #     for pick_id in pickings_not_to_do:
+    #         moves_to_log = {}
+    #         for move in pick_id.move_lines:
+    #             if float_compare(move.product_uom_qty,
+    #                              move.quantity_done,
+    #                              precision_rounding=move.product_uom.rounding) > 0:
+    #                 moves_to_log[move] = (move.quantity_done, move.product_uom_qty)
+    #         pick_id._log_less_quantities_than_expected(moves_to_log)
 
-        pickings_to_validate = self.env.context.get('button_validate_picking_ids')
-        if pickings_to_validate:
-            pickings_to_validate = self.env['stock.picking'].browse(pickings_to_validate).with_context(
-                skip_backorder=True)
-            if pickings_not_to_do:
-                pickings_to_validate = pickings_to_validate.with_context(
-                    picking_ids_not_to_backorder=pickings_not_to_do.ids)
-            temp = pickings_to_validate.button_validate()
+    #     pickings_to_validate = self.env.context.get('button_validate_picking_ids')
+    #     if pickings_to_validate:
+    #         pickings_to_validate = self.env['stock.picking'].browse(pickings_to_validate).with_context(
+    #             skip_backorder=True)
+    #         if pickings_not_to_do:
+    #             pickings_to_validate = pickings_to_validate.with_context(
+    #                 picking_ids_not_to_backorder=pickings_not_to_do.ids)
+    #         temp = pickings_to_validate.button_validate()
 
-            if len(pickings_to_validate) > 0:
-                pick = self.env['stock.picking'].sudo().browse(pickings_to_validate[0])
-                if not isinstance(pickings_to_validate[0], int):
-                    origin = pickings_to_validate[0].origin
-                else:
-                    origin = pick.origin
-                _logger.info(f'pick 1 : {pickings_to_validate[0]}')
-                if pick:
-                    _logger.info(f'pick : {pick}')
-                    order = self.env['sale.order'].sudo().search([('name', '=', origin)])
-                    if order:
-                        order_user = self.env['res.users'].sudo().search([('partner_id', '=', order.partner_id.id)])
-                        if not order_user:
-                            return temp
-                        order_picking_ids = order.picking_ids
-                        if order_picking_ids and len(order_picking_ids) > 1:
-                            first_pick = self.env['stock.picking'].sudo().search(
-                                [('id', 'in', order_picking_ids.ids),
-                                 ('location_dest_id', '=', 5),
-                                 ('state', '!=', 'cancel')])
-                            _logger.info(f'first pick : {first_pick}')
-                            if first_pick and len(first_pick) == 1 and \
-                                    first_pick.state == 'done' and not first_pick.check_notification:
-                                # Send notification when order is delivered
-                                _logger.info(f'first pick state : {first_pick.state}')
-                                _logger.info(first_pick.check_notification)
-                                if order_user.preferred_language == 'en':
-                                    notification_vals = {
-                                        'title': 'Order delivered',
-                                        'content': f'Order #{order.name} was successfully delivered to you.'
-                                                   'Click here to place a new order',
-                                        'fr_title': 'commande livrée',
-                                        'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
-                                                   'Cliquez ici pour passer une nouvelle commande',
-                                        'notification_date': datetime.now(),
-                                        'payload': 'order_delivered',
-                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
-                                        'user_ids': [(6, 0, [order_user.id])],
-                                    }
-                                else:
-                                    notification_vals = {
-                                        'title': 'Order delivered',
-                                        'content': f'Order #{order.name} was successfully delivered to you.'
-                                                   'Click here to place a new order',
-                                        'fr_title': 'commande livrée',
-                                        'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
-                                                   ' Cliquez ici pour passer une nouvelle commande',
-                                        'notification_date': datetime.now(),
-                                        'payload': 'order_delivered',
-                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
-                                        'user_ids': [(6, 0, [order_user.id])],
-                                    }
-                                notification = self.env['firebase.notification'].sudo().create(notification_vals)
-                                if notification:
-                                    _logger.info('source is backorder confirmation !!')
-                                    notification.send()
-                                    first_pick.check_notification = True
-                            second_pick = self.env['stock.picking'].sudo().search(
-                                [('id', 'in', order_picking_ids.ids),
-                                 ('location_dest_id', '=', 11),
-                                 ('state', '!=', 'cancel')])
-                            _logger.info(f'second pick : {second_pick}')
-                            if second_pick and len(second_pick) == 1 and \
-                                    second_pick.state == 'done' and not second_pick.check_notification:
-                                # Send notification when order is on its way to customer
-                                _logger.info(f'second pick state : {second_pick.state}')
-                                _logger.info(second_pick.check_notification)
-                                if order_user.preferred_language == 'en':
-                                    notification_vals = {
-                                        'title': 'Order on its way',
-                                        'content': 'Your order is on its way to you.',
-                                        'fr_title': 'Commande en cours',
-                                        'fr_content': 'Votre commande est en route vers vous.',
-                                        'notification_date': datetime.now(),
-                                        'payload': 'order_on_its_way',
-                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
-                                        'user_ids': [(6, 0, [order_user.id])],
-                                    }
-                                else:
-                                    notification_vals = {
-                                        'title': 'Order on its way',
-                                        'content': 'Your order is on its way to you.',
-                                        'fr_title': 'Commande en cours',
-                                        'fr_content': 'Votre commande est en route vers vous.',
-                                        'notification_date': datetime.now(),
-                                        'payload': 'order_on_its_way',
-                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
-                                        'user_ids': [(6, 0, [order_user.id])],
-                                    }
-                                notification = self.env['firebase.notification'].sudo().create(notification_vals)
-                                if notification:
-                                    _logger.info('source is backorder confirmation !!')
-                                    notification.send()
-                                    second_pick.check_notification = True
+    #         if len(pickings_to_validate) > 0:
+    #             pick = self.env['stock.picking'].sudo().browse(pickings_to_validate[0])
+    #             if not isinstance(pickings_to_validate[0], int):
+    #                 origin = pickings_to_validate[0].origin
+    #             else:
+    #                 origin = pick.origin
+    #             _logger.info(f'pick 1 : {pickings_to_validate[0]}')
+    #             if pick:
+    #                 _logger.info(f'pick : {pick}')
+    #                 order = self.env['sale.order'].sudo().search([('name', '=', origin)])
+    #                 if order:
+    #                     order_user = self.env['res.users'].sudo().search([('partner_id', '=', order.partner_id.id)])
+    #                     if not order_user:
+    #                         return temp
+    #                     order_picking_ids = order.picking_ids
+    #                     if order_picking_ids and len(order_picking_ids) > 1:
+    #                         first_pick = self.env['stock.picking'].sudo().search(
+    #                             [('id', 'in', order_picking_ids.ids),
+    #                              ('location_dest_id', '=', 5),
+    #                              ('state', '!=', 'cancel')])
+    #                         _logger.info(f'first pick : {first_pick}')
+    #                         if first_pick and len(first_pick) == 1 and \
+    #                                 first_pick.state == 'done' and not first_pick.check_notification:
+    #                             # Send notification when order is delivered
+    #                             _logger.info(f'first pick state : {first_pick.state}')
+    #                             _logger.info(first_pick.check_notification)
+    #                             if order_user.preferred_language == 'en':
+    #                                 notification_vals = {
+    #                                     'title': 'Order delivered',
+    #                                     'content': f'Order #{order.name} was successfully delivered to you.'
+    #                                                'Click here to place a new order',
+    #                                     'fr_title': 'commande livrée',
+    #                                     'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
+    #                                                'Cliquez ici pour passer une nouvelle commande',
+    #                                     'notification_date': datetime.now(),
+    #                                     'payload': 'order_delivered',
+    #                                     'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+    #                                     'user_ids': [(6, 0, [order_user.id])],
+    #                                 }
+    #                             else:
+    #                                 notification_vals = {
+    #                                     'title': 'Order delivered',
+    #                                     'content': f'Order #{order.name} was successfully delivered to you.'
+    #                                                'Click here to place a new order',
+    #                                     'fr_title': 'commande livrée',
+    #                                     'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
+    #                                                ' Cliquez ici pour passer une nouvelle commande',
+    #                                     'notification_date': datetime.now(),
+    #                                     'payload': 'order_delivered',
+    #                                     'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+    #                                     'user_ids': [(6, 0, [order_user.id])],
+    #                                 }
+    #                             notification = self.env['firebase.notification'].sudo().create(notification_vals)
+    #                             if notification:
+    #                                 _logger.info('source is backorder confirmation !!')
+    #                                 notification.send()
+    #                                 first_pick.check_notification = True
+    #                         second_pick = self.env['stock.picking'].sudo().search(
+    #                             [('id', 'in', order_picking_ids.ids),
+    #                              ('location_dest_id', '=', 11),
+    #                              ('state', '!=', 'cancel')])
+    #                         _logger.info(f'second pick : {second_pick}')
+    #                         if second_pick and len(second_pick) == 1 and \
+    #                                 second_pick.state == 'done' and not second_pick.check_notification:
+    #                             # Send notification when order is on its way to customer
+    #                             _logger.info(f'second pick state : {second_pick.state}')
+    #                             _logger.info(second_pick.check_notification)
+    #                             if order_user.preferred_language == 'en':
+    #                                 notification_vals = {
+    #                                     'title': 'Order on its way',
+    #                                     'content': 'Your order is on its way to you.',
+    #                                     'fr_title': 'Commande en cours',
+    #                                     'fr_content': 'Votre commande est en route vers vous.',
+    #                                     'notification_date': datetime.now(),
+    #                                     'payload': 'order_on_its_way',
+    #                                     'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+    #                                     'user_ids': [(6, 0, [order_user.id])],
+    #                                 }
+    #                             else:
+    #                                 notification_vals = {
+    #                                     'title': 'Order on its way',
+    #                                     'content': 'Your order is on its way to you.',
+    #                                     'fr_title': 'Commande en cours',
+    #                                     'fr_content': 'Votre commande est en route vers vous.',
+    #                                     'notification_date': datetime.now(),
+    #                                     'payload': 'order_on_its_way',
+    #                                     'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+    #                                     'user_ids': [(6, 0, [order_user.id])],
+    #                                 }
+    #                             notification = self.env['firebase.notification'].sudo().create(notification_vals)
+    #                             if notification:
+    #                                 _logger.info('source is backorder confirmation !!')
+    #                                 notification.send()
+    #                                 second_pick.check_notification = True
 
-            return temp
-        return True
+    #         return temp
+    #     return True
 
-    def process_cancel_backorder(self):
-        pickings_to_validate = self.env.context.get('button_validate_picking_ids')
-        if pickings_to_validate:
-            temp = self.env['stock.picking'] \
-                .browse(pickings_to_validate) \
-                .with_context(skip_backorder=True, picking_ids_not_to_backorder=self.pick_ids.ids) \
-                .button_validate()
+    # def process_cancel_backorder(self):
+    #     pickings_to_validate = self.env.context.get('button_validate_picking_ids')
+    #     if pickings_to_validate:
+    #         temp = self.env['stock.picking'] \
+    #             .browse(pickings_to_validate) \
+    #             .with_context(skip_backorder=True, picking_ids_not_to_backorder=self.pick_ids.ids) \
+    #             .button_validate()
 
-            if len(pickings_to_validate) > 0:
-                pick = self.env['stock.picking'].sudo().browse(pickings_to_validate[0])
-                if pick:
-                    order = self.env['sale.order'].sudo().search([('name', '=', pick.origin)])
-                    if order:
-                        order_user = self.env['res.users'].sudo().search([('partner_id', '=', order.partner_id.id)])
-                        if not order_user:
-                            return temp
-                        order_picking_ids = order.picking_ids
-                        if order_picking_ids and len(order_picking_ids) > 1:
-                            first_pick = self.env['stock.picking'].sudo().search(
-                                [('id', 'in', order_picking_ids.ids),
-                                 ('location_dest_id', '=', 5),
-                                 ('state', '!=', 'cancel')])
-                            if first_pick and len(first_pick) == 1 and \
-                                    first_pick.state == 'done' and not first_pick.check_notification:
-                                # Send notification when order is delivered
-                                if order_user.preferred_language == 'en':
-                                    notification_vals = {
-                                        'title': 'Order delivered',
-                                        'content': f'Order #{order.name} was successfully delivered to you.'
-                                                   'Click here to place a new order',
-                                        'fr_title': 'commande livrée',
-                                        'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
-                                                       'Cliquez ici pour passer une nouvelle commande',
-                                        'notification_date': datetime.now(),
-                                        'payload': 'order_delivered',
-                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
-                                        'user_ids': [(6, 0, [order_user.id])],
-                                    }
-                                else:
-                                    notification_vals = {
-                                        'title': 'Order delivered',
-                                        'content': f'Order #{order.name} was successfully delivered to you.'
-                                                   'Click here to place a new order',
-                                        'fr_title': 'commande livrée',
-                                        'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
-                                                       'Cliquez ici pour passer une nouvelle commande',
-                                        'notification_date': datetime.now(),
-                                        'payload': 'order_delivered',
-                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
-                                        'user_ids': [(6, 0, [order_user.id])],
-                                    }
-                                notification = self.env['firebase.notification'].sudo().create(notification_vals)
-                                if notification:
-                                    _logger.info('source is backorder cancellation !!')
-                                    notification.send()
-                                    first_pick.check_notification = True
-                            second_pick = self.env['stock.picking'].sudo().search(
-                                [('id', 'in', order_picking_ids.ids),
-                                 ('location_dest_id', '=', 11),
-                                 ('state', '!=', 'cancel')])
-                            if second_pick and len(second_pick) == 1 and \
-                                    second_pick.state == 'done' and not second_pick.check_notification:
-                                # Send notification when order is on its way to customer
-                                if order_user.preferred_language == 'en':
-                                    notification_vals = {
-                                        'title': 'Order on its way',
-                                        'content': 'Your order is on its way to you.',
-                                        'fr_title': 'Commande en cours',
-                                        'fr_content': 'Votre commande est en route vers vous.',
-                                        'notification_date': datetime.now(),
-                                        'payload': 'order_on_its_way',
-                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
-                                        'user_ids': [(6, 0, [order_user.id])],
-                                    }
-                                else:
-                                    notification_vals = {
-                                        'title': 'Order on its way',
-                                        'content': 'Your order is on its way to you.',
-                                        'fr_title': 'Commande en cours',
-                                        'fr_content': 'Votre commande est en route vers vous.',
-                                        'notification_date': datetime.now(),
-                                        'payload': 'order_on_its_way',
-                                        'target_action': 'FLUTTER_NOTIFICATION_CLICK',
-                                        'user_ids': [(6, 0, [order_user.id])],
-                                    }
-                                notification = self.env['firebase.notification'].sudo().create(notification_vals)
-                                if notification:
-                                    notification.send()
-                                    _logger.info('source is backorder cancellation !!')
-                                    second_pick.check_notification = True
+    #         if len(pickings_to_validate) > 0:
+    #             pick = self.env['stock.picking'].sudo().browse(pickings_to_validate[0])
+    #             if pick:
+    #                 order = self.env['sale.order'].sudo().search([('name', '=', pick.origin)])
+    #                 if order:
+    #                     order_user = self.env['res.users'].sudo().search([('partner_id', '=', order.partner_id.id)])
+    #                     if not order_user:
+    #                         return temp
+    #                     order_picking_ids = order.picking_ids
+    #                     if order_picking_ids and len(order_picking_ids) > 1:
+    #                         first_pick = self.env['stock.picking'].sudo().search(
+    #                             [('id', 'in', order_picking_ids.ids),
+    #                              ('location_dest_id', '=', 5),
+    #                              ('state', '!=', 'cancel')])
+    #                         if first_pick and len(first_pick) == 1 and \
+    #                                 first_pick.state == 'done' and not first_pick.check_notification:
+    #                             # Send notification when order is delivered
+    #                             if order_user.preferred_language == 'en':
+    #                                 notification_vals = {
+    #                                     'title': 'Order delivered',
+    #                                     'content': f'Order #{order.name} was successfully delivered to you.'
+    #                                                'Click here to place a new order',
+    #                                     'fr_title': 'commande livrée',
+    #                                     'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
+    #                                                    'Cliquez ici pour passer une nouvelle commande',
+    #                                     'notification_date': datetime.now(),
+    #                                     'payload': 'order_delivered',
+    #                                     'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+    #                                     'user_ids': [(6, 0, [order_user.id])],
+    #                                 }
+    #                             else:
+    #                                 notification_vals = {
+    #                                     'title': 'Order delivered',
+    #                                     'content': f'Order #{order.name} was successfully delivered to you.'
+    #                                                'Click here to place a new order',
+    #                                     'fr_title': 'commande livrée',
+    #                                     'fr_content': f'La commande  #{order.name} vous a été livrée avec succès'
+    #                                                    'Cliquez ici pour passer une nouvelle commande',
+    #                                     'notification_date': datetime.now(),
+    #                                     'payload': 'order_delivered',
+    #                                     'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+    #                                     'user_ids': [(6, 0, [order_user.id])],
+    #                                 }
+    #                             notification = self.env['firebase.notification'].sudo().create(notification_vals)
+    #                             if notification:
+    #                                 _logger.info('source is backorder cancellation !!')
+    #                                 notification.send()
+    #                                 first_pick.check_notification = True
+    #                         second_pick = self.env['stock.picking'].sudo().search(
+    #                             [('id', 'in', order_picking_ids.ids),
+    #                              ('location_dest_id', '=', 11),
+    #                              ('state', '!=', 'cancel')])
+    #                         if second_pick and len(second_pick) == 1 and \
+    #                                 second_pick.state == 'done' and not second_pick.check_notification:
+    #                             # Send notification when order is on its way to customer
+    #                             if order_user.preferred_language == 'en':
+    #                                 notification_vals = {
+    #                                     'title': 'Order on its way',
+    #                                     'content': 'Your order is on its way to you.',
+    #                                     'fr_title': 'Commande en cours',
+    #                                     'fr_content': 'Votre commande est en route vers vous.',
+    #                                     'notification_date': datetime.now(),
+    #                                     'payload': 'order_on_its_way',
+    #                                     'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+    #                                     'user_ids': [(6, 0, [order_user.id])],
+    #                                 }
+    #                             else:
+    #                                 notification_vals = {
+    #                                     'title': 'Order on its way',
+    #                                     'content': 'Your order is on its way to you.',
+    #                                     'fr_title': 'Commande en cours',
+    #                                     'fr_content': 'Votre commande est en route vers vous.',
+    #                                     'notification_date': datetime.now(),
+    #                                     'payload': 'order_on_its_way',
+    #                                     'target_action': 'FLUTTER_NOTIFICATION_CLICK',
+    #                                     'user_ids': [(6, 0, [order_user.id])],
+    #                                 }
+    #                             notification = self.env['firebase.notification'].sudo().create(notification_vals)
+    #                             if notification:
+    #                                 notification.send()
+    #                                 _logger.info('source is backorder cancellation !!')
+    #                                 second_pick.check_notification = True
 
-            return temp
-        return True
+    #         return temp
+    #     return True
