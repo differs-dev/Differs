@@ -695,7 +695,7 @@ class StockPicking(models.Model):
                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
                 if notification:
                     notification.send()
-                    picking.check_notification = True
+                    # picking.check_notification = True
                     
             elif picking.location_dest_id == 5 and picking.state == 'done':
                 if order_user.preferred_language == 'en':
@@ -727,7 +727,7 @@ class StockPicking(models.Model):
                 notification = self.env['firebase.notification'].sudo().create(notification_vals)
                 if notification:
                     notification.send()
-                    picking.check_notification = True
+                    # picking.check_notification = True
             
         return res
         
