@@ -669,6 +669,10 @@ class StockPicking(models.Model):
         if origin:
             order = self.env['sale.order'].sudo().search([('name', '=', origin)])
             order_user = self.env['res.users'].sudo().search([('partner_id', '=', order.partner_id.id)])
+            _logger.info('condition data: ')
+            _logger.info(picking.location_dest_id.id)
+            _logger.info(picking.state)
+            _logger.info(picking.check_notification:)
             if picking.location_dest_id.id == 11 and picking.state == 'done' and not picking.check_notification:
                 if order_user.preferred_language == 'en':
                     notification_vals = {
