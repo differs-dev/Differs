@@ -273,15 +273,15 @@
                                         <span>RC:</span>
                                         <span t-esc="o.company_id.company_registry"/>
                                         <span style="padding-left: 10px">Siret:</span>
-                                        <!--                                        <span t-esc="o.company_id.siret"/>-->
+                                        <span t-esc="o.company_id.siret"/>
                                     </div>
                                 </div>
                                 <div class="col-6 ">
                                     <div style="text-align:left;justify-content: space-between;">
                                         <span style="padding-left: 20px">Ape:</span>
-                                        <!--                                        <span t-esc="o.company_id.ape"/>-->
+                                        <span t-esc="o.company_id.ape"/>
                                         <span style="padding-left: 10px">N° TVA:</span>
-                                        <!--                                        <span t-esc="o.company_id.vat"/>-->
+                                        <span t-esc="o.company_id.vat"/>
                                     </div>
                                 </div>
                             </div>
